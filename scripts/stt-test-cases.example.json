@@ -1,0 +1,62 @@
+[
+  {
+    "file": "stt-samples/hindi-01.m4a",
+    "language": "hi-IN",
+    "category": "pure-hindi",
+    "reference": "आज मैंने राहुल से मुलाकात की उन्होंने कहा कि वो अगले हफ्ते दिल्ली जा रहे हैं"
+  },
+  {
+    "file": "stt-samples/hindi-02.m4a",
+    "language": "hi-IN",
+    "category": "pure-hindi",
+    "reference": "प्रिया के साथ कल मीटिंग है उनका नंबर है नौ आठ सात छह पांच चार तीन दो एक"
+  },
+  {
+    "file": "stt-samples/gujarati-01.m4a",
+    "language": "gu-IN",
+    "category": "pure-gujarati",
+    "reference": "આજે સવારે અમે ઓફિસ ગયા હતા અને ત્યાં ઘણા લોકો મળ્યા"
+  },
+  {
+    "file": "stt-samples/gujarati-02.m4a",
+    "language": "gu-IN",
+    "category": "pure-gujarati",
+    "reference": "સુનીલ ભાઈ સાથે ગઈ કાલે વાત થઈ તેઓ આવતા મહિને સુરત આવશે"
+  },
+  {
+    "file": "stt-samples/english-01.m4a",
+    "language": "en-IN",
+    "category": "pure-english",
+    "reference": "Met Vikram at the conference today he wants to schedule a follow up call next Tuesday"
+  },
+  {
+    "file": "stt-samples/hindi-english-01.m4a",
+    "language": "hi-IN",
+    "category": "hindi-english-mix",
+    "reference": "Aaj Amit ke saath meeting thi unhone bola ki next quarter mein revenue double ho jayega"
+  },
+  {
+    "file": "stt-samples/hindi-english-02.m4a",
+    "language": "hi-IN",
+    "category": "hindi-english-mix",
+    "reference": "Priya ka birthday hai Friday ko uske liye coffee shop mein surprise plan karna hai"
+  },
+  {
+    "file": "stt-samples/gujarati-english-01.m4a",
+    "language": "gu-IN",
+    "category": "gujarati-english-mix",
+    "reference": "Ramesh bhai sathe aaje lunch lido hato teo bolia ke teni company no IPO next year aavse"
+  },
+  {
+    "file": "stt-samples/noisy-01.m4a",
+    "language": "hi-IN",
+    "category": "noisy-environment",
+    "reference": "शोर में बोल रहा हूँ आज संजय से मिला उन्होंने नया प्रोजेक्ट शुरू किया है"
+  },
+  {
+    "file": "stt-samples/fast-speech-01.m4a",
+    "language": "hi-IN",
+    "category": "fast-speech",
+    "reference": "जल्दी में बोल रहा हूँ रोहन ने बताया कि कल शाम को पांच बजे मीटिंग है"
+  }
+]
