@@ -14,7 +14,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { Typography, FONT_REGULAR, Spacing } from '@/constants/theme';
+import { Typography, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { getContactDetail, updateContact } from '@/db/queries/contacts';
@@ -102,9 +102,9 @@ export default function EditContactScreen() {
           </Pressable>
           <Pressable
             onPress={() => void handleCameraCapture()}
-            style={[styles.camBtn, { borderColor: theme.cta, backgroundColor: theme.cta }]}
+            style={[styles.camBtn, { borderColor: theme.highlight, backgroundColor: theme.highlight }]}
           >
-            <Text style={[styles.camBtnText, { color: theme.background }]}>capture</Text>
+            <Text style={[styles.camBtnText, { color: INK }]}>capture</Text>
           </Pressable>
         </View>
       </View>
@@ -160,10 +160,10 @@ export default function EditContactScreen() {
         disabled={saving || !name.trim()}
         style={[
           styles.saveBtn,
-          { backgroundColor: theme.cta, opacity: saving || !name.trim() ? 0.5 : 1 },
+          { backgroundColor: theme.highlight, opacity: saving || !name.trim() ? 0.5 : 1 },
         ]}
       >
-        <Text style={[styles.saveBtnText, { color: theme.background }]}>
+        <Text style={[styles.saveBtnText, { color: INK }]}>
           {saving ? 'saving…' : t('common.save')}
         </Text>
       </Pressable>

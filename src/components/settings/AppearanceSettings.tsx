@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { FONT_BOLD, FONT_REGULAR, Spacing } from '@/constants/theme';
+import { FONT_BOLD, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useAppStore, type ThemePreference } from '@/stores/app.store';
 import { upsertAppPrefs } from '@/db/queries/app-prefs';
@@ -44,7 +44,7 @@ export function AppearanceSettings() {
                 styles.segmentItem,
                 { borderColor: theme.cta },
                 index === 0 && styles.segmentItemFirst,
-                selected && { backgroundColor: theme.cta },
+                selected && { backgroundColor: theme.highlight },
               ]}
               onPress={() => handleSelect(option.value)}
               accessibilityRole="button"
@@ -53,7 +53,7 @@ export function AppearanceSettings() {
               <Text
                 style={[
                   styles.segmentLabel,
-                  { color: selected ? theme.background : theme.cta },
+                  { color: selected ? INK : theme.cta },
                 ]}
               >
                 {t(option.labelKey)}

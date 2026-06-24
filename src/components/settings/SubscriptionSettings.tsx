@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { Alert, Linking, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 
-import { FONT_BOLD, FONT_REGULAR, Spacing } from '@/constants/theme';
+import { FONT_BOLD, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useSubscriptionStore } from '@/stores/subscription.store';
 import { getContactCount } from '@/db/queries/contacts';
@@ -56,13 +56,13 @@ export function SubscriptionSettings() {
         <Pressable
           style={({ pressed }) => [
             styles.actionBtn,
-            { backgroundColor: theme.cta, opacity: pressed ? 0.7 : 1 },
+            { backgroundColor: theme.highlight, opacity: pressed ? 0.7 : 1 },
           ]}
           onPress={() => router.push('/paywall')}
           accessibilityRole="button"
           accessibilityLabel="upgrade to unlimited plan"
         >
-          <Text style={[styles.actionLabel, { color: theme.background }]}>upgrade</Text>
+          <Text style={[styles.actionLabel, { color: INK }]}>upgrade</Text>
         </Pressable>
       ) : (
         <Pressable

@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { Typography, FONT_REGULAR, FONT_BOLD, Spacing } from '@/constants/theme';
+import { Typography, FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { getAllPendingFollowUps, type PendingFollowUp } from '@/db/queries/follow-ups';
@@ -47,11 +47,11 @@ export default function ReEngageScreen() {
 
       {topFollowUp ? (
         <Pressable
-          style={[styles.followUpCard, { borderColor: theme.cta + '40' }]}
+          style={[styles.followUpCard, { borderColor: theme.highlight }]}
           onPress={() => router.replace(`/contact/${topFollowUp.contact_id}`)}
           accessibilityRole="button"
         >
-          <Text style={[styles.cardName, { color: theme.cta }]}>{topFollowUp.contact_name}</Text>
+          <Text style={[styles.cardName, { color: theme.text }]}>{topFollowUp.contact_name}</Text>
           <Text style={[styles.cardDate, { color: theme.text + '80' }]}>
             {formatDate(topFollowUp.due_date)}
           </Text>
@@ -68,11 +68,11 @@ export default function ReEngageScreen() {
       )}
 
       <Pressable
-        style={[styles.captureBtn, { backgroundColor: theme.cta }]}
+        style={[styles.captureBtn, { backgroundColor: theme.highlight }]}
         onPress={() => router.replace('/(tabs)/capture')}
         accessibilityRole="button"
       >
-        <Text style={[styles.captureBtnText, { color: theme.background }]}>
+        <Text style={[styles.captureBtnText, { color: INK }]}>
           {t('reEngage.capture')}
         </Text>
       </Pressable>

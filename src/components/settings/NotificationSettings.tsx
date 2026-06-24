@@ -7,7 +7,7 @@ import DateTimePicker, {
 import * as ExpoNotifications from 'expo-notifications';
 import { useTranslation } from 'react-i18next';
 
-import { FONT_BOLD, FONT_REGULAR, Spacing } from '@/constants/theme';
+import { FONT_BOLD, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { getAppPrefs, upsertAppPrefs } from '@/db/queries/app-prefs';
 import { scheduleDailyNudges } from '@/services/notifications.service';
@@ -179,7 +179,7 @@ export function NotificationSettings() {
         style={({ pressed }) => [
           styles.saveButton,
           {
-            backgroundColor: theme.cta,
+            backgroundColor: theme.highlight,
             opacity: isSaving || pressed ? 0.7 : 1,
           },
         ]}
@@ -187,7 +187,7 @@ export function NotificationSettings() {
         disabled={isSaving}
         accessibilityRole="button"
       >
-        <Text style={[styles.saveButtonText, { color: theme.background }]}>
+        <Text style={[styles.saveButtonText, { color: INK }]}>
           {saved ? t('settings.saved') : t('common.save')}
         </Text>
       </Pressable>

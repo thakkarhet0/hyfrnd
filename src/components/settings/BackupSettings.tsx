@@ -5,7 +5,7 @@ import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
 import { useTranslation } from 'react-i18next';
 
-import { FONT_BOLD, FONT_REGULAR, Spacing } from '@/constants/theme';
+import { FONT_BOLD, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { getAppPrefs, upsertAppPrefs } from '@/db/queries/app-prefs';
 import {
@@ -136,13 +136,13 @@ export function BackupSettings() {
             style={({ pressed }) => [
               styles.button,
               {
-                backgroundColor: theme.cta,
+                backgroundColor: theme.highlight,
                 opacity: !request || isWorking || pressed ? 0.5 : 1,
               },
             ]}
             accessibilityRole="button"
           >
-            <Text style={[styles.buttonText, { color: theme.background }]}>
+            <Text style={[styles.buttonText, { color: INK }]}>
               {t('backup.enable')}
             </Text>
           </Pressable>
@@ -162,11 +162,11 @@ export function BackupSettings() {
             disabled={isWorking}
             style={({ pressed }) => [
               styles.button,
-              { backgroundColor: theme.cta, opacity: isWorking || pressed ? 0.5 : 1 },
+              { backgroundColor: theme.highlight, opacity: isWorking || pressed ? 0.5 : 1 },
             ]}
             accessibilityRole="button"
           >
-            <Text style={[styles.buttonText, { color: theme.background }]}>
+            <Text style={[styles.buttonText, { color: INK }]}>
               {isWorking ? t('backup.syncing') : t('backup.backupNow')}
             </Text>
           </Pressable>

@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 
-import { Typography, FONT_REGULAR, FONT_BOLD } from '@/constants/theme';
+import { Typography, FONT_REGULAR, FONT_BOLD, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useCaptureStore } from '@/stores/capture.store';
@@ -169,11 +169,11 @@ export default function ExtractionReviewScreen() {
 
       {/* Confirm button */}
       <Pressable
-        style={[styles.confirmButton, { backgroundColor: theme.cta }]}
+        style={[styles.confirmButton, { backgroundColor: theme.highlight }]}
         onPress={handleConfirm}
         accessibilityLabel={t('extraction.looksRight')}
       >
-        <Text style={[styles.confirmLabel, { color: theme.background }]}>
+        <Text style={[styles.confirmLabel, { color: INK }]}>
           {t('extraction.looksRight')}
         </Text>
       </Pressable>

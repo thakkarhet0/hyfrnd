@@ -4,17 +4,25 @@ export const Colors = {
     text: '#0F1035',
     cta: '#365486',
     accent: '#7FC7D9',
+    // Follow-up / attention accent. Always used as a solid fill or as text on a
+    // dark chip — never as yellow text on the page (too low-contrast on light).
+    highlight: '#FFD23F',
   },
   dark: {
     background: '#0F1035',
     text: '#DCF2F1',
     cta: '#7FC7D9',
     accent: '#7FC7D9',
+    highlight: '#FFD23F',
   },
 } as const;
 
 export type ColorScheme = 'light' | 'dark';
 export type ThemeColors = typeof Colors.light;
+
+// Navy that pairs with `highlight` (yellow): readable as text/ink on a yellow
+// fill, and as a chip background under yellow text, in both light and dark.
+export const INK = '#0F1035';
 
 // letterSpacing in pixels, derived from em spec:
 // display/heading: 0.08em; body/label/caption: 0.04em

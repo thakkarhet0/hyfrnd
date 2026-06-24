@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import * as Calendar from 'expo-calendar';
 import DateTimePicker, { DateTimePickerAndroid, type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
-import { FONT_BOLD, FONT_REGULAR, Spacing } from '@/constants/theme';
+import { FONT_BOLD, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useCaptureStore } from '@/stores/capture.store';
@@ -135,16 +135,16 @@ export default function FollowUpDatePickerScreen() {
       <Pressable
         style={({ pressed }) => [
           styles.confirmBtn,
-          { backgroundColor: theme.cta, opacity: isSubmitting || pressed ? 0.8 : 1 },
+          { backgroundColor: theme.highlight, opacity: isSubmitting || pressed ? 0.8 : 1 },
         ]}
         onPress={() => void handleConfirm(selectedDate)}
         disabled={isSubmitting}
         accessibilityRole="button"
       >
         {isSubmitting ? (
-          <ActivityIndicator color={theme.background} />
+          <ActivityIndicator color={INK} />
         ) : (
-          <Text style={[styles.confirmText, { color: theme.background }]}>
+          <Text style={[styles.confirmText, { color: INK }]}>
             {t('followUp.confirm')}
           </Text>
         )}

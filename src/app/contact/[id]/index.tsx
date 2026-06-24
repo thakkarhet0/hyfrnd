@@ -14,7 +14,7 @@ import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import DateTimePicker, { DateTimePickerAndroid, type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
-import { Typography, FONT_REGULAR, FONT_BOLD, Spacing } from '@/constants/theme';
+import { Typography, FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { getContactDetail, deleteContact, type ContactDetail } from '@/db/queries/contacts';
@@ -496,9 +496,11 @@ export default function ContactDetailScreen() {
         <View style={styles.section}>
           {followUps.map((fu) => (
             <View key={fu.id} style={[styles.followUpRow, { borderColor: theme.text + '20' }]}>
-              <Text style={[styles.followUpDate, { color: theme.cta }]}>
-                {new Date(fu.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-              </Text>
+              <View style={[styles.followUpDateChip, { backgroundColor: INK }]}>
+                <Text style={[styles.followUpDateChipText, { color: theme.highlight }]}>
+                  {new Date(fu.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                </Text>
+              </View>
               <Text style={[styles.followUpStatus, { color: theme.text + '60' }]}>
                 {t(`contacts.${fu.status}` as const)}
               </Text>
@@ -511,10 +513,10 @@ export default function ContactDetailScreen() {
                 <View style={styles.followUpActions}>
                   <Pressable
                     onPress={() => void handleCompleteFollowUp(fu)}
-                    style={[styles.fuActionBtn, { backgroundColor: theme.cta }]}
+                    style={[styles.fuActionBtn, { backgroundColor: theme.highlight }]}
                     accessibilityRole="button"
                   >
-                    <Text style={[styles.fuActionText, { color: theme.background }]}>{t('contacts.completeAction')}</Text>
+                    <Text style={[styles.fuActionText, { color: INK }]}>{t('contacts.completeAction')}</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => void handleSnoozeFollowUp(fu)}
@@ -553,10 +555,10 @@ export default function ContactDetailScreen() {
           <View style={styles.iosPickerButtons}>
             <Pressable
               onPress={() => void handleRescheduleConfirm(reschedulingFollowUp, reschedulePickerDate)}
-              style={[styles.fuActionBtn, { backgroundColor: theme.cta }]}
+              style={[styles.fuActionBtn, { backgroundColor: theme.highlight }]}
               accessibilityRole="button"
             >
-              <Text style={[styles.fuActionText, { color: theme.background }]}>{t('common.confirm')}</Text>
+              <Text style={[styles.fuActionText, { color: INK }]}>{t('common.confirm')}</Text>
             </Pressable>
             <Pressable onPress={() => setReschedulingFollowUp(null)} style={styles.iosPickerCancel} accessibilityRole="button">
               <Text style={[styles.fuActionText, { color: theme.text + '60' }]}>{t('common.cancel')}</Text>
@@ -638,7 +640,8 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     gap: 4,
   },
-  followUpDate: { fontFamily: FONT_BOLD, fontSize: 16, textTransform: 'lowercase' },
+  followUpDateChip: { alignSelf: 'flex-start', paddingHorizontal: Spacing.sm, paddingVertical: 2 },
+  followUpDateChipText: { fontFamily: FONT_BOLD, fontSize: 13, textTransform: 'lowercase' },
   followUpStatus: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
   followUpActions: { flexDirection: 'row', gap: 8, marginTop: 8, flexWrap: 'wrap' },
   fuActionBtn: { paddingHorizontal: 12, paddingVertical: 6 },

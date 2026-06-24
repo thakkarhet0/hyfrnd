@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as Network from 'expo-network';
 
-import { Typography, FONT_REGULAR, FONT_BOLD, Spacing } from '@/constants/theme';
+import { Typography, FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useCaptureFlow } from '@/hooks/use-capture-flow';
@@ -162,7 +162,7 @@ export default function OnboardingCaptureScreen() {
           style={({ pressed }) => [
             styles.cta,
             {
-              backgroundColor: theme.cta,
+              backgroundColor: theme.highlight,
               opacity: isTypedProcessing || pressed || !typedText.trim() ? 0.6 : 1,
             },
           ]}
@@ -171,9 +171,9 @@ export default function OnboardingCaptureScreen() {
           accessibilityRole="button"
         >
           {isTypedProcessing ? (
-            <ActivityIndicator color={theme.background} />
+            <ActivityIndicator color={INK} />
           ) : (
-            <Text style={[styles.ctaText, { color: theme.background }]}>
+            <Text style={[styles.ctaText, { color: INK }]}>
               {t('onboarding.typedFallbackCta')}
             </Text>
           )}
@@ -219,11 +219,11 @@ export default function OnboardingCaptureScreen() {
 
       {isPaused && (
         <Pressable
-          style={[styles.cta, { backgroundColor: theme.cta }]}
+          style={[styles.cta, { backgroundColor: theme.highlight }]}
           onPress={handleConfirm}
           accessibilityRole="button"
         >
-          <Text style={[styles.ctaText, { color: theme.background }]}>
+          <Text style={[styles.ctaText, { color: INK }]}>
             {t('common.confirm')}
           </Text>
         </Pressable>

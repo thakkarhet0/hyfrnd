@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { FONT_REGULAR, FONT_BOLD, Spacing } from '@/constants/theme';
+import { FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useSttConsent } from '@/hooks/use-stt-consent';
 
@@ -37,7 +37,7 @@ export function SttConsentGate({ children }: { children: ReactNode }) {
       <Pressable
         style={({ pressed }) => [
           styles.cta,
-          { backgroundColor: theme.cta, opacity: busy || pressed ? 0.8 : 1 },
+          { backgroundColor: theme.highlight, opacity: busy || pressed ? 0.8 : 1 },
         ]}
         onPress={() => {
           void (async () => {
@@ -50,7 +50,7 @@ export function SttConsentGate({ children }: { children: ReactNode }) {
         accessibilityRole="button"
         accessibilityState={{ disabled: busy }}
       >
-        <Text style={[styles.ctaText, { color: theme.background }]}>
+        <Text style={[styles.ctaText, { color: INK }]}>
           {busy ? '…' : t('onboarding.consentProceed')}
         </Text>
       </Pressable>

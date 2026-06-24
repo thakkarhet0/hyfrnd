@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 
-import { Typography, FONT_REGULAR, FONT_BOLD } from '@/constants/theme';
+import { Typography, FONT_REGULAR, FONT_BOLD, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useCaptureStore } from '@/stores/capture.store';
@@ -118,11 +118,11 @@ export default function MissingFieldScreen() {
         </Pressable>
 
         <Pressable
-          style={[styles.submitButton, { backgroundColor: theme.cta }]}
+          style={[styles.submitButton, { backgroundColor: theme.highlight }]}
           onPress={handleSubmit}
           accessibilityLabel={t('common.confirm')}
         >
-          <Text style={[styles.submitLabel, { color: theme.background }]}>
+          <Text style={[styles.submitLabel, { color: INK }]}>
             {t('common.confirm')}
           </Text>
         </Pressable>

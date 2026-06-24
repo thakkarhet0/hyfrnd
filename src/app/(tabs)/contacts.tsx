@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { router, useFocusEffect } from 'expo-router';
 
-import { Typography, FONT_REGULAR, FONT_BOLD, Spacing } from '@/constants/theme';
+import { Typography, FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { type ContactListItem, getContactsForList } from '@/db/queries/contacts';
@@ -24,7 +24,13 @@ import {
   requestContactsPermission,
 } from '@/services/contacts-sync.service';
 
-type AnyTheme = { background: string; text: string; cta: string; accent: string };
+type AnyTheme = {
+  background: string;
+  text: string;
+  cta: string;
+  accent: string;
+  highlight: string;
+};
 
 function formatDate(ts: number | null): string {
   if (!ts) return '';
@@ -42,14 +48,16 @@ function AppContactRow({
   item,
   theme,
   t,
+  isLast,
 }: {
   item: ContactListItem;
   theme: AnyTheme;
   t: (key: string) => string;
+  isLast: boolean;
 }) {
   return (
     <Pressable
-      style={[styles.row, { borderBottomColor: theme.text + '20' }]}
+      style={[styles.row, blockSides(theme, isLast)]}
       onPress={() => router.push(`/contact/${item.id}`)}
       accessibilityLabel={item.name}
     >
@@ -61,24 +69,48 @@ function AppContactRow({
           </Text>
         ) : null}
         {item.next_follow_up ? (
-          <Text style={[styles.metaText, { color: theme.cta }]}>
-            {t('contacts.followUpOn')} {formatDate(item.next_follow_up)}
-          </Text>
+          <View style={[styles.followUpChip, { backgroundColor: INK }]}>
+            <Text style={[styles.followUpChipText, { color: theme.highlight }]}>
+              {t('contacts.followUpOn')} {formatDate(item.next_follow_up)}
+            </Text>
+          </View>
         ) : null}
       </View>
     </Pressable>
   );
 }
 
-function DeviceContactRow({ item, theme }: { item: DeviceContact; theme: AnyTheme }) {
+function DeviceContactRow({
+  item,
+  theme,
+  isLast,
+}: {
+  item: DeviceContact;
+  theme: AnyTheme;
+  isLast: boolean;
+}) {
   return (
-    <View style={[styles.row, { borderBottomColor: theme.text + '20' }]}>
+    <View style={[styles.row, blockSides(theme, isLast)]}>
       <Text style={[styles.rowName, { color: theme.text }]}>{item.name}</Text>
       {item.phone ? (
         <Text style={[styles.metaText, { color: theme.text + '80' }]}>{item.phone}</Text>
       ) : null}
     </View>
   );
+}
+
+// Left/right walls of a section block, with an inner separator below every row
+// except the last (the footer draws the closing bottom edge).
+function blockSides(theme: AnyTheme, isLast: boolean) {
+  return {
+    backgroundColor: theme.text + '06',
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderLeftColor: theme.text + '20',
+    borderRightColor: theme.text + '20',
+    borderBottomWidth: isLast ? 0 : 1,
+    borderBottomColor: theme.text + '10',
+  };
 }
 
 type Section =
@@ -167,29 +199,35 @@ export default function ContactsScreen() {
   return (
     <Screen style={[styles.container, { backgroundColor: theme.background }]}>
       {!isEmpty && (
-        <TextInput
+        <View
           style={[
-            styles.searchInput,
-            { color: theme.text, borderBottomColor: theme.text + '30' },
+            styles.searchBox,
+            { borderColor: theme.text + '20', backgroundColor: theme.text + '06' },
           ]}
-          value={query}
-          onChangeText={setQuery}
-          placeholder={t('contacts.searchPlaceholder')}
-          placeholderTextColor={theme.text + '60'}
-          returnKeyType="search"
-          clearButtonMode="while-editing"
-        />
+        >
+          <TextInput
+            style={[styles.searchInput, { color: theme.text }]}
+            value={query}
+            onChangeText={setQuery}
+            placeholder={t('contacts.searchPlaceholder')}
+            placeholderTextColor={theme.text + '60'}
+            returnKeyType="search"
+            clearButtonMode="while-editing"
+          />
+        </View>
       )}
 
       {!isEmpty && !query && (
         <Pressable
-          style={[styles.followUpsLink, { borderBottomColor: theme.text + '20' }]}
+          style={({ pressed }) => [
+            styles.followUpsCta,
+            { backgroundColor: theme.highlight, opacity: pressed ? 0.85 : 1 },
+          ]}
           onPress={() => router.push('/followups')}
           accessibilityRole="button"
         >
-          <Text style={[styles.followUpsLinkText, { color: theme.cta }]}>
-            {t('followUps.viewAll')}
-          </Text>
+          <Text style={styles.followUpsCtaText}>{t('followUps.viewAll')}</Text>
+          <Text style={styles.followUpsCtaArrow}>→</Text>
         </Pressable>
       )}
 
@@ -197,7 +235,10 @@ export default function ContactsScreen() {
           blocking the rest of the tab. */}
       {permission && !permission.granted && (
         <Pressable
-          style={[styles.permissionBanner, { borderBottomColor: theme.text + '20' }]}
+          style={[
+            styles.permissionBanner,
+            { borderColor: theme.text + '20', backgroundColor: theme.text + '06' },
+          ]}
           onPress={() => permission.blocked && void Linking.openSettings()}
           accessibilityRole="button"
         >
@@ -228,22 +269,53 @@ export default function ContactsScreen() {
         <SectionList<ContactListItem | DeviceContact, Section>
           sections={sections}
           keyExtractor={(item) => item.id}
-          renderItem={({ item, section }) =>
-            section.key === 'app' ? (
-              <AppContactRow item={item as ContactListItem} theme={theme} t={t} />
+          renderItem={({ item, section, index }) => {
+            const isLast = index === section.data.length - 1;
+            return section.key === 'app' ? (
+              <AppContactRow
+                item={item as ContactListItem}
+                theme={theme}
+                t={t}
+                isLast={isLast}
+              />
             ) : (
-              <DeviceContactRow item={item as DeviceContact} theme={theme} />
-            )
-          }
+              <DeviceContactRow
+                item={item as DeviceContact}
+                theme={theme}
+                isLast={isLast}
+              />
+            );
+          }}
           renderSectionHeader={({ section }) => (
-            <Text
+            <View
               style={[
                 styles.sectionHeader,
-                { color: theme.text + '99', backgroundColor: theme.background },
+                {
+                  backgroundColor: theme.text + '06',
+                  borderTopColor: theme.text + '20',
+                  borderLeftColor: theme.text + '20',
+                  borderRightColor: theme.text + '20',
+                },
               ]}
             >
-              {section.title}
-            </Text>
+              <View style={[styles.accentBar, { backgroundColor: theme.highlight }]} />
+              <Text style={[styles.sectionHeaderText, { color: theme.text }]}>
+                {section.title}
+              </Text>
+            </View>
+          )}
+          renderSectionFooter={() => (
+            <View
+              style={[
+                styles.sectionFooter,
+                {
+                  backgroundColor: theme.text + '06',
+                  borderBottomColor: theme.text + '20',
+                  borderLeftColor: theme.text + '20',
+                  borderRightColor: theme.text + '20',
+                },
+              ]}
+            />
           )}
           stickySectionHeadersEnabled={false}
           contentContainerStyle={styles.list}
@@ -258,28 +330,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  searchBox: {
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    borderWidth: 1,
+  },
   searchInput: {
     fontFamily: FONT_REGULAR,
     fontSize: 16,
-    paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
-    borderBottomWidth: 1,
     textTransform: 'lowercase',
   },
   list: {
     paddingBottom: Spacing.xl,
   },
   sectionHeader: {
-    ...Typography.caption,
-    paddingHorizontal: Spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingTop: Spacing.md,
-    paddingBottom: Spacing.xs,
+    paddingBottom: Spacing.sm,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+  },
+  accentBar: {
+    width: 4,
+    height: 14,
+    marginRight: Spacing.sm,
+  },
+  sectionHeaderText: {
+    ...Typography.label,
+  },
+  sectionFooter: {
+    marginHorizontal: Spacing.lg,
+    height: Spacing.sm,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
   },
   row: {
-    paddingHorizontal: Spacing.lg,
+    marginHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    gap: 4,
+    gap: 6,
   },
   rowName: {
     ...Typography.body,
@@ -287,11 +384,23 @@ const styles = StyleSheet.create({
   },
   rowMeta: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
   },
   metaText: {
     fontFamily: FONT_REGULAR,
     fontSize: 16,
+    textTransform: 'lowercase',
+  },
+  followUpChip: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    alignSelf: 'flex-start',
+  },
+  followUpChipText: {
+    fontFamily: FONT_BOLD,
+    fontSize: 13,
     textTransform: 'lowercase',
   },
   emptyState: {
@@ -309,20 +418,34 @@ const styles = StyleSheet.create({
     ...Typography.body,
     textAlign: 'center',
   },
-  followUpsLink: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderBottomWidth: 1,
+  followUpsCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+    borderWidth: 1,
+    borderColor: INK,
   },
-  followUpsLinkText: {
-    fontFamily: FONT_REGULAR,
+  followUpsCtaText: {
+    fontFamily: FONT_BOLD,
     fontSize: 16,
+    color: INK,
     textTransform: 'lowercase',
   },
+  followUpsCtaArrow: {
+    fontFamily: FONT_BOLD,
+    fontSize: 18,
+    color: INK,
+  },
   permissionBanner: {
-    paddingHorizontal: Spacing.lg,
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.sm,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    borderBottomWidth: 1,
+    borderWidth: 1,
   },
   permissionText: {
     fontFamily: FONT_REGULAR,

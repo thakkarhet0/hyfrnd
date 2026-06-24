@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 
-import { Typography, FONT_BOLD } from '@/constants/theme';
+import { Typography, FONT_BOLD, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useCaptureStore } from '@/stores/capture.store';
@@ -173,10 +173,10 @@ export default function ContactLinkingScreen() {
       {phase.kind === 'matches' && phase.items.length === 1 && (
         <View style={styles.row}>
           <Pressable
-            style={[styles.chip, { backgroundColor: theme.cta }]}
+            style={[styles.chip, { backgroundColor: theme.highlight }]}
             onPress={() => void selectMatch(phase.items[0])}
           >
-            <Text style={[styles.chipLabel, { color: theme.background }]}>
+            <Text style={[styles.chipLabel, { color: INK }]}>
               {t('extraction.yes')}
             </Text>
           </Pressable>
@@ -196,10 +196,10 @@ export default function ContactLinkingScreen() {
           {phase.items.map((m) => (
             <Pressable
               key={m.id}
-              style={[styles.chip, { backgroundColor: theme.cta }]}
+              style={[styles.chip, { backgroundColor: theme.highlight }]}
               onPress={() => void selectMatch(m)}
             >
-              <Text style={[styles.chipLabel, { color: theme.background }]}>
+              <Text style={[styles.chipLabel, { color: INK }]}>
                 {m.kind === 'device' ? t('extraction.fromPhoneMatch', { name: m.name }) : m.name}
               </Text>
             </Pressable>
@@ -224,10 +224,10 @@ export default function ContactLinkingScreen() {
             autoFocus
           />
           <Pressable
-            style={[styles.saveButton, { backgroundColor: theme.cta }]}
+            style={[styles.saveButton, { backgroundColor: theme.highlight }]}
             onPress={() => void handleSaveNew()}
           >
-            <Text style={[styles.saveLabel, { color: theme.background }]}>
+            <Text style={[styles.saveLabel, { color: INK }]}>
               {t('extraction.saveAsNew')}
             </Text>
           </Pressable>

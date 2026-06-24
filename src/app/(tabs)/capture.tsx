@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 import * as Network from 'expo-network';
 
-import { Typography } from '@/constants/theme';
+import { Typography, INK } from '@/constants/theme';
 import { Screen } from '@/components/Screen';
 import { useTheme } from '@/hooks/use-theme';
 import { useCaptureFlow } from '@/hooks/use-capture-flow';
@@ -157,12 +157,12 @@ export default function CaptureScreen() {
                   onPress={handleDone}
                   style={({ pressed }) => [
                     styles.actionButton,
-                    { backgroundColor: theme.cta, borderColor: theme.cta, opacity: pressed ? 0.85 : 1 },
+                    { backgroundColor: theme.highlight, borderColor: theme.highlight, opacity: pressed ? 0.85 : 1 },
                   ]}
                   accessibilityRole="button"
                   accessibilityLabel={t('capture.done')}
                 >
-                  <Text style={[styles.actionLabel, { color: theme.background }]}>
+                  <Text style={[styles.actionLabel, { color: INK }]}>
                     {t('capture.done')}
                   </Text>
                 </Pressable>

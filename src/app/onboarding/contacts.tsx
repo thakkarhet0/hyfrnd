@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { FONT_REGULAR, FONT_BOLD, Spacing } from '@/constants/theme';
+import { FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useAppStore } from '@/stores/app.store';
@@ -44,13 +44,13 @@ export default function ContactsOnboardingScreen() {
         <Pressable
           style={({ pressed }) => [
             styles.cta,
-            { backgroundColor: theme.cta, opacity: loading || pressed ? 0.8 : 1 },
+            { backgroundColor: theme.highlight, opacity: loading || pressed ? 0.8 : 1 },
           ]}
           onPress={() => void handleAllow()}
           disabled={loading}
           accessibilityRole="button"
         >
-          <Text style={[styles.ctaText, { color: theme.background }]}>
+          <Text style={[styles.ctaText, { color: INK }]}>
             {loading ? '…' : t('onboarding.contactsAllow')}
           </Text>
         </Pressable>

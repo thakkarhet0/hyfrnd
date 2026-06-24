@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, BackHandler, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 
-import { Typography, FONT_BOLD, FONT_REGULAR, Spacing, Radius } from '@/constants/theme';
+import { Typography, FONT_BOLD, FONT_REGULAR, Spacing, Radius, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useCaptureStore } from '@/stores/capture.store';
@@ -104,16 +104,16 @@ export default function PaywallScreen() {
 
       <View style={styles.actions}>
         <Pressable
-          style={[styles.primaryBtn, { backgroundColor: theme.cta }]}
+          style={[styles.primaryBtn, { backgroundColor: theme.highlight }]}
           onPress={() => void handleSubscribe()}
           disabled={isPurchasing || isRestoring}
           accessibilityRole="button"
           accessibilityLabel="subscribe for ₹400 per month with 7-day free trial"
         >
           {isPurchasing ? (
-            <ActivityIndicator color={theme.background} />
+            <ActivityIndicator color={INK} />
           ) : (
-            <Text style={[styles.primaryLabel, { color: theme.background }]}>
+            <Text style={[styles.primaryLabel, { color: INK }]}>
               start free trial
             </Text>
           )}
