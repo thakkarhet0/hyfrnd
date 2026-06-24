@@ -1,5 +1,11 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# BMad engine & tooling (artifacts in _bmad-output/ ARE tracked)
+/_bmad/
+/.claude/skills/
+/.claude/agent-memory/
+/.agent/
+
 # dependencies
 node_modules/
 

@@ -1,0 +1,116 @@
+# generated: 2026-06-03
+# last_updated: 2026-06-04
+# project: God's plan
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-06-03
+last_updated: 2026-06-16  # Epic 7 done — all stories 7-1 through 7-5 complete
+project: God's plan
+
+
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # ── Epic 1: Project Foundation ──────────────────────────────────────────────
+  epic-1: done
+  1-1-project-initialization-and-app-shell: done
+  1-2-database-schema-and-migration-pipeline: done
+  1-3-encryption-and-secure-key-management: done
+  1-4-i18n-infrastructure-and-language-files: done
+  1-5-eas-build-configuration-and-ci-pipeline: done
+  1-6-observability-setup-sentry-posthog: done
+  1-7-stt-accuracy-validation-spike: done
+  epic-1-retrospective: optional
+
+  # ── Epic 2: Core Capture Loop ────────────────────────────────────────────────
+  epic-2: done
+  2-1-design-system-tokens-and-capture-screen-shell: done
+  2-2-record-button-audio-recording-and-haptic-feedback: done
+  2-3-audio-persistence-and-stt-queue: done
+  2-4-stt-transcription-service-with-consent-gate-and-fallback: done
+  2-5-claude-haiku-extraction-service: done
+  2-6-extraction-review-card: done
+  2-7-missing-field-prompt: done
+  2-8-contact-linking-screen: done
+  2-9-capture-complete-screen: done
+  epic-2-retrospective: optional
+
+  # ── Epic 3: Contact Management ───────────────────────────────────────────────
+  epic-3: done
+  3-1-contacts-list-screen: done
+  3-2-contact-detail-screen-with-memo-history: done
+  3-3-edit-contact: done
+  3-4-delete-contact-with-cascade: done
+  3-5-contact-search: done
+  3-6-edit-context-points-and-add-free-text-notes: done
+  epic-3-retrospective: optional
+
+  # ── Epic 4: Onboarding ───────────────────────────────────────────────────────
+  epic-4: done
+  4-1-language-selection-screen: done
+  4-2-welcome-screen: done
+  4-3-android-battery-optimization-exemption-prompt: done
+  4-4-scripted-first-capture-loop: done
+  4-5-notification-permission-and-dpdp-consent: done
+  4-6-resumable-onboarding-state: done
+  epic-4-retrospective: optional
+
+  # ── Epic 5: Follow-up & Notifications ───────────────────────────────────────
+  epic-5: done
+  5-1-followup-scheduling-from-capture: done
+  5-2-followup-reminder-notification-with-context: done
+  5-3-followup-actions-complete-snooze-reschedule: done
+  5-4-followups-list-screen: done
+  5-5-three-daily-nudge-notifications: done
+  5-6-re-engagement-prompt-on-3-day-absence: done
+  epic-5-retrospective: optional
+
+  # ── Epic 6: Settings, Privacy & Compliance ──────────────────────────────────
+  epic-6: done
+  6-1-notification-timing-configuration: done
+  6-2-google-drive-backup: done
+  6-3-consent-management-and-data-deletion: done
+  6-4-grievance-officer-and-app-store-compliance: done
+  epic-6-retrospective: optional
+
+  # ── Epic 7: Subscription & Payments ─────────────────────────────────────────
+  epic-7: done
+  7-1-contact-count-tracking-and-freemium-gate-logic: done
+  7-2-paywall-screen: done
+  7-3-in-app-purchase-flow: done
+  7-4-subscription-restore: done
+  7-5-plan-status-and-subscription-management-in-settings: done
+  epic-7-retrospective: optional
