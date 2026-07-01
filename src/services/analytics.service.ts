@@ -8,7 +8,7 @@ const extra = Constants.expoConfig?.extra as Record<string, string> | undefined;
 const isDev = extra?.appEnv === 'development';
 
 // Not exported — use track() to ensure PII guard is always applied
-const _analyticsClient = new PostHog(extra?.posthogApiKey ?? 'placeholder', {
+const _analyticsClient = new PostHog(extra?.posthogApiKey || 'phc_placeholder', {
   host: 'https://us.i.posthog.com',
   disabled: isDev || !extra?.posthogApiKey,
   persistence: Platform.OS === 'web' ? 'memory' : undefined,

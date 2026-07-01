@@ -8,7 +8,6 @@ export async function setupNotificationChannel(): Promise<void> {
   await Notifications.setNotificationChannelAsync(FOLLOW_UP_CHANNEL_ID, {
     name: 'Follow-up Reminders',
     importance: Notifications.AndroidImportance.HIGH,
-    sound: 'default',
   });
 }
 
@@ -31,7 +30,7 @@ export async function scheduleFollowUpNotification(
         title: contactName,
         body: contextSnapshot ?? `follow up with ${contactName}`,
         data: { type: 'follow_up_reminder', contactId, followUpId },
-        sound: 'default',
+        sound: Platform.OS === 'ios' ? 'default' : undefined,
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
@@ -68,7 +67,7 @@ export async function scheduleDailyNudges(
         content: {
           body,
           data: { type: 'daily_nudge' },
-          sound: 'default',
+          sound: Platform.OS === 'ios' ? 'default' : undefined,
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DAILY,
