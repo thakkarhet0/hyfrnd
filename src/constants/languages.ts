@@ -10,7 +10,7 @@ export const SUPPORTED_LANGUAGES: Record<
 };
 
 // Code-switched audio (Hindi-English or Gujarati-English mix) uses the user's
-// primary language code with Sarvam AI — saarika:v2.5 handles code-switching
+// primary language code with Sarvam AI — saaras:v3 handles code-switching
 // automatically without a separate language_code value.
 export const CODE_SWITCHED_SARVAM_CODE = (lang: LanguageCode): string =>
   SUPPORTED_LANGUAGES[lang].sarvamCode;

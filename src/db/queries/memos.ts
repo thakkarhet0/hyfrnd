@@ -50,6 +50,30 @@ export async function getMemoTranscript(
   }
 }
 
+export async function getMemoById(
+  id: string,
+): Promise<{ data: MemoWithId | null; error: Error | null }> {
+  try {
+    const db = getDb();
+    const rows = await db
+      .select({
+        id: memos.id,
+        audio_path: memos.audio_path,
+        raw_transcript: memos.raw_transcript,
+        status: memos.status,
+        created_at: memos.created_at,
+      })
+      .from(memos)
+      .where(eq(memos.id, id))
+      .limit(1);
+    if (rows.length === 0) return { data: null, error: null };
+    return { data: rows[0], error: null };
+  } catch (err) {
+    return { data: null, error: err instanceof Error ? err : new Error(String(err)) };
+  }
+}
+
+
 export async function insertMemo(data: {
   audioPath: string;
 }): Promise<{ data: string | null; error: Error | null }> {

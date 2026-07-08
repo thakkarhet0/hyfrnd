@@ -343,10 +343,12 @@ STT integrated via HTTP API from JS layer — no native module required. Sarvam 
 - FR9: System presents extracted fields (contact name, context points, follow-up date and intent) to the user for review and confirmation before saving
 - FR10: System extracts a contact name from an unstructured voice memo transcript
 - FR11: System extracts 3–5 context points from a voice memo transcript
-- FR12: System extracts a follow-up date and intent from a voice memo transcript
+- FR12: System extracts a follow-up date and intent from a voice memo transcript (calculating relative dates based on the memo's creation date passed as a reference)
 - FR13: System prompts the user to confirm or supply any extraction fields that could not be inferred, presenting one missing field at a time with the raw transcript as context, and accepts both typed and voice input for each response
 - FR14: System stores the raw transcript locally if AI extraction fails, without silently discarding it
 - FR15: System retries queued STT processing when network connectivity is restored
+- FR15b: System provides a diagnostic logging feature ("log it") in the review screen to copy the audio file and save the transcript and all extracted fields to a dedicated SQLite log table using a matching generated ID for testing and verification
+
 
 ### Contact Management
 

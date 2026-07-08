@@ -99,6 +99,20 @@ const m0005 = `
 ALTER TABLE \`app_prefs\` ADD COLUMN \`theme_preference\` text DEFAULT 'system' NOT NULL;
 `;
 
+const m0006 = `
+CREATE TABLE \`extraction_logs\` (
+	\`id\` text PRIMARY KEY NOT NULL,
+	\`memo_id\` text,
+	\`raw_transcript\` text,
+	\`extracted_name\` text,
+	\`extracted_context_points\` text,
+	\`extracted_follow_up_date\` text,
+	\`extracted_follow_up_intent\` text,
+	\`audio_path\` text,
+	\`created_at\` integer NOT NULL
+);
+`;
+
 const migrations = {
   journal: {
     entries: [
@@ -138,6 +152,12 @@ const migrations = {
         tag: '0005_app_prefs_theme_preference',
         breakpoints: true,
       },
+      {
+        idx: 6,
+        when: 1783000000000,
+        tag: '0006_extraction_logs',
+        breakpoints: true,
+      },
     ],
   },
   migrations: {
@@ -147,6 +167,7 @@ const migrations = {
     m0003,
     m0004,
     m0005,
+    m0006,
   },
 };
 

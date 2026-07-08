@@ -83,3 +83,16 @@ export const app_prefs = sqliteTable('app_prefs', {
   last_backup_error: text('last_backup_error'),
   updated_at: integer('updated_at').notNull(),
 });
+
+export const extraction_logs = sqliteTable('extraction_logs', {
+  id: text('id').primaryKey().$defaultFn(() => nanoid()),
+  memo_id: text('memo_id'),
+  raw_transcript: text('raw_transcript'),
+  extracted_name: text('extracted_name'),
+  extracted_context_points: text('extracted_context_points'),
+  extracted_follow_up_date: text('extracted_follow_up_date'),
+  extracted_follow_up_intent: text('extracted_follow_up_intent'),
+  audio_path: text('audio_path'),
+  created_at: integer('created_at').notNull(),
+});
+

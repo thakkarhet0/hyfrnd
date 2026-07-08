@@ -1,9 +1,9 @@
 import Constants from 'expo-constants';
 import { File } from 'expo-file-system';
 
-import { updateMemoTranscript } from '@/db/queries/memos';
-import { getSttConsentGranted } from '@/db/queries/consent';
 import { SUPPORTED_LANGUAGES } from '@/constants/languages';
+import { getSttConsentGranted } from '@/db/queries/consent';
+import { updateMemoTranscript } from '@/db/queries/memos';
 import { useAppStore } from '@/stores/app.store';
 
 export interface QueueItem {
@@ -26,7 +26,7 @@ async function transcribeWithSarvam(audioPath: string, languageCode: string): Pr
     // { uri, type, name } file parts — it needs a Blob. expo-file-system's File implements Blob.
     formData.append('file', new File(audioPath) as unknown as Blob);
     formData.append('language_code', languageCode);
-    formData.append('model', 'saarika:v2.5');
+    formData.append('model', 'saaras:v3');
 
     const response = await fetch('https://api.sarvam.ai/speech-to-text', {
       method: 'POST',

@@ -14,18 +14,25 @@ Return ONLY valid JSON with this exact shape — no markdown, no explanation, ju
   "follow_up_intent": string or null
 }
 Rules:
-- name: the person the memo is about. null if not inferable.
+- name: the person the memo is about(usually the one who the user was on call with). null if not inferable.
 - context_points: 1–5 short bullet facts about the interaction or person. null if nothing inferable.
-- follow_up_date: ISO 8601 date string (YYYY-MM-DD) if a follow-up time is mentioned. null otherwise.
+- follow_up_date: ISO 8601 date string (YYYY-MM-DD) if a follow-up time is mentioned (calculate relative dates based on Today's Date). null otherwise.
 - follow_up_intent: brief phrase describing what the follow-up is for. null if no follow-up mentioned.
 - Use null (not empty string, not empty array) for fields you cannot infer.`;
 
-export function buildExtractionMessages(transcript: string): {
+export function buildExtractionMessages(
+  transcript: string,
+  referenceDateStr?: string,
+): {
   system: string;
   userMessage: string;
 } {
+  const systemPromptWithDate = referenceDateStr
+    ? `${SYSTEM_PROMPT}\n\nToday's Date: ${referenceDateStr}`
+    : SYSTEM_PROMPT;
+
   return {
-    system: SYSTEM_PROMPT,
+    system: systemPromptWithDate,
     userMessage: `Transcript: ${transcript}`,
   };
 }

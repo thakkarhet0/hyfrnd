@@ -184,7 +184,12 @@ Structured JSON extraction from ~200-word transcript. Target: <3s response time.
 Prompt instructs extraction of: `{name, context_points[], follow_up_date, follow_up_intent}`.
 Missing fields returned as null — triggers the one-field-at-a-time confirmation flow (FR13).
 
+**Relative Date Calculation:** Today's Date is formatted as `YYYY-MM-DD (DayOfWeek)` based on the memo's creation timestamp and injected into the prompt, enabling Claude to accurately resolve relative references (e.g., "day after tomorrow", "next Monday") to precise ISO dates.
+
+**Testing Diagnostics Logging:** A developer-facing "log it" button is available on the review screen. Tapping it copies the audio file to disk using a unique generated ID and writes a diagnostic record containing the raw transcript and all extracted properties directly into a local SQLite table (`extraction_logs`) using the same ID.
+
 **API key handling:** Shipped in app bundle for MVP. Migrate to serverless proxy in Vision phase to prevent key exposure in app binary.
+
 
 **Fallback:** If Claude API times out or errors, store raw transcript and prompt user to retry — no silent failure (FR14).
 

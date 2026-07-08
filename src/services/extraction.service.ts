@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 
-import { getMemoTranscript } from '@/db/queries/memos';
+import { getMemoById } from '@/db/queries/memos';
 import type { ExtractionResult } from '@/constants/extraction';
 import { buildExtractionMessages } from '@/constants/extraction';
 import { track, ANALYTICS_EVENTS } from '@/services/analytics.service';
@@ -35,15 +35,27 @@ function parseJsonResponse(text: string): unknown {
   }
 }
 
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+function formatReferenceDate(timestamp: number): string {
+  const date = new Date(timestamp);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const weekday = WEEKDAYS[date.getDay()];
+  return `${year}-${month}-${day} (${weekday})`;
+}
+
 export async function extractFromTranscript(
   memoId: string,
 ): Promise<{ data: ExtractionResult | null; error: Error | null }> {
-  const { data: transcript, error: transcriptError } = await getMemoTranscript(memoId);
-  if (transcriptError) return { data: null, error: transcriptError };
-  if (!transcript) return { data: null, error: new Error('no_transcript') };
+  const { data: memo, error: memoError } = await getMemoById(memoId);
+  if (memoError) return { data: null, error: memoError };
+  if (!memo || !memo.raw_transcript) return { data: null, error: new Error('no_transcript') };
 
+  const referenceDateStr = formatReferenceDate(memo.created_at);
   const claudeApiKey = extra?.claudeApiKey ?? '';
-  const { system, userMessage } = buildExtractionMessages(transcript);
+  const { system, userMessage } = buildExtractionMessages(memo.raw_transcript, referenceDateStr);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
