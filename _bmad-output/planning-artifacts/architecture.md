@@ -181,12 +181,23 @@ TypeScript-first, schema-as-code, migration tracking. Critical for a solo founde
 
 **Provider:** Anthropic Claude Haiku 4.5 (`claude-haiku-4-5-20251001`)
 Structured JSON extraction from ~200-word transcript. Target: <3s response time.
-Prompt instructs extraction of: `{name, context_points[], follow_up_date, follow_up_intent}`.
+Prompt instructs extraction of: `{name, name_native, context_points[], follow_up_date, follow_up_intent}`.
+*   `name`: Always transliterated into English/Latin script to support standard matching.
+*   `name_native`: Extracted native script (Gujarati/Hindi) of the name, if the transcript is in those languages.
+*   `context_points` & `follow_up_intent`: Prompt strictly enforces preserving the source language and script of the transcript (e.g. Gujarati summaries for Gujarati memos) to ensure language consistency.
 Missing fields returned as null — triggers the one-field-at-a-time confirmation flow (FR13).
 
 **Relative Date Calculation:** Today's Date is formatted as `YYYY-MM-DD (DayOfWeek)` based on the memo's creation timestamp and injected into the prompt, enabling Claude to accurately resolve relative references (e.g., "day after tomorrow", "next Monday") to precise ISO dates.
 
 **Testing Diagnostics Logging:** A developer-facing "log it" button is available on the review screen. Tapping it copies the audio file to disk using a unique generated ID and writes a diagnostic record containing the raw transcript and all extracted properties directly into a local SQLite table (`extraction_logs`) using the same ID.
+
+**Contact Matching & Resolution:**
+*   **Local Multi-Way Ranking:** Device contacts are fetched as a single block (`fetchDeviceContacts`) and scored locally in JavaScript using alphanumeric normalization, substring matching, starts-with prefix match bonuses, and suffix-stripping root word overlap checks (matching suffixes like `-bhai`, `-ben`, `-didi`, `-kumar`).
+*   **Phonetic & Typo Tolerance:** Features a custom phonetic normalizer (`toPhonetic`) that collapses soundalikes (`dh`/`d`, `bh`/`b`, `sh`/`s`, `w`/`v`, `z`/`j`), collapses double vowels/consonants, and groups vowels (`a`/`o`/`u` vs `e`/`i`/`y`) to catch spelling variations. Incorporates Levenshtein distance (allowing 1 typo for short words, 2 typos for words $\ge$ 5 letters) to catch consonant errors.
+*   **Cross-Script Transliteration:** Maps Devanagari (Hindi) and Gujarati characters to Latin equivalents during normalization, enabling script-agnostic matching (e.g. English query matching a Gujarati script contact name).
+*   **Dual-Script Matching:** Matches are scored independently against the extracted English `name` and native `name_native` name scripts, choosing the highest resulting score to link.
+*   **Fuzzy Manual Search & Highlighting:** The manual search list uses the same scoring engine to filter and rank results by relevance instead of a simple substring match. Bolds matching characters visually using a `HighlightedText` regex splitter.
+*   **Linking Action Flow:** If matching results exist, the user picks one (with a "None of these" rejection option). If none match, they can choose to search all contacts manually or trigger `presentDeviceContactForm` to register a new contact via the native OS contact form, falling back to local database creation if denied.
 
 **API key handling:** Shipped in app bundle for MVP. Migrate to serverless proxy in Vision phase to prevent key exposure in app binary.
 

@@ -340,10 +340,10 @@ STT integrated via HTTP API from JS layer — no native module required. Sarvam 
 ### STT & AI Extraction
 
 - FR8: System transcribes voice memos recorded in Hindi, Gujarati, English, and Hindi/Gujarati-English code-switched speech
-- FR9: System presents extracted fields (contact name, context points, follow-up date and intent) to the user for review and confirmation before saving
+- FR9: System presents extracted fields (contact name in English, native script contact name, context points, follow-up date and intent) to the user for review and confirmation before saving
 - FR10: System extracts a contact name from an unstructured voice memo transcript
-- FR11: System extracts 3–5 context points from a voice memo transcript
-- FR12: System extracts a follow-up date and intent from a voice memo transcript (calculating relative dates based on the memo's creation date passed as a reference)
+- FR11: System extracts 3–5 context points from a voice memo transcript, preserving the script and language of the original transcript instead of translating to English
+- FR12: System extracts a follow-up date and intent from a voice memo transcript, calculating relative dates based on the memo's creation date passed as a reference and preserving the script and language of the intent instead of translating to English
 - FR13: System prompts the user to confirm or supply any extraction fields that could not be inferred, presenting one missing field at a time with the raw transcript as context, and accepts both typed and voice input for each response
 - FR14: System stores the raw transcript locally if AI extraction fails, without silently discarding it
 - FR15: System retries queued STT processing when network connectivity is restored
@@ -351,10 +351,10 @@ STT integrated via HTTP API from JS layer — no native module required. Sarvam 
 
 
 ### Contact Management
-
-- FR16: User can link a voice memo extraction result to an existing contact from their device contacts
+ 
+- FR16: User can link a voice memo extraction result to an existing contact from their device contacts using string, substring, root-level matching, Levenshtein-based typo tolerance, and consonant/vowel soundalike phonetic rules across both English and native scripts, or search all device and app contacts manually using a matching fuzzy engine and visual highlights
 - FR17: System suggests potential matching contacts when linking a memo to help avoid duplicate entries
-- FR18: User can create a new contact from a voice memo extraction result
+- FR18: User can create a new contact natively on their phone (prefilled with the name) or locally within the app as a fallback
 - FR19: User can edit a contact's name, phone number, and profile photo at any time
 - FR20: User can delete a single contact and all associated memos and follow-ups
 - FR21: User can edit or delete individual extracted context points and add free-text notes to any memo after it has been saved

@@ -53,6 +53,7 @@ export function useQueueProcessor() {
           store.setProcessingError(null);
           await updateMemoStatus(item.memo_id, 'extracted');
           store.setExtractedName(extracted.name);
+          store.setExtractedNameNative(extracted.name_native);
           store.setExtractedContextPoints(extracted.context_points);
           store.setExtractedFollowUpDate(extracted.follow_up_date);
           store.setExtractedFollowUpIntent(extracted.follow_up_intent);

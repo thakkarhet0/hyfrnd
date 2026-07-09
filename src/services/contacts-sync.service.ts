@@ -8,6 +8,7 @@ import {
   getContactsAsync,
   getPermissionsAsync,
   requestPermissionsAsync,
+  presentFormAsync,
 } from 'expo-contacts/legacy';
 
 export interface DeviceContact {
@@ -136,4 +137,17 @@ export function addDeviceContactsListener(
   listener: () => void,
 ): ReturnType<typeof addContactsChangeListener> {
   return addContactsChangeListener(listener);
+}
+
+/**
+ * Presents the device's native create-contact UI prefilled with first/last names.
+ */
+export async function presentDeviceContactForm(name: string): Promise<void> {
+  const parts = name.trim().split(/\s+/);
+  const firstName = parts[0] || '';
+  const lastName = parts.slice(1).join(' ') || '';
+  await presentFormAsync(undefined, {
+    firstName,
+    lastName,
+  } as any);
 }

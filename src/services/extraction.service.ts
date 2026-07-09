@@ -94,6 +94,7 @@ export async function extractFromTranscript(
     }
 
     const nameVal = typeof parsed.name === 'string' ? parsed.name.trim() : null;
+    const nameNativeVal = typeof parsed.name_native === 'string' ? parsed.name_native.trim() : null;
     const followUpDateVal =
       typeof parsed.follow_up_date === 'string' ? parsed.follow_up_date.trim() : null;
     const followUpIntentVal =
@@ -106,6 +107,7 @@ export async function extractFromTranscript(
 
     result = {
       name: nameVal && nameVal.length > 0 ? nameVal : null,
+      name_native: nameNativeVal && nameNativeVal.length > 0 ? nameNativeVal : null,
       context_points: contextPointsVal && contextPointsVal.length > 0 ? contextPointsVal : null,
       follow_up_date: followUpDateVal && followUpDateVal.length > 0 ? followUpDateVal : null,
       follow_up_intent:

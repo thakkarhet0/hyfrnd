@@ -10,6 +10,7 @@ interface CaptureState {
   hasProcessingError: boolean;
   processingError: string | null;
   extractedName: string | null;
+  extractedNameNative: string | null;
   extractedContextPoints: string[] | null;
   extractedFollowUpDate: string | null;
   extractedFollowUpIntent: string | null;
@@ -26,6 +27,7 @@ interface CaptureState {
   setHasProcessingError: (b: boolean) => void;
   setProcessingError: (message: string | null) => void;
   setExtractedName: (name: string | null) => void;
+  setExtractedNameNative: (name: string | null) => void;
   setExtractedContextPoints: (points: string[] | null) => void;
   setExtractedFollowUpDate: (date: string | null) => void;
   setExtractedFollowUpIntent: (intent: string | null) => void;
@@ -46,6 +48,7 @@ export const useCaptureStore = create<CaptureState>((set) => ({
   hasProcessingError: false,
   processingError: null,
   extractedName: null,
+  extractedNameNative: null,
   extractedContextPoints: null,
   extractedFollowUpDate: null,
   extractedFollowUpIntent: null,
@@ -62,6 +65,7 @@ export const useCaptureStore = create<CaptureState>((set) => ({
   setHasProcessingError: (hasProcessingError) => set({ hasProcessingError }),
   setProcessingError: (processingError) => set({ processingError }),
   setExtractedName: (extractedName) => set({ extractedName }),
+  setExtractedNameNative: (extractedNameNative) => set({ extractedNameNative }),
   setExtractedContextPoints: (extractedContextPoints) => set({ extractedContextPoints }),
   setExtractedFollowUpDate: (extractedFollowUpDate) => set({ extractedFollowUpDate }),
   setExtractedFollowUpIntent: (extractedFollowUpIntent) => set({ extractedFollowUpIntent }),
@@ -80,6 +84,7 @@ export const useCaptureStore = create<CaptureState>((set) => ({
       hasProcessingError: false,
       processingError: null,
       extractedName: null,
+      extractedNameNative: null,
       extractedContextPoints: null,
       extractedFollowUpDate: null,
       extractedFollowUpIntent: null,
