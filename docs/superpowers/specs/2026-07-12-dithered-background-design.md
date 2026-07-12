@@ -59,11 +59,15 @@ Runs once per redraw (see "Re-roll triggers" below), not per frame:
   bar's lifetime.
 - Each screen's own background becomes transparent so the shared layer shows
   through:
-  - `CaptureScreenBackground.tsx`: drop the `LinearGradient` and
-    `MetalColors.gradient` fill entirely; component becomes a thin wrapper
-    around `Screen` with a transparent style. (`RecordButtonDOM`'s own
-    `.inner` gradient chassis is a separate, unrelated component and is not
-    touched.)
+  - `(tabs)/capture.tsx`: `CaptureScreenBackground.tsx` is also used by
+    `onboarding/capture.tsx`, which is out of scope and must keep its
+    existing metal gradient — so `CaptureScreenBackground.tsx` itself is
+    **not** modified. Instead, the three `CaptureScreenBackground` call sites
+    in `(tabs)/capture.tsx` are replaced with the plain `Screen` component
+    (which already has no background fill of its own), dropping the gradient
+    only for the tab screen. (`RecordButtonDOM`'s own `.inner` gradient
+    chassis is a separate, unrelated component and is not touched either
+    way.)
   - `calendar.tsx`, `contacts.tsx`, `settings.tsx`: remove the
     `backgroundColor: theme.background` override passed to `Screen`, letting
     the shared dithered layer show through instead.
