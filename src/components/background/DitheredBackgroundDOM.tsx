@@ -81,8 +81,9 @@ function generateValueNoise(
   return field;
 }
 
-// MetalColors.footerBackground-adjacent near-black + MetalColors.accentGlow red.
+// MetalColors.footerBackground-adjacent near-black + MetalColors.accentGlow red + a subtle charcoal grey.
 const COLOR_BLACK: readonly [number, number, number] = [28, 28, 30]; // #1c1c1e
+const COLOR_GREY: readonly [number, number, number] = [46, 48, 50]; // #2e3032
 const COLOR_RED: readonly [number, number, number] = [204, 26, 0]; // #cc1a00
 
 function generateDitherFrame(
@@ -91,7 +92,8 @@ function generateDitherFrame(
   height: number,
   frameSeed: number,
 ): ImageData {
-  const toneField = generateValueNoise(width, height, mulberry32(frameSeed), 16);
+  const toneField = generateValueNoise(width, height, mulberry32(frameSeed), 24);
+  const redRng = mulberry32(frameSeed ^ 0x9e3779b9);
 
   const image = ctx.createImageData(width, height);
   const data = image.data;
@@ -101,12 +103,15 @@ function generateDitherFrame(
       const i = y * width + x;
       const threshold = (BAYER_8X8[y % 8][x % 8] + 0.5) / 64;
       
-      // We want sparse red. Let's make density range from 0.002 to 0.065
-      // using the tone field to form organic clusters.
-      const density = 0.002 + toneField[i] * 0.063;
-      const isRed = density > threshold;
+      // Black vs Grey dither
+      let color = toneField[i] > threshold ? COLOR_GREY : COLOR_BLACK;
 
-      const color = isRed ? COLOR_RED : COLOR_BLACK;
+      // Extremely sparse red flecks (~0.5%)
+      const isRed = redRng() > 0.995;
+      if (isRed) {
+        color = COLOR_RED;
+      }
+
       const p = i * 4;
       data[p] = color[0];
       data[p + 1] = color[1];
@@ -132,12 +137,8 @@ export default function DitheredBackgroundDOM({ seed }: DitheredBackgroundDOMPro
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        const parentWidth = entry.contentRect.width || parent.clientWidth || window.innerWidth;
-        const parentHeight = entry.contentRect.height || parent.clientHeight || window.innerHeight;
-        
-        // Render at half resolution for retro chunky pixel look and performance
-        const width = Math.max(1, Math.round(parentWidth / 2));
-        const height = Math.max(1, Math.round(parentHeight / 2));
+        const width = Math.max(1, Math.round(entry.contentRect.width || parent.clientWidth || window.innerWidth));
+        const height = Math.max(1, Math.round(entry.contentRect.height || parent.clientHeight || window.innerHeight));
 
         canvas.width = width;
         canvas.height = height;
@@ -217,6 +218,4 @@ const Canvas = styled.canvas`
   display: block;
   width: 100%;
   height: 100%;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
 `;

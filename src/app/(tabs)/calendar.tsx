@@ -60,7 +60,7 @@ function groupByDay(items: PendingFollowUp[]): DayGroup[] {
 function FollowUpRow({ item, theme }: { item: PendingFollowUp; theme: ThemeColors }) {
   return (
     <Pressable
-      style={[styles.row, { borderColor: theme.text + '20', backgroundColor: theme.text + '06' }]}
+      style={[styles.row, { borderColor: theme.text + '20', backgroundColor: theme.background }]}
       onPress={() => router.push(`/contact/${item.contact_id}`)}
       accessibilityRole="button"
     >
@@ -170,7 +170,7 @@ export default function CalendarScreen() {
   const hasTodayData = todayEntries.length > 0;
 
   return (
-    <Screen style={styles.container}>
+    <Screen style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.toggleRow}>
         <Pressable
           style={[

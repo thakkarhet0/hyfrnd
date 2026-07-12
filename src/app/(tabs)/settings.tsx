@@ -15,7 +15,7 @@ export default function SettingsScreen() {
   const theme = useTheme();
 
   return (
-    <Screen>
+    <Screen style={{ backgroundColor: theme.background }}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={[styles.heading, { color: theme.text }]}>{t('settings.title')}</Text>
         <SubscriptionSettings />

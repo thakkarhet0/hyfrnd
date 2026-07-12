@@ -103,7 +103,7 @@ function DeviceContactRow({
 // except the last (the footer draws the closing bottom edge).
 function blockSides(theme: AnyTheme, isLast: boolean) {
   return {
-    backgroundColor: theme.text + '06',
+    backgroundColor: theme.background,
     borderLeftWidth: 1,
     borderRightWidth: 1,
     borderLeftColor: theme.text + '20',
@@ -197,12 +197,12 @@ export default function ContactsScreen() {
   const isSearchEmpty = sections.length === 0 && query.trim().length > 0;
 
   return (
-    <Screen style={styles.container}>
+    <Screen style={[styles.container, { backgroundColor: theme.background }]}>
       {!isEmpty && (
         <View
           style={[
             styles.searchBox,
-            { borderColor: theme.text + '20', backgroundColor: theme.text + '06' },
+            { borderColor: theme.text + '20', backgroundColor: theme.background },
           ]}
         >
           <TextInput
@@ -237,7 +237,7 @@ export default function ContactsScreen() {
         <Pressable
           style={[
             styles.permissionBanner,
-            { borderColor: theme.text + '20', backgroundColor: theme.text + '06' },
+            { borderColor: theme.text + '20', backgroundColor: theme.background },
           ]}
           onPress={() => permission.blocked && void Linking.openSettings()}
           accessibilityRole="button"
@@ -291,7 +291,7 @@ export default function ContactsScreen() {
               style={[
                 styles.sectionHeader,
                 {
-                  backgroundColor: theme.text + '06',
+                  backgroundColor: theme.background,
                   borderTopColor: theme.text + '20',
                   borderLeftColor: theme.text + '20',
                   borderRightColor: theme.text + '20',
@@ -309,7 +309,7 @@ export default function ContactsScreen() {
               style={[
                 styles.sectionFooter,
                 {
-                  backgroundColor: theme.text + '06',
+                  backgroundColor: theme.background,
                   borderBottomColor: theme.text + '20',
                   borderLeftColor: theme.text + '20',
                   borderRightColor: theme.text + '20',
