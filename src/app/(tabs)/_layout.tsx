@@ -68,6 +68,7 @@ export default function TabLayout() {
       <View style={StyleSheet.absoluteFill} pointerEvents="none">
         <DitheredBackgroundDOM
           seed={seed}
+          isActive={isRecording}
           dom={{
             style: styles.backgroundDom,
             scrollEnabled: false,
