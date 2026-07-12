@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export type FooterTabKey = 'capture' | 'contacts' | 'settings';
+export type FooterTabKey = 'capture' | 'calendar' | 'contacts' | 'settings';
 
 export interface FooterDOMProps {
   activeTab: FooterTabKey;
@@ -23,7 +23,7 @@ export interface FooterDOMProps {
   dom?: import('expo/dom').DOMProps;
 }
 
-const TABS: FooterTabKey[] = ['capture', 'contacts', 'settings'];
+const TABS: FooterTabKey[] = ['capture', 'calendar', 'contacts', 'settings'];
 
 function IconShape({ variant }: { variant: FooterTabKey }) {
   if (variant === 'capture') {
@@ -33,6 +33,19 @@ function IconShape({ variant }: { variant: FooterTabKey }) {
         <path d="M18 30a14 14 0 0 0 28 0" />
         <line x1={32} y1={44} x2={32} y2={52} />
         <line x1={22} y1={52} x2={42} y2={52} />
+      </>
+    );
+  }
+  if (variant === 'calendar') {
+    return (
+      <>
+        <rect x={14} y={16} width={36} height={34} rx={4} />
+        <line x1={14} y1={26} x2={50} y2={26} />
+        <line x1={24} y1={10} x2={24} y2={20} />
+        <line x1={40} y1={10} x2={40} y2={20} />
+        <circle cx={24} cy={36} r={2.5} />
+        <circle cx={32} cy={36} r={2.5} />
+        <circle cx={40} cy={36} r={2.5} />
       </>
     );
   }
