@@ -1,5 +1,5 @@
 {
-  "tabs": { "capture": "Capture", "contacts": "Contacts", "settings": "Settings" },
+  "tabs": { "capture": "Capture", "calendar": "Calendar", "contacts": "Contacts", "settings": "Settings" },
   "capture": {
     "title": "Capture",
     "recordButton": "tap to speak",
@@ -93,7 +93,11 @@
     "title": "follow-ups",
     "emptyTitle": "you're all caught up",
     "emptyBody": "no pending follow-ups. keep recording moments with people you care about.",
-    "viewAll": "see all follow-ups"
+    "viewAll": "see all follow-ups",
+    "today": "today",
+    "month": "this month",
+    "overdue": "overdue",
+    "emptyMonth": "nothing scheduled this month"
   },
   "reEngage": {
     "heading": "good to have you back",

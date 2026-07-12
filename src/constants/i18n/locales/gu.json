@@ -1,5 +1,5 @@
 {
-  "tabs": { "capture": "રેકોર્ડ", "contacts": "સંપર્ક", "settings": "સેટિંગ્સ" },
+  "tabs": { "capture": "રેકોર્ડ", "calendar": "કેલેન્ડર", "contacts": "સંપર્ક", "settings": "સેટિંગ્સ" },
   "capture": {
     "title": "રેકોર્ડ",
     "recordButton": "બોલવા માટે ટૅપ કરો",
@@ -93,7 +93,11 @@
     "title": "ફૉલો-અપ",
     "emptyTitle": "બધું થઈ ગયું",
     "emptyBody": "કોઈ બાકી ફૉલો-અપ નથી. જે લોકો ગમે છે તેમના વિશે રેકોર્ડ કરતા રહો.",
-    "viewAll": "બધા ફૉલો-અપ જુઓ"
+    "viewAll": "બધા ફૉલો-અપ જુઓ",
+    "today": "આજે",
+    "month": "આ મહિને",
+    "overdue": "બાકી",
+    "emptyMonth": "આ મહિને કંઈ નક્કી નથી"
   },
   "reEngage": {
     "heading": "પાછા આવ્યા, સારું થયું",
