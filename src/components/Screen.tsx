@@ -21,7 +21,7 @@ type ScreenProps = {
  */
 export function Screen({ children, style, edges = ['top'] }: ScreenProps) {
   return (
-    <SafeAreaView style={[{ flex: 1, backgroundColor: 'transparent' }, style]} edges={edges}>
+    <SafeAreaView style={[{ flex: 1 }, style]} edges={edges}>
       {children}
     </SafeAreaView>
   );

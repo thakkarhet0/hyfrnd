@@ -517,7 +517,7 @@ export default function ContactDetailScreen() {
                   {t(`contacts.${fu.status}` as const)}
                 </Text>
                 {fu.context_snapshot ? (
-                  <Text style={[styles.cpText, { color: theme.text + '80' }]} numberOfLines={2}>
+                  <Text style={[styles.cpText, { color: theme.text + '80' }]}>
                     {fu.context_snapshot}
                   </Text>
                 ) : null}

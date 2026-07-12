@@ -15,8 +15,16 @@ import {
 
 type ViewMode = 'today' | 'month';
 
-function formatDayChip(ts: number): string {
-  return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+// Amber — visually distinct from the app's blue accent (theme.cta), reads as
+// "attention/urgent" on the black background without the muddiness of a dusky red.
+const OVERDUE_COLOR = '#ffb020';
+
+function formatDateParts(ts: number): { day: string; weekday: string } {
+  const d = new Date(ts);
+  return {
+    day: d.toLocaleDateString(undefined, { day: 'numeric' }),
+    weekday: d.toLocaleDateString(undefined, { weekday: 'short' }),
+  };
 }
 
 function formatDayHeader(ts: number): string {
@@ -59,6 +67,7 @@ function groupByDay(items: PendingFollowUp[]): DayGroup[] {
 
 function FollowUpRow({ item, theme }: { item: PendingFollowUp; theme: ThemeColors }) {
   const isOverdue = new Date(item.due_date).getTime() < new Date().setHours(0, 0, 0, 0);
+  const { day, weekday } = formatDateParts(item.due_date);
 
   return (
     <Pressable
@@ -76,30 +85,17 @@ function FollowUpRow({ item, theme }: { item: PendingFollowUp; theme: ThemeColor
       <View
         style={[
           styles.accentBar,
-          { backgroundColor: isOverdue ? theme.highlight : '#525d7e' },
+          { backgroundColor: isOverdue ? OVERDUE_COLOR : '#525d7e' },
         ]}
       />
+      <View style={[styles.dateCol, { borderColor: isOverdue ? OVERDUE_COLOR : theme.cardBorder }]}>
+        <Text style={[styles.dateDay, { color: isOverdue ? OVERDUE_COLOR : theme.text }]}>{day}</Text>
+        <Text style={[styles.dateWeekday, { color: isOverdue ? OVERDUE_COLOR : theme.text }]}>
+          {weekday}
+        </Text>
+      </View>
       <View style={styles.rowContent}>
         <Text style={[styles.name, { color: theme.text }]}>{item.contact_name}</Text>
-        <View
-          style={[
-            styles.dateChip,
-            {
-              backgroundColor: isOverdue ? theme.highlight + '20' : theme.text + '10',
-              borderColor: isOverdue ? theme.highlight : theme.text + '30',
-              borderWidth: 1,
-            },
-          ]}
-        >
-          <Text
-            style={[
-              styles.dateChipText,
-              { color: isOverdue ? theme.cta : theme.text + '80' },
-            ]}
-          >
-            {formatDayChip(item.due_date)}
-          </Text>
-        </View>
         {item.context_snapshot ? (
           <Text style={[styles.snapshot, { color: theme.text + '70' }]} numberOfLines={2}>
             {item.context_snapshot}
@@ -237,7 +233,7 @@ export default function CalendarScreen() {
                 <Text
                   style={[
                     styles.sectionLabel,
-                    { color: entry.isOverdue ? theme.highlight : theme.text },
+                    { color: entry.isOverdue ? OVERDUE_COLOR : INK },
                   ]}
                 >
                   {entry.label}
@@ -287,7 +283,7 @@ export default function CalendarScreen() {
               contentContainerStyle={styles.list}
               renderItem={({ item: group }) => (
                 <View>
-                  <Text style={[styles.sectionLabel, { color: theme.text }]}>
+                  <Text style={[styles.sectionLabel, { color: INK }]}>
                     {formatDayHeader(group.due_date)}
                   </Text>
                   {group.items.map((item) => (
@@ -364,6 +360,22 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   accentBar: { width: 5, alignSelf: 'stretch' },
+  dateCol: {
+    width: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.md,
+    borderRightWidth: 1,
+  },
+  dateDay: { fontFamily: FONT_BOLD, fontSize: 22, textAlign: 'center' },
+  dateWeekday: {
+    fontFamily: FONT_REGULAR,
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginTop: 2,
+    textAlign: 'center',
+  },
   rowContent: {
     flex: 1,
     paddingHorizontal: Spacing.md,
@@ -371,7 +383,5 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   name: { fontFamily: FONT_BOLD, fontSize: 18, textTransform: 'lowercase' },
-  dateChip: { alignSelf: 'flex-start', paddingHorizontal: Spacing.sm, paddingVertical: 2 },
-  dateChipText: { fontFamily: FONT_BOLD, fontSize: 13, textTransform: 'lowercase' },
   snapshot: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
 });

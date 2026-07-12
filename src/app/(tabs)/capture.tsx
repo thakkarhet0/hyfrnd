@@ -83,7 +83,7 @@ export default function CaptureScreen() {
     return (
       <Screen style={styles.container}>
         <View style={styles.center}>
-          <Text style={[styles.hint, { color: MetalColors.text }]}>{t('capture.processingFailed')}</Text>
+          <Text style={[styles.hint, { color: theme.text }]}>{t('capture.processingFailed')}</Text>
           {processingError && (
             <Text style={[styles.reRecordLabel, { color: 'red', textAlign: 'center' }]}>{processingError}</Text>
           )}
@@ -126,30 +126,30 @@ export default function CaptureScreen() {
 
           {/* Idle / recording hint */}
           {!isRecording && !isPaused && (
-            <Text style={[styles.hint, { color: MetalColors.text }]}>
+            <Text style={[styles.hint, { color: theme.text }]}>
               {permissionStatus === 'denied'
                 ? t('capture.micPermissionNeeded')
                 : t('capture.recordButton')}
             </Text>
           )}
           {isRecording && (
-            <Text style={[styles.hint, { color: MetalColors.text }]}>{t('capture.tapToStop')}</Text>
+            <Text style={[styles.hint, { color: theme.text }]}>{t('capture.tapToStop')}</Text>
           )}
 
           {/* Paused: continue by tapping the mic, or choose delete / done */}
           {isPaused && (
             <View style={styles.pausedBlock}>
-              <Text style={[styles.hint, { color: MetalColors.text + '99' }]}>
+              <Text style={[styles.hint, { color: theme.text + '99' }]}>
                 {t('capture.tapToContinue')}
               </Text>
               <View style={styles.actionsRow}>
                 <Pressable
                   onPress={() => void discardRecording()}
-                  style={[styles.actionButton, styles.deleteButton, { borderColor: MetalColors.text }]}
+                  style={[styles.actionButton, styles.deleteButton, { borderColor: theme.text }]}
                   accessibilityRole="button"
                   accessibilityLabel={t('capture.delete')}
                 >
-                  <Text style={[styles.actionLabel, { color: MetalColors.text }]}>
+                  <Text style={[styles.actionLabel, { color: theme.text }]}>
                     {t('capture.delete')}
                   </Text>
                 </Pressable>

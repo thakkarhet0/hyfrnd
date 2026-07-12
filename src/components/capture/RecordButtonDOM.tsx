@@ -57,12 +57,12 @@ export default function RecordButtonDOM({
                   <g className="symbol">
                     <defs>
                       <linearGradient id="dotSurface" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#161718" />
-                        <stop offset="100%" stopColor="#2e3032" />
+                        <stop offset="0%" stopColor={themeMode === 'light' ? '#9ea5b0' : '#161718'} />
+                        <stop offset="100%" stopColor={themeMode === 'light' ? '#b8bfc8' : '#2e3032'} />
                       </linearGradient>
                     </defs>
-                    <circle cx={50} cy={50} r={40} fill="none" stroke="#212123" strokeWidth={7} />
-                    <circle className="dot" cx={50} cy={50} r={18} fill="url(#dotSurface)" stroke="#111113" strokeWidth={1.5} />
+                    <circle cx={50} cy={50} r={40} fill="none" stroke={themeMode === 'light' ? '#9ea5b0' : '#212123'} strokeWidth={7} />
+                    <circle className="dot" cx={50} cy={50} r={18} fill="url(#dotSurface)" stroke={themeMode === 'light' ? '#8a9099' : '#111113'} strokeWidth={1.5} />
                   </g>
 
                   {/* Directional rim light: bright top-left, fades bottom-right */}
@@ -139,24 +139,33 @@ const Root = styled.div`
 const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
   .wrap {
     --radius: 30px;
-    --bg: ${props => props.$themeMode === 'light' ? '#eaecee' : '#000000'};
-    --shadow-wrap: ${props => props.$themeMode === 'light' ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.5)'};
+    /*
+     * Neumorphism: button color must match parent panel (#e0e5ec).
+     * Depth comes ONLY from the two outer shadows:
+     *   - dark shadow bottom-right  → looks like light coming from top-left
+     *   - white/bright shadow top-left → bright highlight from that light source
+     */
+    --bg: ${props => props.$themeMode === 'light' ? '#e0e5ec' : '#000000'};
+    --shadow-wrap: ${props => props.$themeMode === 'light' ? 'rgba(0, 0, 0, 0.10)' : 'rgba(0, 0, 0, 0.5)'};
     --shadow-color-1: ${props => props.$themeMode === 'light' ? '#00df9a' : '#2415d9'};
     --shadow-color-2: ${props => props.$themeMode === 'light' ? '#00a877' : '#1b0eb3'};
     --pulse-color: ${props => props.$themeMode === 'light' ? '#00df9a' : '#311fff'};
-    --glow-grad: ${props => props.$themeMode === 'light' 
-      ? 'linear-gradient(to bottom, #00df9a 0%, rgba(255,255,255,0) 100%)' 
+    --glow-grad: ${props => props.$themeMode === 'light'
+      ? 'linear-gradient(to bottom, #00df9a 0%, rgba(255,255,255,0) 100%)'
       : 'linear-gradient(to bottom, #311fff 0%, black 100%)'};
-    --btn-border-top: ${props => props.$themeMode === 'light' ? '#fdfdfe' : '#414244'};
-    --btn-border-sides: ${props => props.$themeMode === 'light' ? '#e6e8eb' : '#2b2b2c'};
-    --btn-border-bottom: ${props => props.$themeMode === 'light' ? '#d4d6db' : '#15161a'};
-    --inner-bg: ${props => props.$themeMode === 'light' 
-      ? 'linear-gradient(180deg, #ffffff 5%, #e1e4e6 100%)' 
+    /* Bevel: very subtle — matches neumorphic flat raised surface */
+    --btn-border-top: ${props => props.$themeMode === 'light' ? '#f0f4f8' : '#414244'};
+    --btn-border-sides: ${props => props.$themeMode === 'light' ? '#e4e9f0' : '#2b2b2c'};
+    --btn-border-bottom: ${props => props.$themeMode === 'light' ? '#c8cfd8' : '#15161a'};
+    /* Inner face: bright white face on top, slightly grey at bottom — adds depth */
+    --inner-bg: ${props => props.$themeMode === 'light'
+      ? 'linear-gradient(180deg, #ffffff 5%, #e8ecf1 100%)'
       : 'linear-gradient(180deg, #232324 5%, #46484b 100%)'};
-    --inner-active-bg: ${props => props.$themeMode === 'light' 
-      ? 'linear-gradient(180deg, #eaecee 5%, #d4d6db 100%)' 
+    --inner-active-bg: ${props => props.$themeMode === 'light'
+      ? 'linear-gradient(180deg, #d8dde5 5%, #c8cfd8 100%)'
       : 'linear-gradient(180deg, #18191a 5%, #313336 100%)'};
     --shine-color: ${props => props.$themeMode === 'light' ? 'rgb(0, 223, 154)' : 'rgb(49, 31, 255)'};
+
 
     display: flex;
     align-items: center;
@@ -208,10 +217,14 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
     z-index: 2;
     border: transparent;
     border-radius: var(--radius);
+    /*
+     * Neumorphic RAISED: dual outer shadows — dark bottom-right, bright top-left.
+     * The inner white inset simulates a bright top surface catch from the light source.
+     */
     box-shadow:
-      inset 0 1px 1px rgb(255 255 255 / 40%),
-      inset 0 -6px 1px -4px var(--shadow-color-1),
-      inset 0 -15px 6px -8px var(--shadow-color-2);
+      ${props => props.$themeMode === 'light'
+        ? `10px 10px 20px rgba(163, 177, 198, 0.7), -10px -10px 20px rgba(255, 255, 255, 0.85), inset 0 1px 1px rgba(255,255,255,0.9), inset 0 -6px 1px -4px var(--shadow-color-1), inset 0 -15px 6px -8px var(--shadow-color-2)`
+        : `inset 0 1px 1px rgb(255 255 255 / 40%), inset 0 -6px 1px -4px var(--shadow-color-1), inset 0 -15px 6px -8px var(--shadow-color-2)`};
     transition:
       transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
       filter 0.25s ease,
@@ -244,7 +257,8 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
     background: var(--shadow-color-1);
     filter: contrast(10) blur(7px);
     transition: all 0.3s ease;
-    opacity: 0;
+    /* Hide the bottom bleed glow in light mode — button is recessed, not raised */
+    opacity: ${props => props.$themeMode === 'light' ? '0' : '1'};
   }
 
   .button .corner {
@@ -287,11 +301,11 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
       transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
       background 0.25s ease,
       box-shadow 0.25s ease;
+    /* Light: inner white face — bright top-left inner catch to reinforce raised look */
     box-shadow:
-      inset 0 -5px 15px -1px rgba(0, 0, 0, 0.3),
-      inset 0 -4px 3px -3px black,
-      inset 0 -10px 20px -8px rgb(255 255 255 / 40%),
-      inset 0 1px 0 1px rgb(255 255 255 / 20%);
+      ${props => props.$themeMode === 'light'
+        ? `inset -3px -3px 8px rgba(255,255,255,0.9), inset 3px 3px 8px rgba(163,177,198,0.4), inset 0 -10px 20px -8px rgba(255,255,255,0.5)`
+        : `inset 0 -5px 15px -1px rgba(0, 0, 0, 0.3), inset 0 -4px 3px -3px black, inset 0 -10px 20px -8px rgb(255 255 255 / 40%), inset 0 1px 0 1px rgb(255 255 255 / 20%)`};
   }
   .button .inner svg {
     display: block;
@@ -393,10 +407,12 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
     height: 6px;
     margin-top: 22px;
     transition: all 0.3s ease;
-    background-color: ${props => props.$themeMode === 'light' ? '#c8cdd4' : '#2d2f33'};
+    background-color: var(--shadow-color-1);
     box-shadow:
-      inset 0 1px 2px 0px rgba(255, 255, 255, 0.2),
-      0 0 0px 3px rgb(0 0 0 / 30%);
+      0 -10px 35px 17px var(--shadow-color-1),
+      inset 0 1px 2px 0px rgba(255, 255, 255, 0.6),
+      0 0 0px 3px rgb(0 0 0 / 60%),
+      0 0 2px 4px var(--shadow-color-2);
   }
 
   .noise {
@@ -423,12 +439,12 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
   .wrap input:active + .button {
     transform: translateY(4px) scale(0.96);
     filter: contrast(1.1) brightness(0.9);
-    background-color: transparent;
+    background-color: ${props => props.$themeMode === 'light' ? '#d8dee6' : 'transparent'};
+    /* Light: flip the neumorphic outer shadows to inset — creates the "pressed in" feel */
     box-shadow:
-      inset 0 1px 1px rgb(255 255 255 / 15%),
-      inset 0 2px 4px 0px rgba(0, 0, 0, 0.5),
-      inset 0 -3px 1px -2px var(--shadow-color-1),
-      inset 0 -6px 3px -4px var(--shadow-color-2);
+      ${props => props.$themeMode === 'light'
+        ? `inset 6px 6px 12px rgba(163,177,198,0.6), inset -6px -6px 12px rgba(255,255,255,0.7), inset 0 -3px 1px -2px var(--shadow-color-1)`
+        : `inset 0 1px 1px rgb(255 255 255 / 15%), inset 0 2px 4px 0px rgba(0, 0, 0, 0.5), inset 0 -3px 1px -2px var(--shadow-color-1), inset 0 -6px 3px -4px var(--shadow-color-2)`};
     transition:
       transform 0.08s ease-out,
       filter 0.08s ease-out,
@@ -436,16 +452,15 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
       background-color 0.08s ease-out;
   }
   .wrap input:active + .button::before {
-    box-shadow: 0 -4px 6px 6px black;
+    box-shadow: ${props => props.$themeMode === 'light' ? 'none' : '0 -4px 6px 6px black'};
     transition: box-shadow 0.08s ease-out;
   }
   .wrap input:active + .button .inner {
     background: var(--inner-active-bg);
     box-shadow:
-      inset 0 3px 10px 0px rgba(0, 0, 0, 0.65),
-      inset 0 -2px 2px -2px black,
-      inset 0 -4px 10px -6px rgb(255 255 255 / 15%),
-      inset 0 1px 0 1px rgb(255 255 255 / 8%);
+      ${props => props.$themeMode === 'light'
+        ? `inset 3px 3px 8px rgba(163,177,198,0.5), inset -3px -3px 8px rgba(255,255,255,0.8)`
+        : `inset 0 3px 10px 0px rgba(0, 0, 0, 0.65), inset 0 -2px 2px -2px black, inset 0 -4px 10px -6px rgb(255 255 255 / 15%), inset 0 1px 0 1px rgb(255 255 255 / 8%)`};
     transform: translateY(2px) scale(0.94);
     transition:
       transform 0.08s ease-out,
@@ -509,8 +524,7 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
     background-color: ${props => props.$themeMode === 'light' ? '#eaecee' : '#2c3238'};
   }
   .wrap input:checked + .button::after {
-    opacity: 1;
-    background: var(--shadow-color-1);
+    background: ${props => props.$themeMode === 'light' ? '#eaecee' : '#09053a'};
   }
 
   .wrap input:checked + .button ~ .bg .shine-1 {
