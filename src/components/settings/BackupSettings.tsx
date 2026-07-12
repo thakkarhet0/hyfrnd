@@ -197,7 +197,7 @@ export function BackupSettings() {
               style={({ pressed }) => [
                 styles.disableButton,
                 {
-                  backgroundColor: '#1c1c1e',
+                  backgroundColor: theme.background,
                   borderColor: theme.text,
                   opacity: isWorking ? 0.5 : 1,
                   transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],

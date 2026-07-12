@@ -111,7 +111,7 @@ export function ConsentSettings() {
             style={({ pressed }) => [
               styles.deleteButton,
               {
-                backgroundColor: '#1c1c1e',
+                backgroundColor: theme.background,
                 borderColor: '#c0392b',
                 opacity: isDeleting ? 0.5 : 1,
                 transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],

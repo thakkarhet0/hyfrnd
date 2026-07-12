@@ -78,7 +78,7 @@ export function SubscriptionSettings() {
               style={({ pressed }) => [
                 styles.actionBtn,
                 {
-                  backgroundColor: '#1c1c1e',
+                  backgroundColor: theme.background,
                   borderColor: theme.cta,
                   transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
                 },

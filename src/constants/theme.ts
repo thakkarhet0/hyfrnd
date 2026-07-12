@@ -5,7 +5,7 @@
 // call sites don't need restructuring; `useColorScheme()` always resolves to
 // 'dark' now, so the `.light` branch is effectively dead but harmless.
 const metal = {
-  background: '#1c1c1e',
+  background: '#000000',
   text: '#F2F3F5',
   // Secondary accent — links, borders, spinners, avatar initials.
   cta: '#6657ff',
