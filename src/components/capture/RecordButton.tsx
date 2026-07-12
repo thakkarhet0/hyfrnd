@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
 
 import { MetalColors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import RecordButtonDOM from './RecordButtonDOM';
 
 // capture.tsx's `styles.center` applies paddingHorizontal:24 around this
@@ -23,11 +24,15 @@ export interface RecordButtonProps {
 }
 
 export function RecordButton({ isRecording, onPress, disabled = false }: RecordButtonProps) {
+  const scheme = useColorScheme();
+  const panelBg = scheme === 'light' ? '#ffffff' : PANEL_BACKGROUND;
+
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, { backgroundColor: panelBg }]}>
       <RecordButtonDOM
         isRecording={isRecording}
         disabled={disabled}
+        themeMode={scheme}
         onPress={async () => onPress()}
         dom={{
           style: styles.dom,
@@ -48,7 +53,6 @@ const styles = StyleSheet.create({
     width: BOX_WIDTH,
     height: BOX_HEIGHT,
     marginHorizontal: -CENTER_PADDING_HORIZONTAL,
-    backgroundColor: PANEL_BACKGROUND,
     alignItems: 'center',
     overflow: 'hidden',
   },

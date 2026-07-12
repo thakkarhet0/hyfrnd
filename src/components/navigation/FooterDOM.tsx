@@ -19,6 +19,7 @@ export interface FooterDOMProps {
   activeTab: FooterTabKey;
   labels: Record<FooterTabKey, string>;
   bottomInset: number;
+  themeMode: 'light' | 'dark';
   onSelect: (tab: FooterTabKey) => Promise<void>;
   dom?: import('expo/dom').DOMProps;
 }
@@ -72,7 +73,7 @@ function IconShape({ variant }: { variant: FooterTabKey }) {
   );
 }
 
-export default function FooterDOM({ activeTab, labels, bottomInset, onSelect }: FooterDOMProps) {
+export default function FooterDOM({ activeTab, labels, bottomInset, themeMode, onSelect }: FooterDOMProps) {
   const handlePress = (tab: FooterTabKey) => {
     if (tab === activeTab) return;
     void onSelect(tab);
@@ -81,7 +82,7 @@ export default function FooterDOM({ activeTab, labels, bottomInset, onSelect }: 
   return (
     <Root>
       <GlobalStyle />
-      <Bar style={{ paddingBottom: bottomInset }}>
+      <Bar style={{ paddingBottom: bottomInset }} $themeMode={themeMode}>
         {TABS.map((tab) => (
           <TabButton
             key={tab}
@@ -90,6 +91,7 @@ export default function FooterDOM({ activeTab, labels, bottomInset, onSelect }: 
             onClick={() => handlePress(tab)}
             aria-label={labels[tab]}
             aria-current={tab === activeTab ? 'page' : undefined}
+            $themeMode={themeMode}
           >
             <svg width={26} height={26} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g className="icon-glow">
@@ -113,7 +115,7 @@ const Root = styled.div`
   background: transparent;
 `;
 
-const Bar = styled.div`
+const Bar = styled.div<{ $themeMode: 'light' | 'dark' }>`
   position: relative;
   width: 100%;
   height: 100%;
@@ -121,13 +123,15 @@ const Bar = styled.div`
   align-items: flex-start;
   justify-content: space-around;
   padding-top: 10px;
-  background: #15161a;
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
-    0 -8px 20px -6px rgba(0, 0, 0, 0.6);
+  background: ${props => props.$themeMode === 'light' ? '#ffffff' : '#15161a'};
+  box-shadow: ${props => props.$themeMode === 'light' 
+    ? '0 -8px 20px -6px rgba(0, 0, 0, 0.1)' 
+    : 'inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 -8px 20px -6px rgba(0, 0, 0, 0.6)'};
+  border-top: ${props => props.$themeMode === 'light' ? '1.5px solid #101114' : 'none'};
+  transition: background-color 0.5s ease, border-color 0.5s ease;
 `;
 
-const TabButton = styled.button`
+const TabButton = styled.button<{ $themeMode: 'light' | 'dark' }>`
   appearance: none;
   border: none;
   background: transparent;
@@ -147,7 +151,7 @@ const TabButton = styled.button`
   }
 
   .icon-glow > * {
-    stroke: #311fff;
+    stroke: ${props => props.$themeMode === 'light' ? '#00df9a' : '#311fff'};
     stroke-width: 8;
     opacity: 0;
     filter: blur(6px);
@@ -155,7 +159,7 @@ const TabButton = styled.button`
   }
 
   .icon-fg > * {
-    stroke: #6b6d72;
+    stroke: ${props => props.$themeMode === 'light' ? '#a2a5ad' : '#6b6d72'};
     stroke-width: 4;
     transition: stroke 0.3s ease;
   }
@@ -165,16 +169,18 @@ const TabButton = styled.button`
     font-size: 10px;
     letter-spacing: 0.3px;
     text-transform: lowercase;
-    color: #6b6d72;
+    color: ${props => props.$themeMode === 'light' ? '#a2a5ad' : '#6b6d72'};
     transition: color 0.3s ease;
   }
 
   &.active .icon-fg > * {
-    stroke: #6657ff;
+    stroke: ${props => props.$themeMode === 'light' ? '#009a6f' : '#6657ff'};
     stroke-dasharray: 220;
     stroke-dashoffset: 220;
     animation: iconSweep 2.4s ease-in-out infinite;
-    filter: drop-shadow(0 0 3px rgba(49, 31, 255, 0.8));
+    filter: ${props => props.$themeMode === 'light' 
+      ? 'drop-shadow(0 0 3px rgba(0, 223, 154, 0.8))' 
+      : 'drop-shadow(0 0 3px rgba(49, 31, 255, 0.8))'};
   }
 
   &.active .icon-glow > * {
@@ -185,7 +191,7 @@ const TabButton = styled.button`
   }
 
   &.active .tab-label {
-    color: #6657ff;
+    color: ${props => props.$themeMode === 'light' ? '#009a6f' : '#6657ff'};
   }
 
   @keyframes iconSweep {

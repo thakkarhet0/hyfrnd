@@ -97,6 +97,7 @@ export default function TabLayout() {
       <View style={{ height: FOOTER_HEIGHT + insets.bottom }}>
         <FooterDOM
           activeTab={activeTab}
+          themeMode={scheme}
           labels={{
             capture: t('tabs.capture'),
             calendar: t('tabs.calendar'),

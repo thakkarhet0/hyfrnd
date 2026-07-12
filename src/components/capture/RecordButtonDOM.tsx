@@ -19,11 +19,17 @@ const GlobalStyle = createGlobalStyle`
 export interface RecordButtonDOMProps {
   isRecording: boolean;
   disabled?: boolean;
+  themeMode?: 'light' | 'dark';
   onPress: () => Promise<void>;
   dom?: import('expo/dom').DOMProps;
 }
 
-export default function RecordButtonDOM({ isRecording, disabled = false, onPress }: RecordButtonDOMProps) {
+export default function RecordButtonDOM({
+  isRecording,
+  disabled = false,
+  themeMode = 'dark',
+  onPress,
+}: RecordButtonDOMProps) {
   const handleChange = () => {
     if (disabled) return;
     void onPress();
@@ -32,7 +38,7 @@ export default function RecordButtonDOM({ isRecording, disabled = false, onPress
   return (
     <Root>
       <GlobalStyle />
-      <StyledWrapper>
+      <StyledWrapper $themeMode={themeMode}>
         <div>
           <label className="wrap" htmlFor="button" style={{ opacity: disabled ? 0.5 : 1 }}>
             <input
@@ -130,10 +136,27 @@ const Root = styled.div`
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
 `;
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
   .wrap {
     --radius: 30px;
-    --bg: #000000;
+    --bg: ${props => props.$themeMode === 'light' ? '#eaecee' : '#000000'};
+    --shadow-wrap: ${props => props.$themeMode === 'light' ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.5)'};
+    --shadow-color-1: ${props => props.$themeMode === 'light' ? '#00df9a' : '#2415d9'};
+    --shadow-color-2: ${props => props.$themeMode === 'light' ? '#00a877' : '#1b0eb3'};
+    --pulse-color: ${props => props.$themeMode === 'light' ? '#00df9a' : '#311fff'};
+    --glow-grad: ${props => props.$themeMode === 'light' 
+      ? 'linear-gradient(to bottom, #00df9a 0%, rgba(255,255,255,0) 100%)' 
+      : 'linear-gradient(to bottom, #311fff 0%, black 100%)'};
+    --btn-border-top: ${props => props.$themeMode === 'light' ? '#fdfdfe' : '#414244'};
+    --btn-border-sides: ${props => props.$themeMode === 'light' ? '#e6e8eb' : '#2b2b2c'};
+    --btn-border-bottom: ${props => props.$themeMode === 'light' ? '#d4d6db' : '#15161a'};
+    --inner-bg: ${props => props.$themeMode === 'light' 
+      ? 'linear-gradient(180deg, #ffffff 5%, #e1e4e6 100%)' 
+      : 'linear-gradient(180deg, #232324 5%, #46484b 100%)'};
+    --inner-active-bg: ${props => props.$themeMode === 'light' 
+      ? 'linear-gradient(180deg, #eaecee 5%, #d4d6db 100%)' 
+      : 'linear-gradient(180deg, #18191a 5%, #313336 100%)'};
+    --shine-color: ${props => props.$themeMode === 'light' ? 'rgb(0, 223, 154)' : 'rgb(49, 31, 255)'};
 
     display: flex;
     align-items: center;
@@ -149,7 +172,7 @@ const StyledWrapper = styled.div`
     width: 350px;
     height: 300px;
     border-radius: 50px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: ${props => props.$themeMode === 'light' ? 'rgba(0, 223, 154, 0.05)' : 'rgba(255, 255, 255, 0.05)'};
     filter: blur(60px);
     transform: skewY(-20deg);
   }
@@ -160,7 +183,7 @@ const StyledWrapper = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 50px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--shadow-wrap);
     filter: blur(30px);
   }
 
@@ -187,8 +210,8 @@ const StyledWrapper = styled.div`
     border-radius: var(--radius);
     box-shadow:
       inset 0 1px 1px rgb(255 255 255 / 40%),
-      inset 0 -6px 1px -4px #2415d9,
-      inset 0 -15px 6px -8px #1b0eb3;
+      inset 0 -6px 1px -4px var(--shadow-color-1),
+      inset 0 -15px 6px -8px var(--shadow-color-2);
     transition:
       transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
       filter 0.25s ease,
@@ -200,10 +223,10 @@ const StyledWrapper = styled.div`
     position: absolute;
     inset: 0;
     border-radius: calc(var(--radius) * 0.8);
-    border-top: 50px solid #414244;
-    border-left: 40px solid #2b2b2c;
-    border-right: 40px solid #2b2b2c;
-    border-bottom: 50px solid #15161a;
+    border-top: 50px solid var(--btn-border-top);
+    border-left: 40px solid var(--btn-border-sides);
+    border-right: 40px solid var(--btn-border-sides);
+    border-bottom: 50px solid var(--btn-border-bottom);
     filter: blur(6px);
     transition: all 0.5s ease;
   }
@@ -218,7 +241,7 @@ const StyledWrapper = styled.div`
     height: 50px;
     width: 120px;
     border-radius: 50px 50px 0 0;
-    background: #2415d9;
+    background: var(--shadow-color-1);
     filter: contrast(10) blur(7px);
     transition: all 0.3s ease;
     opacity: 1;
@@ -259,7 +282,7 @@ const StyledWrapper = styled.div`
     justify-content: center;
     inset: 22px 20px;
     border-radius: calc(var(--radius) * 0.85);
-    background: linear-gradient(180deg, #232324 5%, #46484b 100%);
+    background: var(--inner-bg);
     transition:
       transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
       background 0.25s ease,
@@ -276,7 +299,7 @@ const StyledWrapper = styled.div`
     height: 52%;
   }
 
-  /* ---- Record symbol: etched ring + dot, red accent on recording ---- */
+  /* ---- Record symbol: etched ring + dot, accent on recording ---- */
 
   .button .inner svg .symbol {
     filter: none;
@@ -311,12 +334,15 @@ const StyledWrapper = styled.div`
   }
 
   .bg {
-    background-color: black;
     position: absolute;
-    inset: -7px;
-    border-radius: calc(var(--radius) * 1.25);
-    box-shadow: 0 20px 10px -10px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 152px;
+    height: 148px;
+    border-radius: var(--radius);
     overflow: hidden;
     z-index: 1;
   }
@@ -338,7 +364,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     z-index: 0;
     transition: all 0.3s ease;
-    background: rgb(49, 31, 255);
+    background: var(--shine-color);
     width: 10px;
     height: 10px;
     left: 0;
@@ -367,12 +393,12 @@ const StyledWrapper = styled.div`
     height: 6px;
     margin-top: 22px;
     transition: all 0.3s ease;
-    background-color: #2415d9;
+    background-color: var(--shadow-color-1);
     box-shadow:
-      0 -10px 35px 17px #2415d9,
+      0 -10px 35px 17px var(--shadow-color-1),
       inset 0 1px 2px 0px rgba(255, 255, 255, 0.6),
       0 0 0px 3px rgb(0 0 0 / 60%),
-      0 0 2px 4px rgba(27, 14, 204, 0.8);
+      0 0 2px 4px var(--shadow-color-2);
   }
 
   .noise {
@@ -403,8 +429,8 @@ const StyledWrapper = styled.div`
     box-shadow:
       inset 0 1px 1px rgb(255 255 255 / 15%),
       inset 0 2px 4px 0px rgba(0, 0, 0, 0.5),
-      inset 0 -3px 1px -2px #2415d9,
-      inset 0 -6px 3px -4px #1b0eb3;
+      inset 0 -3px 1px -2px var(--shadow-color-1),
+      inset 0 -6px 3px -4px var(--shadow-color-2);
     transition:
       transform 0.08s ease-out,
       filter 0.08s ease-out,
@@ -416,7 +442,7 @@ const StyledWrapper = styled.div`
     transition: box-shadow 0.08s ease-out;
   }
   .wrap input:active + .button .inner {
-    background: linear-gradient(180deg, #18191a 5%, #313336 100%);
+    background: var(--inner-active-bg);
     box-shadow:
       inset 0 3px 10px 0px rgba(0, 0, 0, 0.65),
       inset 0 -2px 2px -2px black,
@@ -451,7 +477,7 @@ const StyledWrapper = styled.div`
     animation: bgHover 2s infinite linear;
   }
 
-  /* ===== RECORDING (checked) — red pulsing dot + blinking LED ===== */
+  /* ===== RECORDING (checked) — pulsing dot + blinking LED ===== */
 
   .wrap input:checked + .button .inner svg .symbol-path-glow .ring {
     stroke: none;
@@ -461,7 +487,7 @@ const StyledWrapper = styled.div`
     animation: none;
   }
   .wrap input:checked + .button .inner svg .symbol-path-glow .dot {
-    fill: #2415d9;
+    fill: var(--shadow-color-1);
     filter: blur(12px);
     opacity: 0.8;
     animation: dotPulseGlow 1.4s ease-in-out infinite alternate;
@@ -472,7 +498,7 @@ const StyledWrapper = styled.div`
     animation: none;
   }
   .wrap input:checked + .button .inner svg .symbol-path .dot {
-    fill: #311fff;
+    fill: var(--pulse-color);
     opacity: 0.9;
     animation: dotPulse 1.4s ease-in-out infinite alternate;
   }
@@ -480,31 +506,31 @@ const StyledWrapper = styled.div`
   .wrap input:checked + .button {
     box-shadow:
       inset 0 1px 1px rgba(255, 255, 255, 0.4),
-      inset 0 -6px 1px -4px #11096b,
-      inset 0 -15px 6px -8px #07042e;
-    background-color: #2c3238;
+      inset 0 -6px 1px -4px var(--shadow-color-2),
+      inset 0 -15px 6px -8px rgba(0, 0, 0, 0.4);
+    background-color: ${props => props.$themeMode === 'light' ? '#eaecee' : '#2c3238'};
   }
   .wrap input:checked + .button::after {
-    background: #09053a;
+    background: ${props => props.$themeMode === 'light' ? '#eaecee' : '#09053a'};
   }
 
   .wrap input:checked + .button ~ .bg .shine-1 {
-    background-color: rgba(102, 87, 255, 0.7);
+    background-color: ${props => props.$themeMode === 'light' ? 'rgba(0, 223, 154, 0.7)' : 'rgba(102, 87, 255, 0.7)'};
   }
   .wrap input:checked + .button ~ .bg::before {
     box-shadow:
-      inset 0 -2px 0px -1px rgba(121, 108, 255, 0.4),
+      inset 0 -2px 0px -1px ${props => props.$themeMode === 'light' ? 'rgba(0, 223, 154, 0.4)' : 'rgba(121, 108, 255, 0.4)'},
       inset 0 0 5px 1px black,
       inset 0 0 0 1px black;
   }
 
   .wrap input:checked + .button ~ .led {
-    background-color: #311fff;
+    background-color: var(--pulse-color);
     box-shadow:
-      0 -10px 18px 6px rgba(49, 31, 255, 0.55),
+      0 -10px 18px 6px var(--pulse-color),
       inset 0 1px 2px 0px rgba(255, 255, 255, 0.5),
       0 0 0px 3px rgba(0, 0, 0, 0.6),
-      0 0 2px 4px rgba(27, 14, 204, 0.6);
+      0 0 2px 4px var(--shadow-color-1);
     animation: ledPulse 1.8s infinite alternate;
   }
 
@@ -516,7 +542,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     inset: 0;
     border-radius: 30px;
-    background: linear-gradient(to bottom, #311fff 0%, black 100%);
+    background: var(--glow-grad);
     filter: blur(12px);
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -554,11 +580,11 @@ const StyledWrapper = styled.div`
 
   @keyframes dotPulse {
     0% {
-      fill: #160eb3;
+      fill: var(--shadow-color-2);
       opacity: 0.5;
     }
     100% {
-      fill: #311fff;
+      fill: var(--pulse-color);
       opacity: 1;
     }
   }
@@ -576,20 +602,20 @@ const StyledWrapper = styled.div`
 
   @keyframes ledPulse {
     0% {
-      background-color: #2415d9;
+      background-color: var(--shadow-color-1);
       box-shadow:
-        0 -10px 18px 6px rgba(36, 21, 217, 0.45),
+        0 -10px 18px 6px var(--shadow-color-1),
         inset 0 1px 2px 0px rgba(255, 255, 255, 0.4),
         0 0 0px 3px rgba(0, 0, 0, 0.6),
-        0 0 2px 4px rgba(22, 14, 179, 0.5);
+        0 0 2px 4px var(--shadow-color-2);
     }
     100% {
-      background-color: #3e2eff;
+      background-color: var(--pulse-color);
       box-shadow:
-        0 -10px 26px 10px rgba(49, 31, 255, 0.6),
+        0 -10px 26px 10px var(--pulse-color),
         inset 0 1px 2px 0px rgba(255, 255, 255, 0.6),
         0 0 0px 3px rgba(0, 0, 0, 0.5),
-        0 0 3px 5px rgba(36, 21, 217, 0.7);
+        0 0 3px 5px var(--shadow-color-1);
     }
   }
 
