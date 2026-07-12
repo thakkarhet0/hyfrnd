@@ -1,7 +1,7 @@
 'use dom';
 
 import React, { useEffect, useRef } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import { styled, createGlobalStyle } from 'styled-components';
 
 // Matches the reset used by RecordButtonDOM.tsx / FooterDOM.tsx so the
 // WebView's default document doesn't add margin/UA-stylesheet offsets.
@@ -120,13 +120,27 @@ export default function DitheredBackgroundDOM({ seed }: DitheredBackgroundDOMPro
     const canvas = canvasRef.current;
     if (!canvas) return;
     const parent = canvas.parentElement;
-    const width = Math.max(1, Math.round(parent?.clientWidth ?? window.innerWidth));
-    const height = Math.max(1, Math.round(parent?.clientHeight ?? window.innerHeight));
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    drawDither(ctx, width, height, seed);
+    if (!parent) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = Math.max(1, Math.round(entry.contentRect.width || parent.clientWidth || window.innerWidth));
+        const height = Math.max(1, Math.round(entry.contentRect.height || parent.clientHeight || window.innerHeight));
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          drawDither(ctx, width, height, seed);
+        }
+      }
+    });
+
+    resizeObserver.observe(parent);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, [seed]);
 
   return (

@@ -125,7 +125,6 @@ export default function CalendarScreen() {
     useCallback(() => {
       void loadToday();
       void loadMonth(monthCursor.year, monthCursor.month);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadToday, loadMonth, monthCursor.year, monthCursor.month]),
   );
 

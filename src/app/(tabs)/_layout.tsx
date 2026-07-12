@@ -80,6 +80,7 @@ export default function TabLayout() {
           screenOptions={{
             headerShown: false,
             tabBarStyle: { display: 'none' },
+            sceneStyle: { backgroundColor: 'transparent' },
           }}
         >
           <Tabs.Screen name="capture" options={{ title: t('tabs.capture') }} />

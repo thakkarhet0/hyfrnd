@@ -1,7 +1,7 @@
 import '@/polyfills/crypto'; // must run before nanoid / any crypto.getRandomValues usage
 
 import i18n from '@/constants/i18n';
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-navigation';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import Constants from 'expo-constants';
 import { useFonts, SpaceMono_400Regular, SpaceMono_700Bold } from '@expo-google-fonts/space-mono';

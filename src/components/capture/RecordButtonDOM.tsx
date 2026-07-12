@@ -1,7 +1,7 @@
 'use dom';
 
 import React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import { styled, createGlobalStyle } from 'styled-components';
 
 // The DOM-component WebView's default document keeps the browser UA stylesheet
 // (8px body margin etc.), which throws the button off-center inside its fixed
