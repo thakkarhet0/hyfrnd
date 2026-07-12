@@ -36,7 +36,7 @@ export function SubscriptionSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>subscription</Text>
 
-      <View style={styles.cardContainer}>
+      <View style={[styles.cardContainer, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
         <View style={styles.statusRow}>
           <Text style={[styles.label, { color: theme.text }]}>
             {plan_tier === 'unlimited' ? 'unlimited plan' : 'free plan'}
@@ -70,7 +70,7 @@ export function SubscriptionSettings() {
             >
               <Text style={[styles.actionLabel, { color: INK }]}>upgrade</Text>
             </Pressable>
-            <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+            <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
           </View>
         ) : (
           <View style={styles.btnContainer}>
@@ -89,7 +89,7 @@ export function SubscriptionSettings() {
             >
               <Text style={[styles.actionLabel, { color: theme.cta }]}>manage subscription</Text>
             </Pressable>
-            <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20' }]} />
+            <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20', borderColor: theme.cardBorder }]} />
           </View>
         )}
       </View>

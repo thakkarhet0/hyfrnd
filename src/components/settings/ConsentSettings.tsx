@@ -71,7 +71,7 @@ export function ConsentSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('consent.title')}</Text>
 
-      <View style={styles.cardContainer}>
+      <View style={[styles.cardContainer, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
         <View style={styles.consentRow}>
           <View style={styles.consentText}>
             <Text style={[styles.label, { color: theme.text }]}>{t('consent.sttToggle')}</Text>
@@ -82,7 +82,11 @@ export function ConsentSettings() {
             disabled={!consentLoaded}
             style={[
               styles.toggle,
-              { backgroundColor: sttConsent ? theme.cta : theme.text + '20', opacity: consentLoaded ? 1 : 0.4 },
+              {
+                backgroundColor: sttConsent ? theme.cta : theme.text + '20',
+                borderColor: theme.cardBorder,
+                opacity: consentLoaded ? 1 : 0.4,
+              },
             ]}
             accessibilityRole="switch"
             accessibilityState={{ checked: sttConsent, disabled: !consentLoaded }}
@@ -97,7 +101,7 @@ export function ConsentSettings() {
         </View>
       </View>
 
-      <View style={[styles.cardContainer, { borderColor: '#c0392b' }]}>
+      <View style={[styles.cardContainer, { borderColor: '#c0392b', backgroundColor: theme.cardBg }]}>
         <Text style={[styles.detail, { color: theme.text }]}>{t('consent.deleteDisclosure')}</Text>
 
         {deleteError ? (

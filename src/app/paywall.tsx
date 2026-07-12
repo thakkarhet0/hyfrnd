@@ -126,7 +126,7 @@ export default function PaywallScreen() {
               </Text>
             )}
           </Pressable>
-          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
         </View>
 
         {Platform.OS === 'ios' && (
@@ -153,7 +153,7 @@ export default function PaywallScreen() {
                 </Text>
               )}
             </Pressable>
-            <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20' }]} />
+            <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20', borderColor: theme.cardBorder }]} />
           </View>
         )}
 

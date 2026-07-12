@@ -34,12 +34,12 @@ export function LegalSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('legal.title')}</Text>
 
-      <View style={styles.cardContainer}>
+      <View style={[styles.cardContainer, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
         <Pressable
           onPress={handleEmailPress}
           style={({ pressed }) => [
             styles.row,
-            pressed && { backgroundColor: '#2a2a2e' },
+            pressed && { backgroundColor: theme.cardBgActive },
           ]}
           accessibilityRole="link"
         >
@@ -52,7 +52,8 @@ export function LegalSettings() {
           style={({ pressed }) => [
             styles.row,
             styles.rowBorder,
-            pressed && { backgroundColor: '#2a2a2e' },
+            { borderTopColor: theme.divider },
+            pressed && { backgroundColor: theme.cardBgActive },
           ]}
           accessibilityRole="link"
         >
@@ -60,7 +61,7 @@ export function LegalSettings() {
           <Text style={[styles.rowValue, { color: theme.cta }]}>{t('legal.privacyPolicyLink')}</Text>
         </Pressable>
 
-        <View style={[styles.row, styles.rowBorder]}>
+        <View style={[styles.row, styles.rowBorder, { borderTopColor: theme.divider }]}>
           <Text style={[styles.rowLabel, { color: theme.text }]}>{t('legal.version')}</Text>
           <Text style={[styles.versionValue, { color: theme.text + '80' }]}>{`${version} (${buildNumber})`}</Text>
         </View>

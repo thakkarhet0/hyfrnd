@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FooterDOM, { type FooterTabKey } from '@/components/navigation/FooterDOM';
 import DitheredBackgroundDOM from '@/components/background/DitheredBackgroundDOM';
 import { useCaptureStore } from '@/stores/capture.store';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const FOOTER_HEIGHT = 58;
 
@@ -21,6 +22,7 @@ export default function TabLayout() {
   const { t } = useTranslation();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
+  const scheme = useColorScheme();
   const [seed, setSeed] = useState(() => Date.now());
   const isRecording = useCaptureStore((s) => s.isRecording);
   const isPaused = useCaptureStore((s) => s.isPaused);
@@ -70,6 +72,7 @@ export default function TabLayout() {
           seed={seed}
           isRecording={isRecording}
           activeTab={activeTab}
+          themeMode={scheme}
           dom={{
             style: styles.backgroundDom,
             scrollEnabled: false,

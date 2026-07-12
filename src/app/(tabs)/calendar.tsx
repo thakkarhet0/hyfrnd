@@ -65,8 +65,8 @@ function FollowUpRow({ item, theme }: { item: PendingFollowUp; theme: ThemeColor
       style={({ pressed }) => [
         styles.row,
         {
-          borderColor: pressed ? theme.cta : theme.text + '30',
-          backgroundColor: pressed ? '#2a2a2e' : '#222225',
+          borderColor: pressed ? theme.cta : theme.cardBorder,
+          backgroundColor: pressed ? theme.cardBgActive : theme.cardBg,
           transform: [{ scale: pressed ? 0.99 : 1 }],
         },
       ]}
@@ -199,7 +199,7 @@ export default function CalendarScreen() {
 
   return (
     <Screen style={styles.container}>
-      <View style={styles.toggleRow}>
+      <View style={[styles.toggleRow, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
         <Pressable
           style={[
             styles.toggleButton,
@@ -255,7 +255,7 @@ export default function CalendarScreen() {
         )
       ) : (
         <>
-          <View style={styles.monthHeader} {...panResponder.panHandlers}>
+          <View style={[styles.monthHeader, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]} {...panResponder.panHandlers}>
             <Pressable
               onPress={() => goToMonth(-1)}
               disabled={isCurrentMonth}

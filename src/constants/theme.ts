@@ -4,7 +4,7 @@
 // single flat object) so `useTheme()`/`Colors[scheme]`/`getPaperTheme(scheme)`
 // call sites don't need restructuring; `useColorScheme()` always resolves to
 // 'dark' now, so the `.light` branch is effectively dead but harmless.
-const metal = {
+const darkTheme = {
   background: '#000000',
   text: '#F2F3F5',
   // Secondary accent — links, borders, spinners, avatar initials.
@@ -13,11 +13,29 @@ const metal = {
   // Primary CTA-fill color. Always used as a solid fill (never as red text on
   // the page) — pairs with `INK` (white) for the fill's label text.
   highlight: '#311fff',
+  cardBg: '#222225',
+  cardBorder: '#3a3a3e',
+  cardBgActive: '#2a2a2e',
+  divider: '#2d2d31',
+  headerGradient: ['#2c2c31', '#1f1f22'] as const,
+} as const;
+
+const lightTheme = {
+  background: '#ffffff',
+  text: '#101114',
+  cta: '#009a6f',
+  accent: '#00df9a',
+  highlight: '#00cc96',
+  cardBg: '#f2faf7',
+  cardBorder: '#101114',
+  cardBgActive: '#e1ebe8',
+  divider: '#d8e5e0',
+  headerGradient: ['#eaecee', '#f2f4f6'] as const,
 } as const;
 
 export const Colors = {
-  light: metal,
-  dark: metal,
+  light: lightTheme,
+  dark: darkTheme,
 } as const;
 
 // Fixed "metal" palette for the capture experience (record button + its screens
@@ -37,7 +55,7 @@ export const MetalColors = {
 } as const;
 
 export type ColorScheme = 'light' | 'dark';
-export type ThemeColors = typeof Colors.light;
+export type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
 // White — CTA-fill text (on `highlight` red buttons) and chip background for
 // the inverse highlight-text-on-chip pattern. Named INK from the old

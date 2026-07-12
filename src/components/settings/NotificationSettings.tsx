@@ -134,7 +134,7 @@ export function NotificationSettings() {
         {t('settings.notificationTiming')}
       </Text>
 
-      <View style={styles.cardContainer}>
+      <View style={[styles.cardContainer, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
         {NUDGE_CONFIG.map((config, idx) => {
           const hour = hours[config.key];
           const setter = settersRef.current[config.key];
@@ -148,7 +148,7 @@ export function NotificationSettings() {
               key={config.key}
               style={[
                 styles.row,
-                idx > 0 && { borderTopWidth: 1.5, borderTopColor: '#2d2d31', paddingTop: Spacing.md },
+                idx > 0 && { borderTopWidth: 1.5, borderTopColor: theme.divider, paddingTop: Spacing.md },
               ]}
             >
               <Text style={[styles.rowLabel, { color: theme.text }]}>{t(labelKey)}</Text>
@@ -201,7 +201,7 @@ export function NotificationSettings() {
             {saved ? t('settings.saved') : t('common.save')}
           </Text>
         </Pressable>
-        <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+        <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
       </View>
     </View>
   );

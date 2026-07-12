@@ -92,7 +92,7 @@ export default function MissingFieldScreen() {
       <Text style={[styles.question, { color: theme.text }]}>{t(questionKey)}</Text>
 
       {transcript ? (
-        <View style={[styles.transcriptBox, { borderColor: '#3a3a3e', backgroundColor: '#222225' }]}>
+        <View style={[styles.transcriptBox, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
           <Text style={[styles.transcriptText, { color: theme.text + 'AA' }]}>{transcript}</Text>
         </View>
       ) : null}
@@ -133,7 +133,7 @@ export default function MissingFieldScreen() {
           >
             <Text style={[styles.micLabel, { color: theme.cta }]}>🎤</Text>
           </Pressable>
-          <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20' }]} />
+          <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20', borderColor: theme.cardBorder }]} />
         </View>
 
         <View style={styles.submitBtnContainer}>
@@ -153,7 +153,7 @@ export default function MissingFieldScreen() {
               {t('common.confirm')}
             </Text>
           </Pressable>
-          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
         </View>
       </View>
     </ScrollView>

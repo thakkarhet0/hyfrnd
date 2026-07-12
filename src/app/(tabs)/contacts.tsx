@@ -32,6 +32,11 @@ type AnyTheme = {
   cta: string;
   accent: string;
   highlight: string;
+  cardBg: string;
+  cardBorder: string;
+  cardBgActive: string;
+  divider: string;
+  headerGradient: readonly [string, string];
 };
 
 function formatDate(ts: number | null): string {
@@ -69,7 +74,7 @@ function AppContactRow({
       style={({ pressed }) => [
         styles.row,
         blockSides(theme, isLast),
-        pressed && { backgroundColor: '#2a2a2e' },
+        pressed && { backgroundColor: theme.cardBgActive },
       ]}
       onPress={() => router.push(`/contact/${item.id}`)}
       accessibilityLabel={item.name}
@@ -137,13 +142,13 @@ function DeviceContactRow({
 
 function blockSides(theme: AnyTheme, isLast: boolean) {
   return {
-    backgroundColor: '#222225',
+    backgroundColor: theme.cardBg,
     borderLeftWidth: 1.5,
     borderRightWidth: 1.5,
-    borderLeftColor: '#3a3a3e',
-    borderRightColor: '#3a3a3e',
+    borderLeftColor: theme.cardBorder,
+    borderRightColor: theme.cardBorder,
     borderBottomWidth: isLast ? 0 : 1.5,
-    borderBottomColor: '#2d2d31',
+    borderBottomColor: theme.divider,
   };
 }
 
@@ -238,9 +243,9 @@ export default function ContactsScreen() {
           style={[
             styles.searchBox,
             {
-              borderColor: searchFocused ? theme.highlight : '#3a3a3e',
-              backgroundColor: '#222225',
-              borderWidth: searchFocused ? 1.5 : 1.5,
+              borderColor: searchFocused ? theme.highlight : theme.cardBorder,
+              backgroundColor: theme.cardBg,
+              borderWidth: 1.5,
             },
           ]}
         >
@@ -275,7 +280,7 @@ export default function ContactsScreen() {
             <Text style={styles.followUpsCtaText}>{t('followUps.viewAll')}</Text>
             <Text style={styles.followUpsCtaArrow}>→</Text>
           </Pressable>
-          <View style={[styles.followUpsCtaShadow, { backgroundColor: theme.highlight + '20' }]} />
+          <View style={[styles.followUpsCtaShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
         </View>
       )}
 
@@ -285,7 +290,7 @@ export default function ContactsScreen() {
         <Pressable
           style={[
             styles.permissionBanner,
-            { borderColor: '#3a3a3e', backgroundColor: '#222225' },
+            { borderColor: theme.cardBorder, backgroundColor: theme.cardBg },
           ]}
           onPress={() => permission.blocked && void Linking.openSettings()}
           accessibilityRole="button"
@@ -339,12 +344,12 @@ export default function ContactsScreen() {
               style={[
                 styles.sectionHeader,
                 {
-                  borderColor: '#3a3a3e',
+                  borderColor: theme.cardBorder,
                 },
               ]}
             >
               <LinearGradient
-                colors={['#2c2c31', '#1f1f22']}
+                colors={theme.headerGradient}
                 style={StyleSheet.absoluteFill}
               />
               <View style={[styles.accentBar, { backgroundColor: theme.highlight }]} />

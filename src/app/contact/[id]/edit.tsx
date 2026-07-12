@@ -125,7 +125,7 @@ export default function EditContactScreen() {
         {photoUri ? (
           <Image source={{ uri: photoUri }} style={styles.photo} contentFit="cover" />
         ) : (
-          <View style={[styles.photoPlaceholder, { borderColor: theme.cta }]}>
+          <View style={[styles.photoPlaceholder, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
             <Text style={[styles.photoLabel, { color: theme.cta }]}>tap to add photo</Text>
           </View>
         )}
@@ -193,7 +193,7 @@ export default function EditContactScreen() {
             {saving ? 'saving…' : t('common.save')}
           </Text>
         </Pressable>
-        <View style={[styles.saveBtnShadow, { backgroundColor: theme.highlight + '20' }]} />
+        <View style={[styles.saveBtnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
       </View>
     </ScrollView>
     </Screen>

@@ -127,7 +127,7 @@ export function BackupSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('backup.title')}</Text>
 
-      <View style={styles.cardContainer}>
+      <View style={[styles.cardContainer, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
         {!backupEnabled ? (
           <Text style={[styles.disclosure, { color: theme.text }]}>{t('backup.disclosure')}</Text>
         ) : (
@@ -164,7 +164,7 @@ export function BackupSettings() {
               {t('backup.enable')}
             </Text>
           </Pressable>
-          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
         </View>
       ) : (
         <View style={styles.buttonGroup}>
@@ -187,7 +187,7 @@ export function BackupSettings() {
                 {isWorking ? t('backup.syncing') : t('backup.backupNow')}
               </Text>
             </Pressable>
-            <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+            <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
           </View>
 
           <View style={styles.btnContainer}>
@@ -209,7 +209,7 @@ export function BackupSettings() {
                 {t('backup.disable')}
               </Text>
             </Pressable>
-            <View style={[styles.btnShadow, { backgroundColor: theme.text + '10' }]} />
+            <View style={[styles.btnShadow, { backgroundColor: theme.text + '10', borderColor: theme.cardBorder }]} />
           </View>
         </View>
       )}

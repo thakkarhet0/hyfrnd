@@ -471,7 +471,7 @@ export default function ContactDetailScreen() {
         {contact.photo_uri ? (
           <Image source={{ uri: contact.photo_uri }} style={styles.avatar} contentFit="cover" />
         ) : (
-          <View style={[styles.avatarPlaceholder, { borderColor: theme.cta }]}>
+          <View style={[styles.avatarPlaceholder, { borderColor: theme.cta, backgroundColor: theme.cardBg }]}>
             <Text style={[styles.avatarInitial, { color: theme.cta }]}>
               {contact.name.charAt(0).toLowerCase()}
             </Text>
@@ -497,7 +497,7 @@ export default function ContactDetailScreen() {
           >
             <Text style={[styles.editBtnText, { color: theme.cta }]}>{t('contacts.edit')}</Text>
           </Pressable>
-          <View style={[styles.editBtnShadow, { backgroundColor: theme.cta + '20' }]} />
+          <View style={[styles.editBtnShadow, { backgroundColor: theme.cta + '20', borderColor: theme.cardBorder }]} />
         </View>
       </View>
 
@@ -505,7 +505,7 @@ export default function ContactDetailScreen() {
       {followUps.length > 0 ? (
         <View style={styles.section}>
           {followUps.map((fu) => (
-            <View key={fu.id} style={[styles.followUpRow, { borderColor: '#3a3a3e' }]}>
+             <View key={fu.id} style={[styles.followUpRow, { borderColor: theme.cardBorder, backgroundColor: theme.cardBg }]}>
               <View style={[styles.accentBar, { backgroundColor: fu.status === 'pending' ? theme.highlight : theme.text + '40' }]} />
               <View style={styles.followUpContent}>
                 <View style={[styles.followUpDateChip, { backgroundColor: theme.highlight + '20', borderColor: theme.highlight, borderWidth: 1 }]}>

@@ -50,8 +50,8 @@ export default function ReEngageScreen() {
           style={({ pressed }) => [
             styles.followUpCard,
             {
-              borderColor: '#3a3a3e',
-              backgroundColor: '#222225',
+              borderColor: theme.cardBorder,
+              backgroundColor: theme.cardBg,
               opacity: pressed ? 0.85 : 1,
             },
           ]}
@@ -91,7 +91,7 @@ export default function ReEngageScreen() {
             {t('reEngage.capture')}
           </Text>
         </Pressable>
-        <View style={[styles.captureBtnShadow, { backgroundColor: theme.highlight + '20' }]} />
+        <View style={[styles.captureBtnShadow, { backgroundColor: theme.highlight + '20', borderColor: theme.cardBorder }]} />
       </View>
 
       <Pressable
