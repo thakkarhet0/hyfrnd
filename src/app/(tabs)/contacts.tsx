@@ -223,7 +223,7 @@ export default function ContactsScreen() {
             styles.followUpsCta,
             { backgroundColor: theme.highlight, opacity: pressed ? 0.85 : 1 },
           ]}
-          onPress={() => router.push('/followups')}
+          onPress={() => router.push('/(tabs)/calendar')}
           accessibilityRole="button"
         >
           <Text style={styles.followUpsCtaText}>{t('followUps.viewAll')}</Text>
