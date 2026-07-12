@@ -14,7 +14,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { Typography, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
+import { FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { getContactDetail, updateContact } from '@/db/queries/contacts';
@@ -29,6 +29,8 @@ export default function EditContactScreen() {
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [nameFocused, setNameFocused] = useState(false);
+  const [phoneFocused, setPhoneFocused] = useState(false);
 
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
@@ -133,9 +135,18 @@ export default function EditContactScreen() {
       <View style={styles.field}>
         <Text style={[styles.label, { color: theme.text + '80' }]}>name</Text>
         <TextInput
-          style={[styles.input, { color: theme.text, borderBottomColor: theme.text + '30' }]}
+          style={[
+            styles.input,
+            {
+              color: theme.text,
+              borderBottomColor: nameFocused ? theme.highlight : theme.text + '30',
+              borderBottomWidth: nameFocused ? 1.5 : 1,
+            },
+          ]}
           value={name}
           onChangeText={setName}
+          onFocus={() => setNameFocused(true)}
+          onBlur={() => setNameFocused(false)}
           returnKeyType="next"
           autoCapitalize="words"
         />
@@ -145,9 +156,18 @@ export default function EditContactScreen() {
       <View style={styles.field}>
         <Text style={[styles.label, { color: theme.text + '80' }]}>phone</Text>
         <TextInput
-          style={[styles.input, { color: theme.text, borderBottomColor: theme.text + '30' }]}
+          style={[
+            styles.input,
+            {
+              color: theme.text,
+              borderBottomColor: phoneFocused ? theme.highlight : theme.text + '30',
+              borderBottomWidth: phoneFocused ? 1.5 : 1,
+            },
+          ]}
           value={phone}
           onChangeText={setPhone}
+          onFocus={() => setPhoneFocused(true)}
+          onBlur={() => setPhoneFocused(false)}
           keyboardType="phone-pad"
           returnKeyType="done"
           onSubmitEditing={() => void handleSave()}
@@ -155,18 +175,26 @@ export default function EditContactScreen() {
       </View>
 
       {/* Save */}
-      <Pressable
-        onPress={() => void handleSave()}
-        disabled={saving || !name.trim()}
-        style={[
-          styles.saveBtn,
-          { backgroundColor: theme.highlight, opacity: saving || !name.trim() ? 0.5 : 1 },
-        ]}
-      >
-        <Text style={[styles.saveBtnText, { color: INK }]}>
-          {saving ? 'saving…' : t('common.save')}
-        </Text>
-      </Pressable>
+      <View style={styles.saveBtnContainer}>
+        <Pressable
+          onPress={() => void handleSave()}
+          disabled={saving || !name.trim()}
+          style={({ pressed }) => [
+            styles.saveBtn,
+            {
+              backgroundColor: theme.highlight,
+              borderColor: theme.text,
+              opacity: saving || !name.trim() ? 0.5 : 1,
+              transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+            },
+          ]}
+        >
+          <Text style={[styles.saveBtnText, { color: INK }]}>
+            {saving ? 'saving…' : t('common.save')}
+          </Text>
+        </Pressable>
+        <View style={[styles.saveBtnShadow, { backgroundColor: theme.highlight + '20' }]} />
+      </View>
     </ScrollView>
     </Screen>
   );
@@ -180,13 +208,15 @@ const styles = StyleSheet.create({
   photoPlaceholder: {
     width: 120,
     height: 120,
-    borderWidth: 1,
+    borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: '#3a3a3e',
+    backgroundColor: '#15161a',
   },
   photoLabel: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
   field: { gap: 4 },
-  label: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
+  label: { fontFamily: FONT_BOLD, fontSize: 15, textTransform: 'lowercase' },
   input: {
     fontFamily: FONT_REGULAR,
     fontSize: 16,
@@ -194,12 +224,30 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     textTransform: 'lowercase',
   },
-  saveBtn: {
+  saveBtnContainer: {
     marginTop: Spacing.md,
-    padding: Spacing.md,
-    alignItems: 'center',
+    height: 52,
+    position: 'relative',
   },
-  saveBtnText: { ...Typography.body },
+  saveBtnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
+  saveBtn: {
+    position: 'absolute',
+    inset: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
+  },
+  saveBtnText: { fontFamily: FONT_BOLD, fontSize: 16, textTransform: 'lowercase' },
   cameraContainer: { flex: 1, backgroundColor: '#000' },
   camera: { flex: 1 },
   cameraControls: {
@@ -209,7 +257,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
   camBtn: {
-    borderWidth: 1,
+    borderWidth: 1.5,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
   },

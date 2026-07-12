@@ -37,6 +37,7 @@ export default function MissingFieldScreen() {
 
   const [answer, setAnswer] = useState('');
   const [transcript, setTranscript] = useState<string | null>(null);
+  const [inputFocused, setInputFocused] = useState(false);
 
   const currentField = getNextMissingField(
     extractedName,
@@ -91,15 +92,24 @@ export default function MissingFieldScreen() {
       <Text style={[styles.question, { color: theme.text }]}>{t(questionKey)}</Text>
 
       {transcript ? (
-        <View style={[styles.transcriptBox, { borderColor: theme.text + '30' }]}>
+        <View style={[styles.transcriptBox, { borderColor: '#3a3a3e', backgroundColor: '#222225' }]}>
           <Text style={[styles.transcriptText, { color: theme.text + 'AA' }]}>{transcript}</Text>
         </View>
       ) : null}
 
       <TextInput
-        style={[styles.input, { color: theme.text, borderBottomColor: theme.cta }]}
+        style={[
+          styles.input,
+          {
+            color: theme.text,
+            borderBottomColor: inputFocused ? theme.highlight : theme.text + '30',
+            borderBottomWidth: inputFocused ? 1.5 : 1,
+          },
+        ]}
         value={answer}
         onChangeText={setAnswer}
+        onFocus={() => setInputFocused(true)}
+        onBlur={() => setInputFocused(false)}
         placeholder={t(questionKey)}
         placeholderTextColor={theme.text + '60'}
         autoFocus
@@ -108,24 +118,43 @@ export default function MissingFieldScreen() {
       />
 
       <View style={styles.actions}>
-        {/* Mic stub — voice input planned for Epic 4 */}
-        <Pressable
-          style={[styles.micButton, { borderColor: theme.cta }]}
-          onPress={() => {}}
-          accessibilityLabel="voice input"
-        >
-          <Text style={[styles.micLabel, { color: theme.cta }]}>🎤</Text>
-        </Pressable>
+        <View style={styles.micBtnContainer}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.micButton,
+              {
+                backgroundColor: theme.background,
+                borderColor: theme.cta,
+                transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+              },
+            ]}
+            onPress={() => {}}
+            accessibilityLabel="voice input"
+          >
+            <Text style={[styles.micLabel, { color: theme.cta }]}>🎤</Text>
+          </Pressable>
+          <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20' }]} />
+        </View>
 
-        <Pressable
-          style={[styles.submitButton, { backgroundColor: theme.highlight }]}
-          onPress={handleSubmit}
-          accessibilityLabel={t('common.confirm')}
-        >
-          <Text style={[styles.submitLabel, { color: INK }]}>
-            {t('common.confirm')}
-          </Text>
-        </Pressable>
+        <View style={styles.submitBtnContainer}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.submitButton,
+              {
+                backgroundColor: theme.highlight,
+                borderColor: theme.text,
+                transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+              },
+            ]}
+            onPress={handleSubmit}
+            accessibilityLabel={t('common.confirm')}
+          >
+            <Text style={[styles.submitLabel, { color: INK }]}>
+              {t('common.confirm')}
+            </Text>
+          </Pressable>
+          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+        </View>
       </View>
     </ScrollView>
     </Screen>
@@ -142,9 +171,8 @@ const styles = StyleSheet.create({
     ...Typography.heading,
   },
   transcriptBox: {
-    borderWidth: 1,
+    borderWidth: 1.5,
     padding: 12,
-    borderRadius: 0,
   },
   transcriptText: {
     fontFamily: FONT_REGULAR,
@@ -159,25 +187,47 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 16,
     alignItems: 'center',
   },
-  micButton: {
+  micBtnContainer: {
     width: 48,
     height: 48,
-    borderWidth: 1,
-    borderRadius: 0,
+    position: 'relative',
+  },
+  submitBtnContainer: {
+    flex: 1,
+    height: 52,
+    position: 'relative',
+  },
+  btnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
+  micButton: {
+    position: 'absolute',
+    inset: 0,
+    borderWidth: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
   },
   micLabel: {
     fontSize: 20,
   },
   submitButton: {
-    flex: 1,
-    paddingVertical: 16,
+    position: 'absolute',
+    inset: 0,
+    borderWidth: 1.5,
     alignItems: 'center',
-    borderRadius: 0,
+    justifyContent: 'center',
+    zIndex: 1,
   },
   submitLabel: {
     fontFamily: FONT_BOLD,

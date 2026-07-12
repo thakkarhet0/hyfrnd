@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
@@ -47,7 +47,14 @@ export default function ReEngageScreen() {
 
       {topFollowUp ? (
         <Pressable
-          style={[styles.followUpCard, { borderColor: theme.highlight }]}
+          style={({ pressed }) => [
+            styles.followUpCard,
+            {
+              borderColor: '#3a3a3e',
+              backgroundColor: '#222225',
+              opacity: pressed ? 0.85 : 1,
+            },
+          ]}
           onPress={() => router.replace(`/contact/${topFollowUp.contact_id}`)}
           accessibilityRole="button"
         >
@@ -67,15 +74,25 @@ export default function ReEngageScreen() {
         </Text>
       )}
 
-      <Pressable
-        style={[styles.captureBtn, { backgroundColor: theme.highlight }]}
-        onPress={() => router.replace('/(tabs)/capture')}
-        accessibilityRole="button"
-      >
-        <Text style={[styles.captureBtnText, { color: INK }]}>
-          {t('reEngage.capture')}
-        </Text>
-      </Pressable>
+      <View style={styles.captureBtnContainer}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.captureBtn,
+            {
+              backgroundColor: theme.highlight,
+              borderColor: theme.text,
+              transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+            },
+          ]}
+          onPress={() => router.replace('/(tabs)/capture')}
+          accessibilityRole="button"
+        >
+          <Text style={[styles.captureBtnText, { color: INK }]}>
+            {t('reEngage.capture')}
+          </Text>
+        </Pressable>
+        <View style={[styles.captureBtnShadow, { backgroundColor: theme.highlight + '20' }]} />
+      </View>
 
       <Pressable
         onPress={() => router.replace('/(tabs)/contacts')}
@@ -101,18 +118,36 @@ const styles = StyleSheet.create({
   heading: { ...Typography.heading, textAlign: 'center' },
   body: { ...Typography.body, textAlign: 'center' },
   followUpCard: {
-    borderWidth: 1,
+    borderWidth: 1.5,
     padding: Spacing.md,
     gap: 4,
   },
   cardName: { fontFamily: FONT_BOLD, fontSize: 20, textTransform: 'lowercase' },
   cardDate: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
   cardSnapshot: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
-  captureBtn: {
-    paddingVertical: Spacing.lg,
-    alignItems: 'center',
+  captureBtnContainer: {
+    height: 52,
+    position: 'relative',
   },
-  captureBtnText: { fontFamily: FONT_REGULAR, fontSize: 18, textTransform: 'lowercase' },
+  captureBtnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
+  captureBtn: {
+    position: 'absolute',
+    inset: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
+  },
+  captureBtnText: { fontFamily: FONT_BOLD, fontSize: 16, textTransform: 'lowercase' },
   dismissBtn: { alignItems: 'center', paddingVertical: Spacing.sm },
   dismissText: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
 });

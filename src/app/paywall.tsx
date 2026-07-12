@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, BackHandler, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 
-import { Typography, FONT_BOLD, FONT_REGULAR, Spacing, Radius, INK } from '@/constants/theme';
+import { Typography, FONT_BOLD, FONT_REGULAR, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { useCaptureStore } from '@/stores/capture.store';
@@ -103,38 +103,58 @@ export default function PaywallScreen() {
       </View>
 
       <View style={styles.actions}>
-        <Pressable
-          style={[styles.primaryBtn, { backgroundColor: theme.highlight }]}
-          onPress={() => void handleSubscribe()}
-          disabled={isPurchasing || isRestoring}
-          accessibilityRole="button"
-          accessibilityLabel="subscribe for ₹400 per month with 7-day free trial"
-        >
-          {isPurchasing ? (
-            <ActivityIndicator color={INK} />
-          ) : (
-            <Text style={[styles.primaryLabel, { color: INK }]}>
-              start free trial
-            </Text>
-          )}
-        </Pressable>
-
-        {Platform.OS === 'ios' && (
+        <View style={styles.btnContainer}>
           <Pressable
-            style={[styles.secondaryBtn, { borderColor: theme.cta }]}
-            onPress={() => void handleRestore()}
+            style={({ pressed }) => [
+              styles.primaryBtn,
+              {
+                backgroundColor: theme.highlight,
+                borderColor: theme.text,
+                transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+              },
+            ]}
+            onPress={() => void handleSubscribe()}
             disabled={isPurchasing || isRestoring}
             accessibilityRole="button"
-            accessibilityLabel="restore previous purchase"
+            accessibilityLabel="subscribe for ₹400 per month with 7-day free trial"
           >
-            {isRestoring ? (
-              <ActivityIndicator color={theme.cta} />
+            {isPurchasing ? (
+              <ActivityIndicator color={INK} />
             ) : (
-              <Text style={[styles.secondaryLabel, { color: theme.cta }]}>
-                restore purchase
+              <Text style={[styles.primaryLabel, { color: INK }]}>
+                start free trial
               </Text>
             )}
           </Pressable>
+          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+        </View>
+
+        {Platform.OS === 'ios' && (
+          <View style={styles.btnContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.secondaryBtn,
+                {
+                  backgroundColor: theme.background,
+                  borderColor: theme.cta,
+                  transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+                },
+              ]}
+              onPress={() => void handleRestore()}
+              disabled={isPurchasing || isRestoring}
+              accessibilityRole="button"
+              accessibilityLabel="restore previous purchase"
+            >
+              {isRestoring ? (
+                <ActivityIndicator color={theme.cta} />
+              ) : (
+                <Text style={[styles.secondaryLabel, { color: theme.cta }]}>
+                  restore purchase
+                </Text>
+              )}
+            </Pressable>
+            <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20' }]} />
+          </View>
         )}
 
         <Pressable
@@ -174,10 +194,28 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
     paddingBottom: Spacing.xxl,
   },
+  btnContainer: {
+    height: 52,
+    position: 'relative',
+    marginBottom: Spacing.xs,
+  },
+  btnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
   primaryBtn: {
-    paddingVertical: Spacing.lg,
+    position: 'absolute',
+    inset: 0,
     alignItems: 'center',
-    borderRadius: Radius.none,
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   primaryLabel: {
     fontFamily: FONT_BOLD,
@@ -185,14 +223,16 @@ const styles = StyleSheet.create({
     textTransform: 'lowercase',
   },
   secondaryBtn: {
-    paddingVertical: Spacing.md,
+    position: 'absolute',
+    inset: 0,
     alignItems: 'center',
-    borderRadius: Radius.none,
-    borderWidth: 1,
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   secondaryLabel: {
-    fontFamily: FONT_REGULAR,
-    fontSize: 14,
+    fontFamily: FONT_BOLD,
+    fontSize: 16,
     textTransform: 'lowercase',
   },
   ghostBtn: {

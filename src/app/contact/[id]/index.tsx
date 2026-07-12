@@ -471,7 +471,7 @@ export default function ContactDetailScreen() {
         {contact.photo_uri ? (
           <Image source={{ uri: contact.photo_uri }} style={styles.avatar} contentFit="cover" />
         ) : (
-          <View style={[styles.avatarPlaceholder, { backgroundColor: theme.cta + '20' }]}>
+          <View style={[styles.avatarPlaceholder, { borderColor: theme.cta }]}>
             <Text style={[styles.avatarInitial, { color: theme.cta }]}>
               {contact.name.charAt(0).toLowerCase()}
             </Text>
@@ -483,57 +483,70 @@ export default function ContactDetailScreen() {
             <Text style={[styles.phoneText, { color: theme.text + '80' }]}>{contact.phone}</Text>
           ) : null}
         </View>
-        <Pressable
-          onPress={() => router.push(`/contact/${id}/edit`)}
-          style={[styles.editBtn, { borderColor: theme.cta }]}
-        >
-          <Text style={[styles.editBtnText, { color: theme.cta }]}>{t('contacts.edit')}</Text>
-        </Pressable>
+        <View style={styles.editBtnContainer}>
+          <Pressable
+            onPress={() => router.push(`/contact/${id}/edit`)}
+            style={({ pressed }) => [
+              styles.editBtn,
+              {
+                backgroundColor: theme.background,
+                borderColor: theme.cta,
+                transform: [{ translateY: pressed ? 1.5 : 0 }, { translateX: pressed ? 1.5 : 0 }],
+              },
+            ]}
+          >
+            <Text style={[styles.editBtnText, { color: theme.cta }]}>{t('contacts.edit')}</Text>
+          </Pressable>
+          <View style={[styles.editBtnShadow, { backgroundColor: theme.cta + '20' }]} />
+        </View>
       </View>
 
       {/* Follow-ups */}
       {followUps.length > 0 ? (
         <View style={styles.section}>
           {followUps.map((fu) => (
-            <View key={fu.id} style={[styles.followUpRow, { borderColor: theme.text + '20' }]}>
-              <View style={[styles.followUpDateChip, { backgroundColor: INK }]}>
-                <Text style={[styles.followUpDateChipText, { color: theme.highlight }]}>
-                  {new Date(fu.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                </Text>
-              </View>
-              <Text style={[styles.followUpStatus, { color: theme.text + '60' }]}>
-                {t(`contacts.${fu.status}` as const)}
-              </Text>
-              {fu.context_snapshot ? (
-                <Text style={[styles.cpText, { color: theme.text + '80' }]} numberOfLines={2}>
-                  {fu.context_snapshot}
-                </Text>
-              ) : null}
-              {fu.status === 'pending' && (
-                <View style={styles.followUpActions}>
-                  <Pressable
-                    onPress={() => void handleCompleteFollowUp(fu)}
-                    style={[styles.fuActionBtn, { backgroundColor: theme.highlight }]}
-                    accessibilityRole="button"
-                  >
-                    <Text style={[styles.fuActionText, { color: INK }]}>{t('contacts.completeAction')}</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={() => void handleSnoozeFollowUp(fu)}
-                    style={[styles.fuActionBtn, { borderWidth: 1, borderColor: theme.cta }]}
-                    accessibilityRole="button"
-                  >
-                    <Text style={[styles.fuActionText, { color: theme.cta }]}>{t('contacts.snoozeAction')}</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={() => handleRescheduleFollowUp(fu)}
-                    style={[styles.fuActionBtn, { borderWidth: 1, borderColor: theme.text + '40' }]}
-                    accessibilityRole="button"
-                  >
-                    <Text style={[styles.fuActionText, { color: theme.text + '80' }]}>{t('contacts.rescheduleAction')}</Text>
-                  </Pressable>
+            <View key={fu.id} style={[styles.followUpRow, { borderColor: '#3a3a3e' }]}>
+              <View style={[styles.accentBar, { backgroundColor: fu.status === 'pending' ? theme.highlight : theme.text + '40' }]} />
+              <View style={styles.followUpContent}>
+                <View style={[styles.followUpDateChip, { backgroundColor: theme.highlight + '20', borderColor: theme.highlight, borderWidth: 1 }]}>
+                  <Text style={[styles.followUpDateChipText, { color: theme.cta }]}>
+                    {new Date(fu.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                  </Text>
                 </View>
-              )}
+                <Text style={[styles.followUpStatus, { color: theme.text + '60' }]}>
+                  {t(`contacts.${fu.status}` as const)}
+                </Text>
+                {fu.context_snapshot ? (
+                  <Text style={[styles.cpText, { color: theme.text + '80' }]} numberOfLines={2}>
+                    {fu.context_snapshot}
+                  </Text>
+                ) : null}
+                {fu.status === 'pending' && (
+                  <View style={styles.followUpActions}>
+                    <Pressable
+                      onPress={() => void handleCompleteFollowUp(fu)}
+                      style={[styles.fuActionBtn, { backgroundColor: theme.highlight }]}
+                      accessibilityRole="button"
+                    >
+                      <Text style={[styles.fuActionText, { color: INK }]}>{t('contacts.completeAction')}</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => void handleSnoozeFollowUp(fu)}
+                      style={[styles.fuActionBtn, { borderWidth: 1, borderColor: theme.cta }]}
+                      accessibilityRole="button"
+                    >
+                      <Text style={[styles.fuActionText, { color: theme.cta }]}>{t('contacts.snoozeAction')}</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => handleRescheduleFollowUp(fu)}
+                      style={[styles.fuActionBtn, { borderWidth: 1, borderColor: theme.text + '40' }]}
+                      accessibilityRole="button"
+                    >
+                      <Text style={[styles.fuActionText, { color: theme.text + '80' }]}>{t('contacts.rescheduleAction')}</Text>
+                    </Pressable>
+                  </View>
+                )}
+              </View>
             </View>
           ))}
         </View>
@@ -591,15 +604,26 @@ export default function ContactDetailScreen() {
       )}
 
       {/* Delete */}
-      <Pressable
-        onPress={handleDelete}
-        disabled={deleteLoading}
-        style={[styles.deleteBtn, { borderColor: '#c0392b' + '40' }]}
-      >
-        <Text style={[styles.deleteBtnText, { color: '#c0392b', opacity: deleteLoading ? 0.5 : 1 }]}>
-          {deleteLoading ? 'deleting…' : t('contacts.delete')}
-        </Text>
-      </Pressable>
+      <View style={styles.deleteBtnContainer}>
+        <Pressable
+          onPress={handleDelete}
+          disabled={deleteLoading}
+          style={({ pressed }) => [
+            styles.deleteBtn,
+            {
+              backgroundColor: theme.background,
+              borderColor: '#c0392b',
+              transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+            },
+          ]}
+          accessibilityRole="button"
+        >
+          <Text style={[styles.deleteBtnText, { color: '#c0392b', opacity: deleteLoading ? 0.5 : 1 }]}>
+            {deleteLoading ? 'deleting…' : t('contacts.delete')}
+          </Text>
+        </Pressable>
+        <View style={[styles.deleteBtnShadow, { borderColor: '#c0392b', backgroundColor: 'rgba(192, 57, 43, 0.1)' }]} />
+      </View>
     </ScrollView>
     </Screen>
   );
@@ -622,23 +646,49 @@ const styles = StyleSheet.create({
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1.5,
+    backgroundColor: '#15161a',
   },
   avatarInitial: { ...Typography.heading, fontSize: 24 },
   headerText: { flex: 1, gap: 2 },
   nameText: { ...Typography.heading },
   phoneText: { fontFamily: FONT_REGULAR, fontSize: 14, textTransform: 'lowercase' },
-  editBtn: {
-    borderWidth: 1,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
+  editBtnContainer: {
+    position: 'relative',
+    height: 34,
+    width: 72,
   },
-  editBtnText: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
+  editBtnShadow: {
+    position: 'absolute',
+    top: 2,
+    left: 2,
+    right: -2,
+    bottom: -2,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
+  editBtn: {
+    position: 'absolute',
+    inset: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
+  },
+  editBtnText: { fontFamily: FONT_BOLD, fontSize: 14, textTransform: 'lowercase' },
   section: { paddingHorizontal: Spacing.lg, paddingTop: Spacing.sm },
   followUpRow: {
-    borderWidth: 1,
-    padding: Spacing.sm,
+    flexDirection: 'row',
+    borderWidth: 1.5,
+    backgroundColor: '#222225',
     marginBottom: Spacing.sm,
-    gap: 4,
+  },
+  accentBar: { width: 5, alignSelf: 'stretch' },
+  followUpContent: {
+    flex: 1,
+    padding: Spacing.sm + 4,
+    gap: 6,
   },
   followUpDateChip: { alignSelf: 'flex-start', paddingHorizontal: Spacing.sm, paddingVertical: 2 },
   followUpDateChipText: { fontFamily: FONT_BOLD, fontSize: 13, textTransform: 'lowercase' },
@@ -673,12 +723,28 @@ const styles = StyleSheet.create({
   addNoteBtnText: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
   noItems: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase', marginBottom: 4 },
   bodyText: { ...Typography.body },
-  deleteBtn: {
+  deleteBtnContainer: {
     marginHorizontal: Spacing.lg,
     marginTop: Spacing.xl,
-    borderWidth: 1,
-    padding: Spacing.md,
-    alignItems: 'center',
+    height: 52,
+    position: 'relative',
   },
-  deleteBtnText: { fontFamily: FONT_REGULAR, fontSize: 16, textTransform: 'lowercase' },
+  deleteBtnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    zIndex: 0,
+  },
+  deleteBtn: {
+    position: 'absolute',
+    inset: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
+  },
+  deleteBtnText: { fontFamily: FONT_BOLD, fontSize: 16, textTransform: 'lowercase' },
 });
