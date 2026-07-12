@@ -81,17 +81,17 @@ function generateValueNoise(
   return field;
 }
 
-// MetalColors.footerBackground-adjacent near-black + a lighter charcoal grey
-// (the app's two darkest metal tones), plus MetalColors.accentGlow red.
+// MetalColors.footerBackground-adjacent near-black + MetalColors.accentGlow red.
 const COLOR_BLACK: readonly [number, number, number] = [28, 28, 30]; // #1c1c1e
-const COLOR_GREY: readonly [number, number, number] = [46, 48, 50]; // #2e3032
 const COLOR_RED: readonly [number, number, number] = [204, 26, 0]; // #cc1a00
 
-function drawDither(ctx: CanvasRenderingContext2D, width: number, height: number, seed: number): void {
-  const toneField = generateValueNoise(width, height, mulberry32(seed), 24);
-  // Independent per-pixel draw (not smoothed) for the red mask, so red reads
-  // as sparse flecks rather than smoothed blobs.
-  const redRng = mulberry32(seed ^ 0x9e3779b9);
+function generateDitherFrame(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  frameSeed: number,
+): ImageData {
+  const toneField = generateValueNoise(width, height, mulberry32(frameSeed), 16);
 
   const image = ctx.createImageData(width, height);
   const data = image.data;
@@ -100,8 +100,13 @@ function drawDither(ctx: CanvasRenderingContext2D, width: number, height: number
     for (let x = 0; x < width; x++) {
       const i = y * width + x;
       const threshold = (BAYER_8X8[y % 8][x % 8] + 0.5) / 64;
-      const isRed = redRng() > 0.96; // ~4% of pixels
-      const color = isRed ? COLOR_RED : toneField[i] > threshold ? COLOR_GREY : COLOR_BLACK;
+      
+      // We want sparse red. Let's make density range from 0.002 to 0.065
+      // using the tone field to form organic clusters.
+      const density = 0.002 + toneField[i] * 0.063;
+      const isRed = density > threshold;
+
+      const color = isRed ? COLOR_RED : COLOR_BLACK;
       const p = i * 4;
       data[p] = color[0];
       data[p + 1] = color[1];
@@ -110,11 +115,14 @@ function drawDither(ctx: CanvasRenderingContext2D, width: number, height: number
     }
   }
 
-  ctx.putImageData(image, 0, 0);
+  return image;
 }
 
 export default function DitheredBackgroundDOM({ seed }: DitheredBackgroundDOMProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const framesRef = useRef<ImageData[]>([]);
+  const currentFrameRef = useRef<number>(0);
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -124,15 +132,30 @@ export default function DitheredBackgroundDOM({ seed }: DitheredBackgroundDOMPro
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        const width = Math.max(1, Math.round(entry.contentRect.width || parent.clientWidth || window.innerWidth));
-        const height = Math.max(1, Math.round(entry.contentRect.height || parent.clientHeight || window.innerHeight));
+        const parentWidth = entry.contentRect.width || parent.clientWidth || window.innerWidth;
+        const parentHeight = entry.contentRect.height || parent.clientHeight || window.innerHeight;
+        
+        // Render at half resolution for retro chunky pixel look and performance
+        const width = Math.max(1, Math.round(parentWidth / 2));
+        const height = Math.max(1, Math.round(parentHeight / 2));
 
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d');
-        if (ctx) {
-          drawDither(ctx, width, height, seed);
+        if (!ctx) continue;
+
+        // Generate 4 frames of animated dithered noise
+        const frames: ImageData[] = [];
+        for (let f = 0; f < 4; f++) {
+          const frameSeed = seed + f * 12345;
+          frames.push(generateDitherFrame(ctx, width, height, frameSeed));
         }
+
+        framesRef.current = frames;
+        currentFrameRef.current = 0;
+
+        // Render first frame immediately
+        ctx.putImageData(frames[0], 0, 0);
       }
     });
 
@@ -142,6 +165,39 @@ export default function DitheredBackgroundDOM({ seed }: DitheredBackgroundDOMPro
       resizeObserver.disconnect();
     };
   }, [seed]);
+
+  // Continuous loop animation running at ~12 FPS
+  useEffect(() => {
+    let lastTime = 0;
+    const interval = 80; // 80ms per frame (~12.5 FPS)
+
+    const tick = (time: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        animationRef.current = requestAnimationFrame(tick);
+        return;
+      }
+      const ctx = canvas.getContext('2d');
+      const frames = framesRef.current;
+
+      if (ctx && frames.length > 0) {
+        if (time - lastTime >= interval) {
+          currentFrameRef.current = (currentFrameRef.current + 1) % frames.length;
+          ctx.putImageData(frames[currentFrameRef.current], 0, 0);
+          lastTime = time;
+        }
+      }
+      animationRef.current = requestAnimationFrame(tick);
+    };
+
+    animationRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Root>
@@ -161,4 +217,6 @@ const Canvas = styled.canvas`
   display: block;
   width: 100%;
   height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 `;
