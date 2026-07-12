@@ -300,7 +300,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   toggleLabel: { ...Typography.label },
-  placeholder: { flex: 1 },
   monthHeader: {
     flexDirection: 'row',
     alignItems: 'center',
