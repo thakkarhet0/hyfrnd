@@ -17,12 +17,18 @@ const GlobalStyle = createGlobalStyle`
 
 export interface DitheredBackgroundDOMProps {
   seed: number;
-  isActive: boolean;
+  isRecording: boolean;
+  activeTab: string;
   dom?: import('expo/dom').DOMProps;
 }
 
-export default function DitheredBackgroundDOM({ isActive }: DitheredBackgroundDOMProps) {
-  const targetOpacity = isActive ? 1.0 : 0.35;
+export default function DitheredBackgroundDOM({ isRecording, activeTab }: DitheredBackgroundDOMProps) {
+  let targetOpacity = 0.0;
+  if (activeTab === 'capture') {
+    targetOpacity = isRecording ? 1.0 : 0.0;
+  } else {
+    targetOpacity = 0.35; // subtle dither for other tabs
+  }
 
   return (
     <Root style={{ opacity: targetOpacity }}>
