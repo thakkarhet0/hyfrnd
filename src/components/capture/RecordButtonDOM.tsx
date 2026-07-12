@@ -121,6 +121,13 @@ const Root = styled.div`
   justify-content: center;
   overflow: visible;
   background: transparent;
+  /* Fades this WebView's own rendered pixels to true transparency at the
+     top/bottom edges (a real alpha fade baked into the content itself,
+     not a color guess layered on top from the RN side) — masks a faint
+     residual tint the WebView's background otherwise leaves at its edges
+     even when set to transparent. */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
 `;
 
 const StyledWrapper = styled.div`
