@@ -187,8 +187,8 @@ const StyledWrapper = styled.div`
     border-radius: var(--radius);
     box-shadow:
       inset 0 1px 1px rgb(255 255 255 / 40%),
-      inset 0 -6px 1px -4px #cc1a00,
-      inset 0 -15px 6px -8px #b31500;
+      inset 0 -6px 1px -4px #2415d9,
+      inset 0 -15px 6px -8px #1b0eb3;
     transition:
       transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
       filter 0.25s ease,
@@ -218,7 +218,7 @@ const StyledWrapper = styled.div`
     height: 50px;
     width: 120px;
     border-radius: 50px 50px 0 0;
-    background: #cc1a00;
+    background: #2415d9;
     filter: contrast(10) blur(7px);
     transition: all 0.3s ease;
     opacity: 1;
@@ -338,7 +338,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     z-index: 0;
     transition: all 0.3s ease;
-    background: rgb(200, 25, 0);
+    background: rgb(49, 31, 255);
     width: 10px;
     height: 10px;
     left: 0;
@@ -367,12 +367,12 @@ const StyledWrapper = styled.div`
     height: 6px;
     margin-top: 22px;
     transition: all 0.3s ease;
-    background-color: #cc1a00;
+    background-color: #2415d9;
     box-shadow:
-      0 -10px 35px 17px #cc1a00,
+      0 -10px 35px 17px #2415d9,
       inset 0 1px 2px 0px rgba(255, 255, 255, 0.6),
       0 0 0px 3px rgb(0 0 0 / 60%),
-      0 0 2px 4px rgba(140, 15, 0, 0.8);
+      0 0 2px 4px rgba(27, 14, 204, 0.8);
   }
 
   .noise {
@@ -403,8 +403,8 @@ const StyledWrapper = styled.div`
     box-shadow:
       inset 0 1px 1px rgb(255 255 255 / 15%),
       inset 0 2px 4px 0px rgba(0, 0, 0, 0.5),
-      inset 0 -3px 1px -2px #cc1a00,
-      inset 0 -6px 3px -4px #b31500;
+      inset 0 -3px 1px -2px #2415d9,
+      inset 0 -6px 3px -4px #1b0eb3;
     transition:
       transform 0.08s ease-out,
       filter 0.08s ease-out,
@@ -461,7 +461,7 @@ const StyledWrapper = styled.div`
     animation: none;
   }
   .wrap input:checked + .button .inner svg .symbol-path-glow .dot {
-    fill: #cc1a00;
+    fill: #2415d9;
     filter: blur(12px);
     opacity: 0.8;
     animation: dotPulseGlow 1.4s ease-in-out infinite alternate;
@@ -472,7 +472,7 @@ const StyledWrapper = styled.div`
     animation: none;
   }
   .wrap input:checked + .button .inner svg .symbol-path .dot {
-    fill: #cc2200;
+    fill: #311fff;
     opacity: 0.9;
     animation: dotPulse 1.4s ease-in-out infinite alternate;
   }
@@ -480,31 +480,31 @@ const StyledWrapper = styled.div`
   .wrap input:checked + .button {
     box-shadow:
       inset 0 1px 1px rgba(255, 255, 255, 0.4),
-      inset 0 -6px 1px -4px #6b1515,
-      inset 0 -15px 6px -8px #2e0a0a;
+      inset 0 -6px 1px -4px #11096b,
+      inset 0 -15px 6px -8px #07042e;
     background-color: #2c3238;
   }
   .wrap input:checked + .button::after {
-    background: #3a1010;
+    background: #09053a;
   }
 
   .wrap input:checked + .button ~ .bg .shine-1 {
-    background-color: rgba(255, 60, 60, 0.7);
+    background-color: rgba(102, 87, 255, 0.7);
   }
   .wrap input:checked + .button ~ .bg::before {
     box-shadow:
-      inset 0 -2px 0px -1px rgba(255, 100, 100, 0.4),
+      inset 0 -2px 0px -1px rgba(121, 108, 255, 0.4),
       inset 0 0 5px 1px black,
       inset 0 0 0 1px black;
   }
 
   .wrap input:checked + .button ~ .led {
-    background-color: #cc1818;
+    background-color: #311fff;
     box-shadow:
-      0 -10px 18px 6px rgba(180, 20, 20, 0.55),
+      0 -10px 18px 6px rgba(49, 31, 255, 0.55),
       inset 0 1px 2px 0px rgba(255, 255, 255, 0.5),
       0 0 0px 3px rgba(0, 0, 0, 0.6),
-      0 0 2px 4px rgba(140, 10, 10, 0.6);
+      0 0 2px 4px rgba(27, 14, 204, 0.6);
     animation: ledPulse 1.8s infinite alternate;
   }
 
@@ -516,7 +516,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     inset: 0;
     border-radius: 30px;
-    background: linear-gradient(to bottom, #ff2b2b 0%, black 100%);
+    background: linear-gradient(to bottom, #311fff 0%, black 100%);
     filter: blur(12px);
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -554,11 +554,11 @@ const StyledWrapper = styled.div`
 
   @keyframes dotPulse {
     0% {
-      fill: #881500;
+      fill: #160eb3;
       opacity: 0.5;
     }
     100% {
-      fill: #dd2200;
+      fill: #311fff;
       opacity: 1;
     }
   }
@@ -576,20 +576,20 @@ const StyledWrapper = styled.div`
 
   @keyframes ledPulse {
     0% {
-      background-color: #b81212;
+      background-color: #2415d9;
       box-shadow:
-        0 -10px 18px 6px rgba(160, 15, 15, 0.45),
+        0 -10px 18px 6px rgba(36, 21, 217, 0.45),
         inset 0 1px 2px 0px rgba(255, 255, 255, 0.4),
         0 0 0px 3px rgba(0, 0, 0, 0.6),
-        0 0 2px 4px rgba(120, 8, 8, 0.5);
+        0 0 2px 4px rgba(22, 14, 179, 0.5);
     }
     100% {
-      background-color: #e02020;
+      background-color: #3e2eff;
       box-shadow:
-        0 -10px 26px 10px rgba(200, 25, 25, 0.6),
+        0 -10px 26px 10px rgba(49, 31, 255, 0.6),
         inset 0 1px 2px 0px rgba(255, 255, 255, 0.6),
         0 0 0px 3px rgba(0, 0, 0, 0.5),
-        0 0 3px 5px rgba(160, 12, 12, 0.7);
+        0 0 3px 5px rgba(36, 21, 217, 0.7);
     }
   }
 

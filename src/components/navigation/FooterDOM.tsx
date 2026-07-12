@@ -147,7 +147,7 @@ const TabButton = styled.button`
   }
 
   .icon-glow > * {
-    stroke: #dd2200;
+    stroke: #311fff;
     stroke-width: 8;
     opacity: 0;
     filter: blur(6px);
@@ -170,11 +170,11 @@ const TabButton = styled.button`
   }
 
   &.active .icon-fg > * {
-    stroke: #ff5a3c;
+    stroke: #6657ff;
     stroke-dasharray: 220;
     stroke-dashoffset: 220;
     animation: iconSweep 2.4s ease-in-out infinite;
-    filter: drop-shadow(0 0 3px rgba(221, 34, 0, 0.8));
+    filter: drop-shadow(0 0 3px rgba(49, 31, 255, 0.8));
   }
 
   &.active .icon-glow > * {
@@ -185,7 +185,7 @@ const TabButton = styled.button`
   }
 
   &.active .tab-label {
-    color: #ff5a3c;
+    color: #6657ff;
   }
 
   @keyframes iconSweep {

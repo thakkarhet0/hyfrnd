@@ -8,11 +8,11 @@ const metal = {
   background: '#1c1c1e',
   text: '#F2F3F5',
   // Secondary accent — links, borders, spinners, avatar initials.
-  cta: '#ff5a3c',
-  accent: '#ff5a3c',
+  cta: '#6657ff',
+  accent: '#6657ff',
   // Primary CTA-fill color. Always used as a solid fill (never as red text on
   // the page) — pairs with `INK` (white) for the fill's label text.
-  highlight: '#dd2200',
+  highlight: '#311fff',
 } as const;
 
 export const Colors = {
@@ -29,11 +29,11 @@ export const MetalColors = {
   // darkest tone (`.button::before` bottom border / `.bg` fill).
   footerBackground: '#15161a',
   text: '#F2F3F5',
-  cta: '#ff5a3c',
+  cta: '#6657ff',
   // Idle button accent (chassis inset shadow / led / shine).
-  accentGlow: '#cc1a00',
+  accentGlow: '#2415d9',
   // Recording accent — brighter red pulse (led/dot at animation peak).
-  accentGlowActive: '#dd2200',
+  accentGlowActive: '#311fff',
 } as const;
 
 export type ColorScheme = 'light' | 'dark';

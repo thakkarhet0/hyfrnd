@@ -59,7 +59,7 @@ export default function DitheredBackgroundDOM({ isActive }: DitheredBackgroundDO
           width="100%"
           height="100%"
           colorBack="#050505"
-          colorFront="#a80000"
+          colorFront="#311fff"
           shape="warp"
           type="2x2"
           size={1.5}
