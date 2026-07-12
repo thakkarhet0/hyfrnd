@@ -13,7 +13,7 @@ import { requeueFailedItems } from '@/db/queries/queue';
 import { RecordButton } from '@/components/capture/RecordButton';
 import { ProcessingScreen } from '@/components/capture/ProcessingScreen';
 import { SttConsentGate } from '@/components/capture/SttConsentGate';
-import { CaptureScreenBackground } from '@/components/capture/CaptureScreenBackground';
+import { Screen } from '@/components/Screen';
 
 export default function CaptureScreen() {
   const { t } = useTranslation();
@@ -81,7 +81,7 @@ export default function CaptureScreen() {
 
   if (hasProcessingError && !isProcessing && memoId) {
     return (
-      <CaptureScreenBackground style={styles.container}>
+      <Screen style={styles.container}>
         <View style={styles.center}>
           <Text style={[styles.hint, { color: MetalColors.text }]}>{t('capture.processingFailed')}</Text>
           {processingError && (
@@ -106,20 +106,20 @@ export default function CaptureScreen() {
             </Text>
           </Pressable>
         </View>
-      </CaptureScreenBackground>
+      </Screen>
     );
   }
 
   if (isProcessing && memoId) {
     return (
-      <CaptureScreenBackground style={styles.container}>
+      <Screen style={styles.container}>
         <ProcessingScreen memoId={memoId} isConnected={isConnected ?? false} />
-      </CaptureScreenBackground>
+      </Screen>
     );
   }
 
   return (
-    <CaptureScreenBackground style={styles.container}>
+    <Screen style={styles.container}>
       <SttConsentGate>
         <View style={styles.center}>
           <RecordButton isRecording={isRecording} onPress={handleRecordPress} />
@@ -174,7 +174,7 @@ export default function CaptureScreen() {
           {error && <Text style={[styles.hint, { color: 'red' }]}>{error}</Text>}
         </View>
       </SttConsentGate>
-    </CaptureScreenBackground>
+    </Screen>
   );
 }
 

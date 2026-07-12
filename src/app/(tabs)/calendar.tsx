@@ -171,7 +171,7 @@ export default function CalendarScreen() {
   const hasTodayData = todayEntries.length > 0;
 
   return (
-    <Screen style={[styles.container, { backgroundColor: theme.background }]}>
+    <Screen style={styles.container}>
       <View style={styles.toggleRow}>
         <Pressable
           style={[

@@ -197,7 +197,7 @@ export default function ContactsScreen() {
   const isSearchEmpty = sections.length === 0 && query.trim().length > 0;
 
   return (
-    <Screen style={[styles.container, { backgroundColor: theme.background }]}>
+    <Screen style={styles.container}>
       {!isEmpty && (
         <View
           style={[
