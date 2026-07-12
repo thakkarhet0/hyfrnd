@@ -1,4 +1,4 @@
-import { asc, eq } from 'drizzle-orm';
+import { and, asc, eq, gte, lt } from 'drizzle-orm';
 import { contacts, follow_ups } from '@/db/schema';
 
 import { getDb } from '@/db/index';
@@ -74,6 +74,79 @@ export async function getAllPendingFollowUps(): Promise<{
       .from(follow_ups)
       .innerJoin(contacts, eq(follow_ups.contact_id, contacts.id))
       .where(eq(follow_ups.status, 'pending'))
+      .orderBy(asc(follow_ups.due_date));
+    return { data: rows, error: null };
+  } catch (err) {
+    return { data: null, error: String(err) };
+  }
+}
+
+export interface FollowUpsForToday {
+  overdue: PendingFollowUp[];
+  today: PendingFollowUp[];
+}
+
+function startOfLocalDay(date: Date): number {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+}
+
+export async function getFollowUpsForToday(): Promise<{
+  data: FollowUpsForToday | null;
+  error: string | null;
+}> {
+  try {
+    const db = getDb();
+    const startOfToday = startOfLocalDay(new Date());
+    const startOfTomorrow = startOfToday + 24 * 60 * 60 * 1000;
+    const rows = await db
+      .select({
+        id: follow_ups.id,
+        contact_id: follow_ups.contact_id,
+        contact_name: contacts.name,
+        memo_id: follow_ups.memo_id,
+        due_date: follow_ups.due_date,
+        status: follow_ups.status,
+        context_snapshot: follow_ups.context_snapshot,
+      })
+      .from(follow_ups)
+      .innerJoin(contacts, eq(follow_ups.contact_id, contacts.id))
+      .where(and(eq(follow_ups.status, 'pending'), lt(follow_ups.due_date, startOfTomorrow)))
+      .orderBy(asc(follow_ups.due_date));
+    const overdue = rows.filter((r) => r.due_date < startOfToday);
+    const today = rows.filter((r) => r.due_date >= startOfToday);
+    return { data: { overdue, today }, error: null };
+  } catch (err) {
+    return { data: null, error: String(err) };
+  }
+}
+
+export async function getFollowUpsForMonth(
+  monthStart: number,
+  monthEndExclusive: number,
+): Promise<{ data: PendingFollowUp[] | null; error: string | null }> {
+  try {
+    const db = getDb();
+    const rows = await db
+      .select({
+        id: follow_ups.id,
+        contact_id: follow_ups.contact_id,
+        contact_name: contacts.name,
+        memo_id: follow_ups.memo_id,
+        due_date: follow_ups.due_date,
+        status: follow_ups.status,
+        context_snapshot: follow_ups.context_snapshot,
+      })
+      .from(follow_ups)
+      .innerJoin(contacts, eq(follow_ups.contact_id, contacts.id))
+      .where(
+        and(
+          eq(follow_ups.status, 'pending'),
+          gte(follow_ups.due_date, monthStart),
+          lt(follow_ups.due_date, monthEndExclusive),
+        ),
+      )
       .orderBy(asc(follow_ups.due_date));
     return { data: rows, error: null };
   } catch (err) {
