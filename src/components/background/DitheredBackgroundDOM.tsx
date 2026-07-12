@@ -1,6 +1,6 @@
 'use dom';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { createGlobalStyle, styled } from 'styled-components';
 // @ts-ignore - `@paper-design/shaders-react` may lack local types depending on the environment setup; ignoring ensures zero compiler blockers.
 import { Dithering } from '@paper-design/shaders-react';
@@ -22,58 +22,28 @@ export interface DitheredBackgroundDOMProps {
 }
 
 export default function DitheredBackgroundDOM({ isActive }: DitheredBackgroundDOMProps) {
-  const [prevIsActive, setPrevIsActive] = useState(isActive);
-  const [shouldRender, setShouldRender] = useState(isActive);
-  const [opacity, setOpacity] = useState(isActive ? 1 : 0);
-
-  // Synchronize state during render when props change
-  if (isActive !== prevIsActive) {
-    setPrevIsActive(isActive);
-    if (isActive) {
-      setShouldRender(true);
-    } else {
-      setOpacity(0);
-    }
-  }
-
-  useEffect(() => {
-    if (isActive) {
-      // Small frame delay to ensure DOM is updated before setting opacity to 1
-      const timer = requestAnimationFrame(() => {
-        setOpacity(1);
-      });
-      return () => cancelAnimationFrame(timer);
-    } else {
-      const timer = setTimeout(() => {
-        setShouldRender(false);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isActive]);
+  const targetOpacity = isActive ? 1.0 : 0.35;
 
   return (
-    <Root $opacity={opacity}>
+    <Root style={{ opacity: targetOpacity }}>
       <GlobalStyle />
-      {shouldRender && (
-        <Dithering
-          width="100%"
-          height="100%"
-          colorBack="#050505"
-          colorFront="#311fff"
-          shape="warp"
-          type="2x2"
-          size={1.5}
-          speed={1}
-        />
-      )}
+      <Dithering
+        width="100%"
+        height="100%"
+        colorBack="#000000"
+        colorFront="#311fff"
+        shape="warp"
+        type="2x2"
+        size={1.5}
+        speed={0.8}
+      />
     </Root>
   );
 }
 
-const Root = styled.div<{ $opacity: number }>`
+const Root = styled.div`
   width: 100%;
   height: 100%;
-  background: transparent;
-  opacity: ${props => props.$opacity};
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #000000;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 `;
