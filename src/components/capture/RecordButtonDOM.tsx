@@ -244,7 +244,7 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
     background: var(--shadow-color-1);
     filter: contrast(10) blur(7px);
     transition: all 0.3s ease;
-    opacity: 1;
+    opacity: 0;
   }
 
   .button .corner {
@@ -393,12 +393,10 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
     height: 6px;
     margin-top: 22px;
     transition: all 0.3s ease;
-    background-color: var(--shadow-color-1);
+    background-color: ${props => props.$themeMode === 'light' ? '#c8cdd4' : '#2d2f33'};
     box-shadow:
-      0 -10px 35px 17px var(--shadow-color-1),
-      inset 0 1px 2px 0px rgba(255, 255, 255, 0.6),
-      0 0 0px 3px rgb(0 0 0 / 60%),
-      0 0 2px 4px var(--shadow-color-2);
+      inset 0 1px 2px 0px rgba(255, 255, 255, 0.2),
+      0 0 0px 3px rgb(0 0 0 / 30%);
   }
 
   .noise {
@@ -511,7 +509,8 @@ const StyledWrapper = styled.div<{ $themeMode: 'light' | 'dark' }>`
     background-color: ${props => props.$themeMode === 'light' ? '#eaecee' : '#2c3238'};
   }
   .wrap input:checked + .button::after {
-    background: ${props => props.$themeMode === 'light' ? '#eaecee' : '#09053a'};
+    opacity: 1;
+    background: var(--shadow-color-1);
   }
 
   .wrap input:checked + .button ~ .bg .shine-1 {
