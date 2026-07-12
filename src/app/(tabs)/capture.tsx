@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 import * as Network from 'expo-network';
 
-import { Typography, INK } from '@/constants/theme';
-import { Screen } from '@/components/Screen';
+import { Typography, INK, MetalColors } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useCaptureFlow } from '@/hooks/use-capture-flow';
 import { useQueueProcessor } from '@/hooks/use-queue-processor';
@@ -14,6 +13,7 @@ import { requeueFailedItems } from '@/db/queries/queue';
 import { RecordButton } from '@/components/capture/RecordButton';
 import { ProcessingScreen } from '@/components/capture/ProcessingScreen';
 import { SttConsentGate } from '@/components/capture/SttConsentGate';
+import { CaptureScreenBackground } from '@/components/capture/CaptureScreenBackground';
 
 export default function CaptureScreen() {
   const { t } = useTranslation();
@@ -81,9 +81,9 @@ export default function CaptureScreen() {
 
   if (hasProcessingError && !isProcessing && memoId) {
     return (
-      <Screen style={[styles.container, { backgroundColor: theme.background }]}>
+      <CaptureScreenBackground style={styles.container}>
         <View style={styles.center}>
-          <Text style={[styles.hint, { color: theme.text }]}>{t('capture.processingFailed')}</Text>
+          <Text style={[styles.hint, { color: MetalColors.text }]}>{t('capture.processingFailed')}</Text>
           {processingError && (
             <Text style={[styles.reRecordLabel, { color: 'red', textAlign: 'center' }]}>{processingError}</Text>
           )}
@@ -101,55 +101,55 @@ export default function CaptureScreen() {
             }}
             style={styles.reRecordButton}
           >
-            <Text style={[styles.reRecordLabel, { color: theme.cta }]}>
+            <Text style={[styles.reRecordLabel, { color: MetalColors.cta }]}>
               {t('capture.retryProcessing')}
             </Text>
           </Pressable>
         </View>
-      </Screen>
+      </CaptureScreenBackground>
     );
   }
 
   if (isProcessing && memoId) {
     return (
-      <Screen style={[styles.container, { backgroundColor: theme.background }]}>
+      <CaptureScreenBackground style={styles.container}>
         <ProcessingScreen memoId={memoId} isConnected={isConnected ?? false} />
-      </Screen>
+      </CaptureScreenBackground>
     );
   }
 
   return (
-    <Screen style={[styles.container, { backgroundColor: theme.background }]}>
+    <CaptureScreenBackground style={styles.container}>
       <SttConsentGate>
         <View style={styles.center}>
           <RecordButton isRecording={isRecording} onPress={handleRecordPress} />
 
           {/* Idle / recording hint */}
           {!isRecording && !isPaused && (
-            <Text style={[styles.hint, { color: theme.text }]}>
+            <Text style={[styles.hint, { color: MetalColors.text }]}>
               {permissionStatus === 'denied'
                 ? t('capture.micPermissionNeeded')
                 : t('capture.recordButton')}
             </Text>
           )}
           {isRecording && (
-            <Text style={[styles.hint, { color: theme.text }]}>{t('capture.tapToStop')}</Text>
+            <Text style={[styles.hint, { color: MetalColors.text }]}>{t('capture.tapToStop')}</Text>
           )}
 
           {/* Paused: continue by tapping the mic, or choose delete / done */}
           {isPaused && (
             <View style={styles.pausedBlock}>
-              <Text style={[styles.hint, { color: theme.text + '99' }]}>
+              <Text style={[styles.hint, { color: MetalColors.text + '99' }]}>
                 {t('capture.tapToContinue')}
               </Text>
               <View style={styles.actionsRow}>
                 <Pressable
                   onPress={() => void discardRecording()}
-                  style={[styles.actionButton, styles.deleteButton, { borderColor: theme.text }]}
+                  style={[styles.actionButton, styles.deleteButton, { borderColor: MetalColors.text }]}
                   accessibilityRole="button"
                   accessibilityLabel={t('capture.delete')}
                 >
-                  <Text style={[styles.actionLabel, { color: theme.text }]}>
+                  <Text style={[styles.actionLabel, { color: MetalColors.text }]}>
                     {t('capture.delete')}
                   </Text>
                 </Pressable>
@@ -174,7 +174,7 @@ export default function CaptureScreen() {
           {error && <Text style={[styles.hint, { color: 'red' }]}>{error}</Text>}
         </View>
       </SttConsentGate>
-    </Screen>
+    </CaptureScreenBackground>
   );
 }
 

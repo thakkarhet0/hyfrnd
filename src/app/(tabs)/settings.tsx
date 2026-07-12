@@ -5,7 +5,6 @@ import { FONT_BOLD, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
 import { SubscriptionSettings } from '@/components/settings/SubscriptionSettings';
-import { AppearanceSettings } from '@/components/settings/AppearanceSettings';
 import { NotificationSettings } from '@/components/settings/NotificationSettings';
 import { BackupSettings } from '@/components/settings/BackupSettings';
 import { ConsentSettings } from '@/components/settings/ConsentSettings';
@@ -20,7 +19,6 @@ export default function SettingsScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={[styles.heading, { color: theme.text }]}>{t('settings.title')}</Text>
         <SubscriptionSettings />
-        <AppearanceSettings />
         <NotificationSettings />
         <BackupSettings />
         <ConsentSettings />

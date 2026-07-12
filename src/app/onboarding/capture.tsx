@@ -4,15 +4,15 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as Network from 'expo-network';
 
-import { Typography, FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
+import { Typography, FONT_REGULAR, FONT_BOLD, Spacing, INK, MetalColors } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { Screen } from '@/components/Screen';
 import { useCaptureFlow } from '@/hooks/use-capture-flow';
 import { useQueueProcessor } from '@/hooks/use-queue-processor';
 import { useCaptureStore } from '@/stores/capture.store';
 import { RecordButton } from '@/components/capture/RecordButton';
 import { ProcessingScreen } from '@/components/capture/ProcessingScreen';
 import { SttConsentGate } from '@/components/capture/SttConsentGate';
+import { CaptureScreenBackground } from '@/components/capture/CaptureScreenBackground';
 import { insertMemo, updateMemoTranscript, updateMemoStatus } from '@/db/queries/memos';
 import { extractFromTranscript } from '@/services/extraction.service';
 
@@ -112,18 +112,18 @@ export default function OnboardingCaptureScreen() {
   // Processing state (STT + extraction running)
   if (isProcessing && memoId) {
     return (
-      <Screen style={[styles.container, { backgroundColor: theme.background }]} edges={['top', 'bottom']}>
+      <CaptureScreenBackground style={styles.container} edges={['top', 'bottom']}>
         <ProcessingScreen memoId={memoId} isConnected={isConnected ?? false} />
-      </Screen>
+      </CaptureScreenBackground>
     );
   }
 
   // Error state
   if (hasProcessingError && !isProcessing && memoId) {
     return (
-      <Screen style={[styles.container, { backgroundColor: theme.background }]} edges={['top', 'bottom']}>
+      <CaptureScreenBackground style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.center}>
-          <Text style={[styles.hint, { color: theme.text }]}>{t('capture.processingFailed')}</Text>
+          <Text style={[styles.hint, { color: MetalColors.text }]}>{t('capture.processingFailed')}</Text>
           <Pressable
             onPress={() => {
               store.setHasProcessingError(false);
@@ -132,28 +132,28 @@ export default function OnboardingCaptureScreen() {
             }}
             style={styles.retryButton}
           >
-            <Text style={[styles.retryLabel, { color: theme.cta }]}>
+            <Text style={[styles.retryLabel, { color: MetalColors.cta }]}>
               {t('capture.retryProcessing')}
             </Text>
           </Pressable>
         </View>
-      </Screen>
+      </CaptureScreenBackground>
     );
   }
 
   // Typed fallback: mic permission denied
   if (permissionStatus === 'denied') {
     return (
-      <Screen style={[styles.container, { backgroundColor: theme.background }]} edges={['top', 'bottom']}>
-        <Text style={[styles.prompt, { color: theme.text }]}>
+      <CaptureScreenBackground style={styles.container} edges={['top', 'bottom']}>
+        <Text style={[styles.prompt, { color: MetalColors.text }]}>
           {t('onboarding.micDeniedFallback')}
         </Text>
         <TextInput
-          style={[styles.typedInput, { color: theme.text, borderBottomColor: theme.cta }]}
+          style={[styles.typedInput, { color: MetalColors.text, borderBottomColor: MetalColors.cta }]}
           value={typedText}
           onChangeText={setTypedText}
           placeholder={t('onboarding.typedFallbackPlaceholder')}
-          placeholderTextColor={theme.text + '60'}
+          placeholderTextColor={MetalColors.text + '60'}
           multiline
           autoFocus
           accessibilityLabel={t('onboarding.typedFallbackPlaceholder')}
@@ -178,20 +178,20 @@ export default function OnboardingCaptureScreen() {
             </Text>
           )}
         </Pressable>
-      </Screen>
+      </CaptureScreenBackground>
     );
   }
 
   // Default: record state (gated behind STT consent — audio must not be sent before consent)
   return (
-    <Screen style={[styles.container, { backgroundColor: theme.background }]} edges={['top', 'bottom']}>
+    <CaptureScreenBackground style={styles.container} edges={['top', 'bottom']}>
       <SttConsentGate>
-      <Text style={[styles.prompt, { color: theme.text }]}>
+      <Text style={[styles.prompt, { color: MetalColors.text }]}>
         {t('onboarding.capturePrompt')}
       </Text>
 
       {permissionStatus === 'undetermined' && (
-        <Text style={[styles.micExplain, { color: theme.text + '80' }]}>
+        <Text style={[styles.micExplain, { color: MetalColors.text + '80' }]}>
           {t('onboarding.micExplain')}
         </Text>
       )}
@@ -200,16 +200,16 @@ export default function OnboardingCaptureScreen() {
         <RecordButton isRecording={isRecording} onPress={handleToggleRecord} />
 
         {isRecording && (
-          <Text style={[styles.hint, { color: theme.text }]}>{t('capture.tapToStop')}</Text>
+          <Text style={[styles.hint, { color: MetalColors.text }]}>{t('capture.tapToStop')}</Text>
         )}
 
         {isPaused && (
           <>
-            <Text style={[styles.hint, { color: theme.text + '99' }]}>
+            <Text style={[styles.hint, { color: MetalColors.text + '99' }]}>
               {t('capture.tapToContinue')}
             </Text>
             <Pressable onPress={() => void discardRecording()} style={styles.reRecordButton}>
-              <Text style={[styles.reRecordLabel, { color: theme.cta }]}>
+              <Text style={[styles.reRecordLabel, { color: MetalColors.cta }]}>
                 {t('capture.reRecord')}
               </Text>
             </Pressable>
@@ -229,7 +229,7 @@ export default function OnboardingCaptureScreen() {
         </Pressable>
       )}
       </SttConsentGate>
-    </Screen>
+    </CaptureScreenBackground>
   );
 }
 

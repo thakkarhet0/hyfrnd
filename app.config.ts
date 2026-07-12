@@ -8,7 +8,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   scheme: 'godsplan',
-  userInterfaceStyle: 'automatic',
+  userInterfaceStyle: 'dark',
   owner: 'thakkarhet',
   ios: {
     icon: './assets/expo.icon',

@@ -1,28 +1,48 @@
+// The app is permanently dark/"metal", matching the record button's own
+// chassis (see MetalColors below) — there is no light mode. `light` and `dark`
+// are kept as identical values (rather than collapsing the Colors shape to a
+// single flat object) so `useTheme()`/`Colors[scheme]`/`getPaperTheme(scheme)`
+// call sites don't need restructuring; `useColorScheme()` always resolves to
+// 'dark' now, so the `.light` branch is effectively dead but harmless.
+const metal = {
+  background: '#1c1c1e',
+  text: '#F2F3F5',
+  // Secondary accent — links, borders, spinners, avatar initials.
+  cta: '#ff5a3c',
+  accent: '#ff5a3c',
+  // Primary CTA-fill color. Always used as a solid fill (never as red text on
+  // the page) — pairs with `INK` (white) for the fill's label text.
+  highlight: '#dd2200',
+} as const;
+
 export const Colors = {
-  light: {
-    background: '#DCF2F1',
-    text: '#0F1035',
-    cta: '#365486',
-    accent: '#7FC7D9',
-    // Follow-up / attention accent. Always used as a solid fill or as text on a
-    // dark chip — never as yellow text on the page (too low-contrast on light).
-    highlight: '#FFD23F',
-  },
-  dark: {
-    background: '#0F1035',
-    text: '#DCF2F1',
-    cta: '#7FC7D9',
-    accent: '#7FC7D9',
-    highlight: '#FFD23F',
-  },
+  light: metal,
+  dark: metal,
+} as const;
+
+// Fixed "metal" palette for the capture experience (record button + its screens
+// + the tab bar), matching the RecordButtonDOM button's own gradient/glow colors.
+export const MetalColors = {
+  // Matches the button's `.inner` face gradient (180deg, #232324 5% -> #46484b 100%).
+  gradient: ['#232324', '#46484b'] as const,
+  // Shade darker than the page gradient — matches the button chassis's own
+  // darkest tone (`.button::before` bottom border / `.bg` fill).
+  footerBackground: '#15161a',
+  text: '#F2F3F5',
+  cta: '#ff5a3c',
+  // Idle button accent (chassis inset shadow / led / shine).
+  accentGlow: '#cc1a00',
+  // Recording accent — brighter red pulse (led/dot at animation peak).
+  accentGlowActive: '#dd2200',
 } as const;
 
 export type ColorScheme = 'light' | 'dark';
 export type ThemeColors = typeof Colors.light;
 
-// Navy that pairs with `highlight` (yellow): readable as text/ink on a yellow
-// fill, and as a chip background under yellow text, in both light and dark.
-export const INK = '#0F1035';
+// White — CTA-fill text (on `highlight` red buttons) and chip background for
+// the inverse highlight-text-on-chip pattern. Named INK from the old
+// navy-on-cream palette; kept the name to avoid a 15+ call-site rename.
+export const INK = '#FFFFFF';
 
 // letterSpacing in pixels, derived from em spec:
 // display/heading: 0.08em; body/label/caption: 0.04em

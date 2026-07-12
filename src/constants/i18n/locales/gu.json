@@ -46,7 +46,7 @@
     "snoozeAction": "1 અઠવાડિયા પછી",
     "rescheduleAction": "નવી તારીખ"
   },
-  "settings": { "title": "સેટિંગ્સ", "appearance": "દેખાવ", "themeSystem": "સિસ્ટમ", "themeLight": "લાઇટ", "themeDark": "ડાર્ક", "notificationTiming": "નોટિફિકેશન સમય", "morning": "સવાર", "afternoon": "બપોર", "evening": "સાંજ", "saved": "સાચવ્યું" },
+  "settings": { "title": "સેટિંગ્સ", "notificationTiming": "નોટિફિકેશન સમય", "morning": "સવાર", "afternoon": "બપોર", "evening": "સાંજ", "saved": "સાચવ્યું" },
   "backup": { "title": "ગૂગલ ડ્રાઇવ બૅકઅપ", "disclosure": "તમારો ડેટા તમારા ગૂગલ ડ્રાઇવમાં સૅવ થશે — ફક્ત તમે જ એક્સેસ કરી શકો", "enable": "બૅકઅપ ચાલુ કરો", "disable": "બૅકઅપ બંધ કરો", "backupNow": "હમણાં બૅકઅપ કરો", "syncing": "સિંક થઈ રહ્યું છે...", "lastBackup": "છેલ્લો બૅકઅપ: {{time}}", "lastFailed": "છેલ્લો સિંક નિષ્ફળ — ફરી પ્રયત્ન થશે" },
   "legal": { "title": "કાનૂની", "grievanceOfficer": "ફરિયાદ અધિકારી", "privacyPolicy": "ગોપનીયતા નીતિ", "privacyPolicyLink": "godsplan.app/privacy", "version": "આવૃત્તિ" },
   "consent": { "title": "ગોપનીયતા અને સંમતિ", "sttToggle": "વૉઇસ ટ્રાન્સક્રિપ્શનની પરવાનગી આપો", "sttDetail": "તમારો અવાજ ટ્રાન્સક્રિપ્શન માટે Sarvam AIને મોકલાય છે. ગમે ત્યારે બંધ કરો.", "deleteTitle": "મારો ડેટા કાઢો", "deleteDisclosure": "બધા સંપર્ક, મેમો, ફૉલો-અપ અને વૉઇસ ફ઼ાઇલ આ ડિવાઇસ પરથી કાયમ માટે ભૂંસાઈ જશે.", "deleteButton": "મારો બધો ડેટા કાઢો", "deleteConfirmTitle": "બધું ભૂંસવું?", "deleteConfirmBody": "આ બધા સંપર્ક, મેમો, ફૉલો-અપ અને વૉઇસ ફ઼ાઇલ કાયમ માટે ભૂંસી નાખશે. જો ગૂગલ ડ્રાઇવ બૅકઅપ ચાલુ હોય, તે પણ ભૂંસાશે. આ પૂર્વવત્ કરી શકાશે નહીં.", "deleteConfirm": "બધું ભૂંસો", "deleteCancel": "રદ કરો", "deleting": "ભૂંસવામાં આવી રહ્યું છે..." },

@@ -46,7 +46,7 @@
     "snoozeAction": "1 हफ़्ते बाद",
     "rescheduleAction": "नई तारीख"
   },
-  "settings": { "title": "सेटिंग्स", "appearance": "दिखावट", "themeSystem": "सिस्टम", "themeLight": "लाइट", "themeDark": "डार्क", "notificationTiming": "नोटिफिकेशन समय", "morning": "सुबह", "afternoon": "दोपहर", "evening": "शाम", "saved": "सेव हो गया" },
+  "settings": { "title": "सेटिंग्स", "notificationTiming": "नोटिफिकेशन समय", "morning": "सुबह", "afternoon": "दोपहर", "evening": "शाम", "saved": "सेव हो गया" },
   "backup": { "title": "गूगल ड्राइव बैकअप", "disclosure": "आपका डेटा आपके गूगल ड्राइव में सेव होगा — सिर्फ आप एक्सेस कर सकते हैं", "enable": "बैकअप चालू करें", "disable": "बैकअप बंद करें", "backupNow": "अभी बैकअप करें", "syncing": "सिंक हो रहा है...", "lastBackup": "आखिरी बैकअप: {{time}}", "lastFailed": "पिछला सिंक विफल — फिर से कोशिश होगी" },
   "legal": { "title": "कानूनी", "grievanceOfficer": "शिकायत अधिकारी", "privacyPolicy": "गोपनीयता नीति", "privacyPolicyLink": "godsplan.app/privacy", "version": "संस्करण" },
   "consent": { "title": "गोपनीयता और सहमति", "sttToggle": "वॉयस ट्रांसक्रिप्शन की अनुमति दें", "sttDetail": "आपकी आवाज़ ट्रांसक्रिप्शन के लिए Sarvam AI को भेजी जाती है। इसे कभी भी बंद करें।", "deleteTitle": "मेरा डेटा हटाएं", "deleteDisclosure": "सभी संपर्क, मेमो, फ़ॉलो-अप और वॉयस फ़ाइलें इस डिवाइस से स्थायी रूप से हटा दी जाएंगी।", "deleteButton": "मेरा सारा डेटा हटाएं", "deleteConfirmTitle": "सब कुछ हटाएं?", "deleteConfirmBody": "इससे सभी संपर्क, मेमो, फ़ॉलो-अप और वॉयस फ़ाइलें स्थायी रूप से हट जाएंगी। अगर गूगल ड्राइव बैकअप चालू है, वह भी हट जाएगा। यह वापस नहीं लिया जा सकता।", "deleteConfirm": "सब कुछ हटाएं", "deleteCancel": "रद्द करें", "deleting": "हटाया जा रहा है..." },

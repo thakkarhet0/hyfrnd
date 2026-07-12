@@ -46,7 +46,7 @@
     "snoozeAction": "1 week later",
     "rescheduleAction": "reschedule"
   },
-  "settings": { "title": "Settings", "appearance": "appearance", "themeSystem": "system", "themeLight": "light", "themeDark": "dark", "notificationTiming": "notification timing", "morning": "morning", "afternoon": "afternoon", "evening": "evening", "saved": "saved" },
+  "settings": { "title": "Settings", "notificationTiming": "notification timing", "morning": "morning", "afternoon": "afternoon", "evening": "evening", "saved": "saved" },
   "backup": { "title": "google drive backup", "disclosure": "your data will be saved to your google drive — only you can access it", "enable": "enable backup", "disable": "disable backup", "backupNow": "backup now", "syncing": "syncing...", "lastBackup": "last backup: {{time}}", "lastFailed": "last sync failed — will retry" },
   "legal": { "title": "legal", "grievanceOfficer": "grievance officer", "privacyPolicy": "privacy policy", "privacyPolicyLink": "godsplan.app/privacy", "version": "version" },
   "consent": { "title": "privacy & consent", "sttToggle": "allow voice transcription", "sttDetail": "your voice is sent to sarvam ai for transcription. you can turn this off anytime.", "deleteTitle": "delete my data", "deleteDisclosure": "permanently deletes all contacts, memos, follow-ups, and voice files from this device.", "deleteButton": "delete all my data", "deleteConfirmTitle": "delete everything?", "deleteConfirmBody": "this will permanently delete all contacts, memos, follow-ups, and voice files. if google drive backup is enabled, that will also be deleted. this cannot be undone.", "deleteConfirm": "delete everything", "deleteCancel": "cancel", "deleting": "deleting..." },

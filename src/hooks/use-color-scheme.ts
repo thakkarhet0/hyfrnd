@@ -1,14 +1,9 @@
-import { useColorScheme as useSystemColorScheme } from 'react-native';
-
-import { useAppStore } from '@/stores/app.store';
-
 /**
- * Resolves the active color scheme, honoring the user's in-app theme preference
- * (Settings → appearance). 'system' defers to the OS; 'light'/'dark' force a mode.
+ * The app is permanently dark/"metal" — there is no light mode or user
+ * preference to resolve. Kept as a hook (rather than inlining 'dark'
+ * everywhere) since `useTheme()`, `_layout.tsx`'s nav/Paper theme selection,
+ * and `getPaperTheme(scheme)` all call this.
  */
 export function useColorScheme(): 'light' | 'dark' {
-  const system = useSystemColorScheme();
-  const preference = useAppStore((s) => s.theme_preference);
-  if (preference === 'light' || preference === 'dark') return preference;
-  return system === 'dark' ? 'dark' : 'light';
+  return 'dark';
 }
