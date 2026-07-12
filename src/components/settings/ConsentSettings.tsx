@@ -71,65 +71,82 @@ export function ConsentSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('consent.title')}</Text>
 
-      <View style={[styles.consentRow, { borderColor: theme.text + '20' }]}>
-        <View style={styles.consentText}>
-          <Text style={[styles.label, { color: theme.text }]}>{t('consent.sttToggle')}</Text>
-          <Text style={[styles.detail, { color: theme.text + '80' }]}>{t('consent.sttDetail')}</Text>
-        </View>
-        <Pressable
-          onPress={() => void handleToggleConsent(!sttConsent)}
-          disabled={!consentLoaded}
-          style={[
-            styles.toggle,
-            { backgroundColor: sttConsent ? theme.cta : theme.text + '20', opacity: consentLoaded ? 1 : 0.4 },
-          ]}
-          accessibilityRole="switch"
-          accessibilityState={{ checked: sttConsent, disabled: !consentLoaded }}
-        >
-          <View
+      <View style={styles.cardContainer}>
+        <View style={styles.consentRow}>
+          <View style={styles.consentText}>
+            <Text style={[styles.label, { color: theme.text }]}>{t('consent.sttToggle')}</Text>
+            <Text style={[styles.detail, { color: theme.text + '80' }]}>{t('consent.sttDetail')}</Text>
+          </View>
+          <Pressable
+            onPress={() => void handleToggleConsent(!sttConsent)}
+            disabled={!consentLoaded}
             style={[
-              styles.toggleKnob,
-              { backgroundColor: theme.background, transform: [{ translateX: sttConsent ? 20 : 0 }] },
+              styles.toggle,
+              { backgroundColor: sttConsent ? theme.cta : theme.text + '20', opacity: consentLoaded ? 1 : 0.4 },
             ]}
-          />
-        </Pressable>
+            accessibilityRole="switch"
+            accessibilityState={{ checked: sttConsent, disabled: !consentLoaded }}
+          >
+            <View
+              style={[
+                styles.toggleKnob,
+                { backgroundColor: theme.background, transform: [{ translateX: sttConsent ? 20 : 0 }] },
+              ]}
+            />
+          </Pressable>
+        </View>
       </View>
 
-      <Text style={[styles.detail, { color: theme.text + '80' }]}>{t('consent.deleteDisclosure')}</Text>
+      <View style={[styles.cardContainer, { borderColor: '#c0392b' }]}>
+        <Text style={[styles.detail, { color: theme.text }]}>{t('consent.deleteDisclosure')}</Text>
 
-      {deleteError ? (
-        <Text style={styles.errorText}>{deleteError}</Text>
-      ) : null}
+        {deleteError ? (
+          <Text style={styles.errorText}>{deleteError}</Text>
+        ) : null}
 
-      <Pressable
-        onPress={handleDeletePress}
-        disabled={isDeleting}
-        style={({ pressed }) => [
-          styles.deleteButton,
-          { borderColor: '#c0392b', opacity: isDeleting || pressed ? 0.5 : 1 },
-        ]}
-        accessibilityRole="button"
-      >
-        <Text style={[styles.deleteButtonText, { color: '#c0392b' }]}>
-          {isDeleting ? t('consent.deleting') : t('consent.deleteButton')}
-        </Text>
-      </Pressable>
+        <View style={styles.btnContainer}>
+          <Pressable
+            onPress={handleDeletePress}
+            disabled={isDeleting}
+            style={({ pressed }) => [
+              styles.deleteButton,
+              {
+                backgroundColor: '#1c1c1e',
+                borderColor: '#c0392b',
+                opacity: isDeleting ? 0.5 : 1,
+                transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+              },
+            ]}
+            accessibilityRole="button"
+          >
+            <Text style={[styles.deleteButtonText, { color: '#c0392b' }]}>
+              {isDeleting ? t('consent.deleting') : t('consent.deleteButton')}
+            </Text>
+          </Pressable>
+          <View style={[styles.btnShadow, { borderColor: '#c0392b', backgroundColor: 'rgba(192, 57, 43, 0.1)' }]} />
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   section: {
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   sectionTitle: {
     fontFamily: FONT_BOLD,
     fontSize: 18,
     textTransform: 'lowercase',
   },
-  consentRow: {
-    borderWidth: 1,
+  cardContainer: {
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    backgroundColor: '#222225',
     padding: Spacing.md,
+    gap: Spacing.md,
+  },
+  consentRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: Spacing.md,
@@ -140,7 +157,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: FONT_BOLD,
-    fontSize: 16,
+    fontSize: 15,
     textTransform: 'lowercase',
   },
   detail: {
@@ -154,19 +171,38 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: 'center',
     paddingHorizontal: 2,
+    borderWidth: 1,
+    borderColor: '#3a3a3e',
   },
   toggleKnob: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
+  },
+  btnContainer: {
+    height: 52,
+    position: 'relative',
+    marginTop: Spacing.xs,
+  },
+  btnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    zIndex: 0,
   },
   deleteButton: {
-    paddingVertical: Spacing.lg,
+    position: 'absolute',
+    inset: 0,
     alignItems: 'center',
-    borderWidth: 1,
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   deleteButtonText: {
-    fontFamily: FONT_REGULAR,
-    fontSize: 18,
+    fontFamily: FONT_BOLD,
+    fontSize: 16,
     textTransform: 'lowercase',
   },
   errorText: {

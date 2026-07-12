@@ -11,6 +11,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { router, useFocusEffect } from 'expo-router';
 
+import { LinearGradient } from 'expo-linear-gradient';
+
 import { Typography, FONT_REGULAR, FONT_BOLD, Spacing, INK } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Screen } from '@/components/Screen';
@@ -44,6 +46,13 @@ function normalizePhone(phone: string | null): string | null {
   return digits.length >= 10 ? digits.slice(-10) : digits || null;
 }
 
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 0 || !parts[0]) return '';
+  if (parts.length === 1) return parts[0].slice(0, 2).toLowerCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toLowerCase();
+}
+
 function AppContactRow({
   item,
   theme,
@@ -57,24 +66,44 @@ function AppContactRow({
 }) {
   return (
     <Pressable
-      style={[styles.row, blockSides(theme, isLast)]}
+      style={({ pressed }) => [
+        styles.row,
+        blockSides(theme, isLast),
+        pressed && { backgroundColor: '#2a2a2e' },
+      ]}
       onPress={() => router.push(`/contact/${item.id}`)}
       accessibilityLabel={item.name}
     >
-      <Text style={[styles.rowName, { color: theme.text }]}>{item.name}</Text>
-      <View style={styles.rowMeta}>
-        {item.last_interaction ? (
-          <Text style={[styles.metaText, { color: theme.text + '80' }]}>
-            {t('contacts.lastSeen')} {formatDate(item.last_interaction)}
-          </Text>
-        ) : null}
-        {item.next_follow_up ? (
-          <View style={[styles.followUpChip, { backgroundColor: INK }]}>
-            <Text style={[styles.followUpChipText, { color: theme.highlight }]}>
-              {t('contacts.followUpOn')} {formatDate(item.next_follow_up)}
+      <View style={[styles.avatar, { borderColor: theme.highlight }]}>
+        <Text style={[styles.avatarText, { color: theme.cta }]}>
+          {getInitials(item.name)}
+        </Text>
+      </View>
+      <View style={styles.rowRight}>
+        <Text style={[styles.rowName, { color: theme.text }]}>{item.name}</Text>
+        <View style={styles.rowMeta}>
+          {item.last_interaction ? (
+            <Text style={[styles.metaText, { color: theme.text + '80' }]}>
+              {t('contacts.lastSeen')} {formatDate(item.last_interaction)}
             </Text>
-          </View>
-        ) : null}
+          ) : null}
+          {item.next_follow_up ? (
+            <View
+              style={[
+                styles.followUpChip,
+                {
+                  backgroundColor: theme.highlight + '20',
+                  borderColor: theme.highlight,
+                  borderWidth: 1,
+                },
+              ]}
+            >
+              <Text style={[styles.followUpChipText, { color: theme.cta }]}>
+                {t('contacts.followUpOn')} {formatDate(item.next_follow_up)}
+              </Text>
+            </View>
+          ) : null}
+        </View>
       </View>
     </Pressable>
   );
@@ -91,25 +120,30 @@ function DeviceContactRow({
 }) {
   return (
     <View style={[styles.row, blockSides(theme, isLast)]}>
-      <Text style={[styles.rowName, { color: theme.text }]}>{item.name}</Text>
-      {item.phone ? (
-        <Text style={[styles.metaText, { color: theme.text + '80' }]}>{item.phone}</Text>
-      ) : null}
+      <View style={[styles.avatar, { borderColor: theme.text + '20' }]}>
+        <Text style={[styles.avatarText, { color: theme.text + '60' }]}>
+          {getInitials(item.name)}
+        </Text>
+      </View>
+      <View style={styles.rowRight}>
+        <Text style={[styles.rowName, { color: theme.text }]}>{item.name}</Text>
+        {item.phone ? (
+          <Text style={[styles.metaText, { color: theme.text + '80' }]}>{item.phone}</Text>
+        ) : null}
+      </View>
     </View>
   );
 }
 
-// Left/right walls of a section block, with an inner separator below every row
-// except the last (the footer draws the closing bottom edge).
 function blockSides(theme: AnyTheme, isLast: boolean) {
   return {
-    backgroundColor: theme.background,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderLeftColor: theme.text + '20',
-    borderRightColor: theme.text + '20',
-    borderBottomWidth: isLast ? 0 : 1,
-    borderBottomColor: theme.text + '10',
+    backgroundColor: '#222225',
+    borderLeftWidth: 1.5,
+    borderRightWidth: 1.5,
+    borderLeftColor: '#3a3a3e',
+    borderRightColor: '#3a3a3e',
+    borderBottomWidth: isLast ? 0 : 1.5,
+    borderBottomColor: '#2d2d31',
   };
 }
 
@@ -125,6 +159,7 @@ export default function ContactsScreen() {
   const [deviceContacts, setDeviceContacts] = useState<DeviceContact[]>([]);
   const [permission, setPermission] = useState<ContactsPermission | null>(null);
   const [query, setQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
   const askedThisSession = useRef(false);
 
   const loadAppContacts = useCallback(async () => {
@@ -202,7 +237,11 @@ export default function ContactsScreen() {
         <View
           style={[
             styles.searchBox,
-            { borderColor: theme.text + '20', backgroundColor: theme.background },
+            {
+              borderColor: searchFocused ? theme.highlight : '#3a3a3e',
+              backgroundColor: '#222225',
+              borderWidth: searchFocused ? 1.5 : 1.5,
+            },
           ]}
         >
           <TextInput
@@ -211,6 +250,8 @@ export default function ContactsScreen() {
             onChangeText={setQuery}
             placeholder={t('contacts.searchPlaceholder')}
             placeholderTextColor={theme.text + '60'}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
             returnKeyType="search"
             clearButtonMode="while-editing"
           />
@@ -218,17 +259,24 @@ export default function ContactsScreen() {
       )}
 
       {!isEmpty && !query && (
-        <Pressable
-          style={({ pressed }) => [
-            styles.followUpsCta,
-            { backgroundColor: theme.highlight, opacity: pressed ? 0.85 : 1 },
-          ]}
-          onPress={() => router.push('/(tabs)/calendar')}
-          accessibilityRole="button"
-        >
-          <Text style={styles.followUpsCtaText}>{t('followUps.viewAll')}</Text>
-          <Text style={styles.followUpsCtaArrow}>→</Text>
-        </Pressable>
+        <View style={styles.followUpsCtaContainer}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.followUpsCta,
+              {
+                backgroundColor: theme.highlight,
+                borderColor: theme.text,
+                transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+              },
+            ]}
+            onPress={() => router.push('/(tabs)/calendar')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.followUpsCtaText}>{t('followUps.viewAll')}</Text>
+            <Text style={styles.followUpsCtaArrow}>→</Text>
+          </Pressable>
+          <View style={[styles.followUpsCtaShadow, { backgroundColor: theme.highlight + '20' }]} />
+        </View>
       )}
 
       {/* Contacts permission denied — surface a path to Settings without
@@ -237,7 +285,7 @@ export default function ContactsScreen() {
         <Pressable
           style={[
             styles.permissionBanner,
-            { borderColor: theme.text + '20', backgroundColor: theme.background },
+            { borderColor: '#3a3a3e', backgroundColor: '#222225' },
           ]}
           onPress={() => permission.blocked && void Linking.openSettings()}
           accessibilityRole="button"
@@ -291,13 +339,14 @@ export default function ContactsScreen() {
               style={[
                 styles.sectionHeader,
                 {
-                  backgroundColor: theme.background,
-                  borderTopColor: theme.text + '20',
-                  borderLeftColor: theme.text + '20',
-                  borderRightColor: theme.text + '20',
+                  borderColor: '#3a3a3e',
                 },
               ]}
             >
+              <LinearGradient
+                colors={['#2c2c31', '#1f1f22']}
+                style={StyleSheet.absoluteFill}
+              />
               <View style={[styles.accentBar, { backgroundColor: theme.highlight }]} />
               <Text style={[styles.sectionHeaderText, { color: theme.text }]}>
                 {section.title}
@@ -309,10 +358,8 @@ export default function ContactsScreen() {
               style={[
                 styles.sectionFooter,
                 {
-                  backgroundColor: theme.background,
-                  borderBottomColor: theme.text + '20',
-                  borderLeftColor: theme.text + '20',
-                  borderRightColor: theme.text + '20',
+                  backgroundColor: '#222225',
+                  borderColor: '#3a3a3e',
                 },
               ]}
             />
@@ -334,7 +381,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.lg,
     marginTop: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    borderWidth: 1,
+    borderWidth: 1.5,
   },
   searchInput: {
     fontFamily: FONT_REGULAR,
@@ -351,32 +398,53 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.lg,
     marginTop: Spacing.lg,
     paddingHorizontal: Spacing.md,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.sm,
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
+    paddingTop: Spacing.md + 4,
+    paddingBottom: Spacing.sm + 4,
+    borderTopWidth: 1.5,
+    borderLeftWidth: 1.5,
+    borderRightWidth: 1.5,
+    overflow: 'hidden',
   },
   accentBar: {
-    width: 4,
+    width: 5,
     height: 14,
     marginRight: Spacing.sm,
   },
   sectionHeaderText: {
     ...Typography.label,
+    zIndex: 1,
   },
   sectionFooter: {
     marginHorizontal: Spacing.lg,
     height: Spacing.sm,
-    borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
+    borderBottomWidth: 1.5,
+    borderLeftWidth: 1.5,
+    borderRightWidth: 1.5,
   },
   row: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginHorizontal: Spacing.lg,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    gap: 6,
+    paddingVertical: Spacing.md - 2,
+    gap: Spacing.md,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#15161a',
+  },
+  avatarText: {
+    fontFamily: FONT_BOLD,
+    fontSize: 14,
+    textTransform: 'lowercase',
+  },
+  rowRight: {
+    flex: 1,
+    gap: 4,
   },
   rowName: {
     ...Typography.body,
@@ -418,16 +486,31 @@ const styles = StyleSheet.create({
     ...Typography.body,
     textAlign: 'center',
   },
+  followUpsCtaContainer: {
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.md,
+    height: 52,
+    position: 'relative',
+  },
+  followUpsCtaShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
   followUpsCta: {
+    position: 'absolute',
+    inset: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginHorizontal: Spacing.lg,
-    marginTop: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
-    borderWidth: 1,
-    borderColor: INK,
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   followUpsCtaText: {
     fontFamily: FONT_BOLD,
@@ -444,8 +527,8 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.lg,
     marginTop: Spacing.sm,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderWidth: 1,
+    paddingVertical: Spacing.sm + 4,
+    borderWidth: 1.5,
   },
   permissionText: {
     fontFamily: FONT_REGULAR,

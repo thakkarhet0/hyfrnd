@@ -134,89 +134,108 @@ export function NotificationSettings() {
         {t('settings.notificationTiming')}
       </Text>
 
-      {NUDGE_CONFIG.map((config) => {
-        const hour = hours[config.key];
-        const setter = settersRef.current[config.key];
-        const labelKey = `settings.${config.key}` as
-          | 'settings.morning'
-          | 'settings.afternoon'
-          | 'settings.evening';
+      <View style={styles.cardContainer}>
+        {NUDGE_CONFIG.map((config, idx) => {
+          const hour = hours[config.key];
+          const setter = settersRef.current[config.key];
+          const labelKey = `settings.${config.key}` as
+            | 'settings.morning'
+            | 'settings.afternoon'
+            | 'settings.evening';
 
-        return (
-          <View key={config.key} style={styles.row}>
-            <Text style={[styles.rowLabel, { color: theme.text }]}>{t(labelKey)}</Text>
+          return (
+            <View
+              key={config.key}
+              style={[
+                styles.row,
+                idx > 0 && { borderTopWidth: 1.5, borderTopColor: '#2d2d31', paddingTop: Spacing.md },
+              ]}
+            >
+              <Text style={[styles.rowLabel, { color: theme.text }]}>{t(labelKey)}</Text>
 
-            {Platform.OS === 'ios' ? (
-              <DateTimePicker
-                value={hourToDate(hour)}
-                mode="time"
-                display="spinner"
-                onChange={(_: DateTimePickerEvent, date: Date | undefined) => {
-                  if (date) {
-                    const picked = Math.max(config.min, Math.min(config.max, date.getHours()));
-                    setter(picked);
-                  }
-                }}
-                style={styles.iosPicker}
-                textColor={theme.text}
-              />
-            ) : (
-              <Pressable
-                onPress={() => openAndroidPicker(config.key)}
-                style={[styles.androidTimeButton, { borderBottomColor: theme.cta }]}
-                accessibilityRole="button"
-              >
-                <Text style={[styles.androidTimeText, { color: theme.cta }]}>
-                  {formatHour(hour)}
-                </Text>
-              </Pressable>
-            )}
-          </View>
-        );
-      })}
+              {Platform.OS === 'ios' ? (
+                <DateTimePicker
+                  value={hourToDate(hour)}
+                  mode="time"
+                  display="spinner"
+                  onChange={(_: DateTimePickerEvent, date: Date | undefined) => {
+                    if (date) {
+                      const picked = Math.max(config.min, Math.min(config.max, date.getHours()));
+                      setter(picked);
+                    }
+                  }}
+                  style={styles.iosPicker}
+                  textColor={theme.text}
+                />
+              ) : (
+                <Pressable
+                  onPress={() => openAndroidPicker(config.key)}
+                  style={[styles.androidTimeButton, { borderBottomColor: theme.cta }]}
+                  accessibilityRole="button"
+                >
+                  <Text style={[styles.androidTimeText, { color: theme.cta }]}>
+                    {formatHour(hour)}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+          );
+        })}
+      </View>
 
-      <Pressable
-        style={({ pressed }) => [
-          styles.saveButton,
-          {
-            backgroundColor: theme.highlight,
-            opacity: isSaving || pressed ? 0.7 : 1,
-          },
-        ]}
-        onPress={() => void handleSave()}
-        disabled={isSaving}
-        accessibilityRole="button"
-      >
-        <Text style={[styles.saveButtonText, { color: INK }]}>
-          {saved ? t('settings.saved') : t('common.save')}
-        </Text>
-      </Pressable>
+      <View style={styles.btnContainer}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.saveButton,
+            {
+              backgroundColor: theme.highlight,
+              borderColor: theme.text,
+              transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+            },
+          ]}
+          onPress={() => void handleSave()}
+          disabled={isSaving}
+          accessibilityRole="button"
+        >
+          <Text style={[styles.saveButtonText, { color: INK }]}>
+            {saved ? t('settings.saved') : t('common.save')}
+          </Text>
+        </Pressable>
+        <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   section: {
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   sectionTitle: {
     fontFamily: FONT_BOLD,
     fontSize: 18,
     textTransform: 'lowercase',
   },
+  cardContainer: {
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    backgroundColor: '#222225',
+    padding: Spacing.md,
+    gap: Spacing.md,
+  },
   row: {
     gap: 8,
   },
   rowLabel: {
-    fontFamily: FONT_REGULAR,
-    fontSize: 16,
+    fontFamily: FONT_BOLD,
+    fontSize: 15,
     textTransform: 'lowercase',
   },
   iosPicker: {
     height: 100,
   },
   androidTimeButton: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.5,
     paddingVertical: 8,
     alignSelf: 'flex-start',
     minWidth: 80,
@@ -226,14 +245,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textTransform: 'lowercase',
   },
+  btnContainer: {
+    height: 52,
+    position: 'relative',
+    marginTop: Spacing.xs,
+  },
+  btnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
   saveButton: {
-    paddingVertical: Spacing.lg,
+    position: 'absolute',
+    inset: 0,
     alignItems: 'center',
-    marginTop: Spacing.lg,
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   saveButtonText: {
-    fontFamily: FONT_REGULAR,
-    fontSize: 18,
+    fontFamily: FONT_BOLD,
+    fontSize: 16,
     textTransform: 'lowercase',
   },
 });

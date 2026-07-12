@@ -34,33 +34,36 @@ export function LegalSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('legal.title')}</Text>
 
-      <Pressable
-        onPress={handleEmailPress}
-        style={({ pressed }) => [
-          styles.row,
-          { borderColor: theme.text + '20', opacity: pressed ? 0.6 : 1 },
-        ]}
-        accessibilityRole="link"
-      >
-        <Text style={[styles.rowLabel, { color: theme.text }]}>{t('legal.grievanceOfficer')}</Text>
-        <Text style={[styles.rowValue, { color: theme.cta }]}>{GRIEVANCE_EMAIL}</Text>
-      </Pressable>
+      <View style={styles.cardContainer}>
+        <Pressable
+          onPress={handleEmailPress}
+          style={({ pressed }) => [
+            styles.row,
+            pressed && { backgroundColor: '#2a2a2e' },
+          ]}
+          accessibilityRole="link"
+        >
+          <Text style={[styles.rowLabel, { color: theme.text }]}>{t('legal.grievanceOfficer')}</Text>
+          <Text style={[styles.rowValue, { color: theme.cta }]}>{GRIEVANCE_EMAIL}</Text>
+        </Pressable>
 
-      <Pressable
-        onPress={handlePrivacyPress}
-        style={({ pressed }) => [
-          styles.row,
-          { borderColor: theme.text + '20', opacity: pressed ? 0.6 : 1 },
-        ]}
-        accessibilityRole="link"
-      >
-        <Text style={[styles.rowLabel, { color: theme.text }]}>{t('legal.privacyPolicy')}</Text>
-        <Text style={[styles.rowValue, { color: theme.cta }]}>{t('legal.privacyPolicyLink')}</Text>
-      </Pressable>
+        <Pressable
+          onPress={handlePrivacyPress}
+          style={({ pressed }) => [
+            styles.row,
+            styles.rowBorder,
+            pressed && { backgroundColor: '#2a2a2e' },
+          ]}
+          accessibilityRole="link"
+        >
+          <Text style={[styles.rowLabel, { color: theme.text }]}>{t('legal.privacyPolicy')}</Text>
+          <Text style={[styles.rowValue, { color: theme.cta }]}>{t('legal.privacyPolicyLink')}</Text>
+        </Pressable>
 
-      <View style={[styles.row, { borderColor: theme.text + '20' }]}>
-        <Text style={[styles.rowLabel, { color: theme.text }]}>{t('legal.version')}</Text>
-        <Text style={[styles.versionValue, { color: theme.text + '80' }]}>{`${version} (${buildNumber})`}</Text>
+        <View style={[styles.row, styles.rowBorder]}>
+          <Text style={[styles.rowLabel, { color: theme.text }]}>{t('legal.version')}</Text>
+          <Text style={[styles.versionValue, { color: theme.text + '80' }]}>{`${version} (${buildNumber})`}</Text>
+        </View>
       </View>
     </View>
   );
@@ -68,17 +71,25 @@ export function LegalSettings() {
 
 const styles = StyleSheet.create({
   section: {
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   sectionTitle: {
     fontFamily: FONT_BOLD,
     fontSize: 18,
     textTransform: 'lowercase',
   },
+  cardContainer: {
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    backgroundColor: '#222225',
+  },
   row: {
-    borderWidth: 1,
     padding: Spacing.md,
     gap: 4,
+  },
+  rowBorder: {
+    borderTopWidth: 1.5,
+    borderTopColor: '#2d2d31',
   },
   rowLabel: {
     fontFamily: FONT_BOLD,

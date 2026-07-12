@@ -58,22 +58,50 @@ function groupByDay(items: PendingFollowUp[]): DayGroup[] {
 }
 
 function FollowUpRow({ item, theme }: { item: PendingFollowUp; theme: ThemeColors }) {
+  const isOverdue = new Date(item.due_date).getTime() < new Date().setHours(0, 0, 0, 0);
+
   return (
     <Pressable
-      style={[styles.row, { borderColor: theme.text + '20', backgroundColor: theme.background }]}
+      style={({ pressed }) => [
+        styles.row,
+        {
+          borderColor: pressed ? theme.cta : theme.text + '30',
+          backgroundColor: pressed ? '#2a2a2e' : '#222225',
+          transform: [{ scale: pressed ? 0.99 : 1 }],
+        },
+      ]}
       onPress={() => router.push(`/contact/${item.contact_id}`)}
       accessibilityRole="button"
     >
-      <View style={[styles.accentBar, { backgroundColor: theme.highlight }]} />
+      <View
+        style={[
+          styles.accentBar,
+          { backgroundColor: isOverdue ? theme.highlight : '#525d7e' },
+        ]}
+      />
       <View style={styles.rowContent}>
         <Text style={[styles.name, { color: theme.text }]}>{item.contact_name}</Text>
-        <View style={[styles.dateChip, { backgroundColor: INK }]}>
-          <Text style={[styles.dateChipText, { color: theme.highlight }]}>
+        <View
+          style={[
+            styles.dateChip,
+            {
+              backgroundColor: isOverdue ? theme.highlight + '20' : theme.text + '10',
+              borderColor: isOverdue ? theme.highlight : theme.text + '30',
+              borderWidth: 1,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.dateChipText,
+              { color: isOverdue ? theme.cta : theme.text + '80' },
+            ]}
+          >
             {formatDayChip(item.due_date)}
           </Text>
         </View>
         {item.context_snapshot ? (
-          <Text style={[styles.snapshot, { color: theme.text + '80' }]} numberOfLines={2}>
+          <Text style={[styles.snapshot, { color: theme.text + '70' }]} numberOfLines={2}>
             {item.context_snapshot}
           </Text>
         ) : null}
@@ -175,26 +203,24 @@ export default function CalendarScreen() {
         <Pressable
           style={[
             styles.toggleButton,
-            { borderColor: theme.text + '40' },
-            view === 'today' && { backgroundColor: theme.highlight, borderColor: theme.highlight },
+            view === 'today' && { backgroundColor: theme.highlight },
           ]}
           onPress={() => setView('today')}
           accessibilityRole="button"
         >
-          <Text style={[styles.toggleLabel, { color: view === 'today' ? INK : theme.text }]}>
+          <Text style={[styles.toggleLabel, { color: view === 'today' ? INK : theme.text + '80' }]}>
             {t('followUps.today')}
           </Text>
         </Pressable>
         <Pressable
           style={[
             styles.toggleButton,
-            { borderColor: theme.text + '40' },
-            view === 'month' && { backgroundColor: theme.highlight, borderColor: theme.highlight },
+            view === 'month' && { backgroundColor: theme.highlight },
           ]}
           onPress={() => setView('month')}
           accessibilityRole="button"
         >
-          <Text style={[styles.toggleLabel, { color: view === 'month' ? INK : theme.text }]}>
+          <Text style={[styles.toggleLabel, { color: view === 'month' ? INK : theme.text + '80' }]}>
             {t('followUps.month')}
           </Text>
         </Pressable>
@@ -287,16 +313,18 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   toggleRow: {
     flexDirection: 'row',
-    gap: Spacing.sm,
     marginHorizontal: Spacing.lg,
-    marginTop: Spacing.sm,
+    marginTop: Spacing.md,
     marginBottom: Spacing.md,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    backgroundColor: '#222225',
+    padding: 3,
   },
   toggleButton: {
     flex: 1,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.sm + 2,
     alignItems: 'center',
-    borderWidth: 1,
   },
   toggleLabel: { ...Typography.label },
   monthHeader: {
@@ -306,6 +334,10 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.lg,
     marginBottom: Spacing.md,
     paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    backgroundColor: '#222225',
   },
   monthArrow: { fontFamily: FONT_BOLD, fontSize: 24, paddingHorizontal: Spacing.md },
   monthLabel: { ...Typography.subheading },
@@ -329,14 +361,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: Spacing.lg,
     marginBottom: Spacing.sm,
-    borderWidth: 1,
+    borderWidth: 1.5,
   },
-  accentBar: { width: 4, alignSelf: 'stretch' },
+  accentBar: { width: 5, alignSelf: 'stretch' },
   rowContent: {
     flex: 1,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
-    gap: 6,
+    gap: 8,
   },
   name: { fontFamily: FONT_BOLD, fontSize: 18, textTransform: 'lowercase' },
   dateChip: { alignSelf: 'flex-start', paddingHorizontal: Spacing.sm, paddingVertical: 2 },

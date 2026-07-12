@@ -127,9 +127,25 @@ export function BackupSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>{t('backup.title')}</Text>
 
-      {!backupEnabled ? (
-        <>
+      <View style={styles.cardContainer}>
+        {!backupEnabled ? (
           <Text style={[styles.disclosure, { color: theme.text }]}>{t('backup.disclosure')}</Text>
+        ) : (
+          <View style={styles.statusRow}>
+            {formattedLastBackup ? (
+              <Text style={[styles.subtitle, { color: theme.text }]}>
+                {t('backup.lastBackup', { time: formattedLastBackup })}
+              </Text>
+            ) : null}
+            {lastBackupError ? (
+              <Text style={[styles.errorText]}>{t('backup.lastFailed')}</Text>
+            ) : null}
+          </View>
+        )}
+      </View>
+
+      {!backupEnabled ? (
+        <View style={styles.btnContainer}>
           <Pressable
             onPress={handleEnable}
             disabled={!request || isWorking}
@@ -137,7 +153,9 @@ export function BackupSettings() {
               styles.button,
               {
                 backgroundColor: theme.highlight,
-                opacity: !request || isWorking || pressed ? 0.5 : 1,
+                borderColor: theme.text,
+                opacity: !request || isWorking ? 0.5 : 1,
+                transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
               },
             ]}
             accessibilityRole="button"
@@ -146,44 +164,54 @@ export function BackupSettings() {
               {t('backup.enable')}
             </Text>
           </Pressable>
-        </>
+          <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+        </View>
       ) : (
-        <>
-          {formattedLastBackup ? (
-            <Text style={[styles.subtitle, { color: theme.text }]}>
-              {t('backup.lastBackup', { time: formattedLastBackup })}
-            </Text>
-          ) : null}
-          {lastBackupError ? (
-            <Text style={[styles.errorText]}>{t('backup.lastFailed')}</Text>
-          ) : null}
-          <Pressable
-            onPress={() => void handleBackupNow()}
-            disabled={isWorking}
-            style={({ pressed }) => [
-              styles.button,
-              { backgroundColor: theme.highlight, opacity: isWorking || pressed ? 0.5 : 1 },
-            ]}
-            accessibilityRole="button"
-          >
-            <Text style={[styles.buttonText, { color: INK }]}>
-              {isWorking ? t('backup.syncing') : t('backup.backupNow')}
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => void handleDisable()}
-            disabled={isWorking}
-            style={({ pressed }) => [
-              styles.disableButton,
-              { borderColor: theme.text, opacity: isWorking || pressed ? 0.5 : 1 },
-            ]}
-            accessibilityRole="button"
-          >
-            <Text style={[styles.disableButtonText, { color: theme.text }]}>
-              {t('backup.disable')}
-            </Text>
-          </Pressable>
-        </>
+        <View style={styles.buttonGroup}>
+          <View style={styles.btnContainer}>
+            <Pressable
+              onPress={() => void handleBackupNow()}
+              disabled={isWorking}
+              style={({ pressed }) => [
+                styles.button,
+                {
+                  backgroundColor: theme.highlight,
+                  borderColor: theme.text,
+                  opacity: isWorking ? 0.5 : 1,
+                  transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+                },
+              ]}
+              accessibilityRole="button"
+            >
+              <Text style={[styles.buttonText, { color: INK }]}>
+                {isWorking ? t('backup.syncing') : t('backup.backupNow')}
+              </Text>
+            </Pressable>
+            <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+          </View>
+
+          <View style={styles.btnContainer}>
+            <Pressable
+              onPress={() => void handleDisable()}
+              disabled={isWorking}
+              style={({ pressed }) => [
+                styles.disableButton,
+                {
+                  backgroundColor: '#1c1c1e',
+                  borderColor: theme.text,
+                  opacity: isWorking ? 0.5 : 1,
+                  transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+                },
+              ]}
+              accessibilityRole="button"
+            >
+              <Text style={[styles.disableButtonText, { color: theme.text }]}>
+                {t('backup.disable')}
+              </Text>
+            </Pressable>
+            <View style={[styles.btnShadow, { backgroundColor: theme.text + '10' }]} />
+          </View>
+        </View>
       )}
     </View>
   );
@@ -191,12 +219,22 @@ export function BackupSettings() {
 
 const styles = StyleSheet.create({
   section: {
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   sectionTitle: {
     fontFamily: FONT_BOLD,
     fontSize: 18,
     textTransform: 'lowercase',
+  },
+  cardContainer: {
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    backgroundColor: '#222225',
+    padding: Spacing.md,
+    gap: Spacing.md,
+  },
+  statusRow: {
+    gap: 4,
   },
   disclosure: {
     fontFamily: FONT_REGULAR,
@@ -215,22 +253,46 @@ const styles = StyleSheet.create({
     textTransform: 'lowercase',
     color: '#c0392b',
   },
+  buttonGroup: {
+    gap: Spacing.md + 4,
+  },
+  btnContainer: {
+    height: 52,
+    position: 'relative',
+  },
+  btnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
   button: {
-    paddingVertical: Spacing.lg,
+    position: 'absolute',
+    inset: 0,
     alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   buttonText: {
-    fontFamily: FONT_REGULAR,
-    fontSize: 18,
+    fontFamily: FONT_BOLD,
+    fontSize: 16,
     textTransform: 'lowercase',
   },
   disableButton: {
-    paddingVertical: Spacing.lg,
+    position: 'absolute',
+    inset: 0,
     alignItems: 'center',
-    borderWidth: 1,
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   disableButtonText: {
-    fontFamily: FONT_REGULAR,
+    fontFamily: FONT_BOLD,
     fontSize: 16,
     textTransform: 'lowercase',
   },

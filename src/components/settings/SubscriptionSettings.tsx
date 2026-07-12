@@ -36,68 +36,89 @@ export function SubscriptionSettings() {
     <View style={styles.section}>
       <Text style={[styles.sectionTitle, { color: theme.text }]}>subscription</Text>
 
-      <View style={[styles.row, { borderColor: theme.text + '20' }]}>
-        <Text style={[styles.label, { color: theme.text }]}>
-          {plan_tier === 'unlimited' ? 'unlimited plan' : 'free plan'}
-        </Text>
-        {plan_tier === 'free' && (
-          <Text style={[styles.value, { color: theme.text + '80' }]}>
-            {contact_count}/{FREE_LIMIT} contacts
+      <View style={styles.cardContainer}>
+        <View style={styles.statusRow}>
+          <Text style={[styles.label, { color: theme.text }]}>
+            {plan_tier === 'unlimited' ? 'unlimited plan' : 'free plan'}
           </Text>
-        )}
-        {plan_tier === 'unlimited' && (
-          <Text style={[styles.value, { color: theme.text + '80' }]}>
-            ₹400/month · renews automatically
-          </Text>
+          {plan_tier === 'free' && (
+            <Text style={[styles.value, { color: theme.text + '80' }]}>
+              {contact_count}/{FREE_LIMIT} contacts
+            </Text>
+          )}
+          {plan_tier === 'unlimited' && (
+            <Text style={[styles.value, { color: theme.text + '80' }]}>
+              ₹400/month · renews automatically
+            </Text>
+          )}
+        </View>
+
+        {plan_tier === 'free' ? (
+          <View style={styles.btnContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.actionBtn,
+                {
+                  backgroundColor: theme.highlight,
+                  borderColor: theme.text,
+                  transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+                },
+              ]}
+              onPress={() => router.push('/paywall')}
+              accessibilityRole="button"
+              accessibilityLabel="upgrade to unlimited plan"
+            >
+              <Text style={[styles.actionLabel, { color: INK }]}>upgrade</Text>
+            </Pressable>
+            <View style={[styles.btnShadow, { backgroundColor: theme.highlight + '20' }]} />
+          </View>
+        ) : (
+          <View style={styles.btnContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.actionBtn,
+                {
+                  backgroundColor: '#1c1c1e',
+                  borderColor: theme.cta,
+                  transform: [{ translateY: pressed ? 2 : 0 }, { translateX: pressed ? 2 : 0 }],
+                },
+              ]}
+              onPress={handleManage}
+              accessibilityRole="button"
+              accessibilityLabel="manage subscription in app store"
+            >
+              <Text style={[styles.actionLabel, { color: theme.cta }]}>manage subscription</Text>
+            </Pressable>
+            <View style={[styles.btnShadow, { backgroundColor: theme.cta + '20' }]} />
+          </View>
         )}
       </View>
-
-      {plan_tier === 'free' ? (
-        <Pressable
-          style={({ pressed }) => [
-            styles.actionBtn,
-            { backgroundColor: theme.highlight, opacity: pressed ? 0.7 : 1 },
-          ]}
-          onPress={() => router.push('/paywall')}
-          accessibilityRole="button"
-          accessibilityLabel="upgrade to unlimited plan"
-        >
-          <Text style={[styles.actionLabel, { color: INK }]}>upgrade</Text>
-        </Pressable>
-      ) : (
-        <Pressable
-          style={({ pressed }) => [
-            styles.actionBtn,
-            { borderWidth: 1, borderColor: theme.cta, opacity: pressed ? 0.7 : 1 },
-          ]}
-          onPress={handleManage}
-          accessibilityRole="button"
-          accessibilityLabel="manage subscription in app store"
-        >
-          <Text style={[styles.actionLabel, { color: theme.cta }]}>manage subscription</Text>
-        </Pressable>
-      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   section: {
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   sectionTitle: {
     fontFamily: FONT_BOLD,
     fontSize: 18,
     textTransform: 'lowercase',
   },
-  row: {
-    borderWidth: 1,
+  cardContainer: {
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    backgroundColor: '#222225',
     padding: Spacing.md,
+    gap: Spacing.md,
+  },
+  statusRow: {
     gap: 4,
   },
   label: {
     fontFamily: FONT_BOLD,
-    fontSize: 14,
+    fontSize: 15,
     textTransform: 'lowercase',
   },
   value: {
@@ -105,13 +126,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textTransform: 'lowercase',
   },
+  btnContainer: {
+    height: 52,
+    position: 'relative',
+  },
+  btnShadow: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: -4,
+    bottom: -4,
+    borderWidth: 1.5,
+    borderColor: '#3a3a3e',
+    zIndex: 0,
+  },
   actionBtn: {
-    paddingVertical: Spacing.lg,
+    position: 'absolute',
+    inset: 0,
     alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    zIndex: 1,
   },
   actionLabel: {
-    fontFamily: FONT_REGULAR,
-    fontSize: 18,
+    fontFamily: FONT_BOLD,
+    fontSize: 16,
     textTransform: 'lowercase',
   },
 });
